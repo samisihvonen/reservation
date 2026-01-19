@@ -1,44 +1,56 @@
+// ============================================
+// 7. UPDATED CONTROLLER (Use Service)
+// ============================================
+// File: src/main/java/com/example/backend/controller/ReservationController.java
+
 package com.example.backend.controller;
 
-import com.example.backend.model.Reservation;
-import com.example.backend.repository.ReservationRepository;
+import com.example.backend.dto.CreateReservationRequest;
+import com.example.backend.dto.ReservationResponse;
+import com.example.backend.service.ReservationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
 public class ReservationController {
-
+    
     @Autowired
-    private ReservationRepository repository;
-
-    // Haetaan tietyn huoneen varaukset (Reactin useEffect käyttää tätä)
+    private ReservationService service;
+    
+    /**
+     * Haetaan kaikki varaukset tietylle huoneelle
+     * GET /api/reservations/{roomId}
+     */
     @GetMapping("/{roomId}")
-    public List<Reservation> getByRoom(@PathVariable String roomId) {
-        return repository.findByRoomId(roomId);
+    public ResponseEntity<List<ReservationResponse>> getByRoom(@PathVariable String roomId) {
+        List<ReservationResponse> reservations = service.getReservationsByRoom(roomId);
+        return ResponseEntity.ok(reservations);
     }
-
+    
+    /**
+     * Luodaan uusi varaus
+     * POST /api/reservations
+     * Body: { "roomId": "room-1", "startTime": "...", "endTime": "...", "user": "..." }
+     */
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Reservation req) {
-        // Estetään menneisyyteen varaaminen (hyvä lisä validointiin)
-        if (req.getStartTime().isBefore(java.time.LocalDateTime.now())) {
-            return ResponseEntity.badRequest().body("Varaus ei voi olla menneisyydessä.");
-        }
-
-        List<Reservation> existing = repository.findByRoomId(req.getRoomId());
-        
-        // Päällekkäisyyden tarkistuslogiikka
-        boolean overlap = existing.stream().anyMatch(r -> 
-            req.getStartTime().isBefore(r.getEndTime()) && 
-            req.getEndTime().isAfter(r.getStartTime())
-        );
-
-        if (overlap) {
-            return ResponseEntity.status(409).body("Huone on jo varattu valittuna aikana!");
-        }
-
-        return ResponseEntity.ok(repository.save(req));
+    public ResponseEntity<ReservationResponse> create(
+            @Valid @RequestBody CreateReservationRequest request) {
+        ReservationResponse response = service.createReservation(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    
+    /**
+     * Poistetaan varaus
+     * DELETE /api/reservations/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        service.deleteReservation(id);
+        return ResponseEntity.noContent().build();
     }
 }

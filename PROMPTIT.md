@@ -143,3 +143,137 @@ PROMPTIT.md: Kirjaa ylös, että pyysit tekoälyä vaihtamaan toteutuksen in-mem
 ANALYYSI.md: Mainitse, että user on varattu sana monissa tietokannoissa (kuten Postgres), joten kentän nimen muuttaminen userNameksi oli tarpeellinen tekninen korjaus.
 
 Vinkki: Jos haluat tehdä tästä todella ammattimaisen, voit luoda projektin juureen docker-compose.yml tiedoston, jolla PostgreSQL-kontti käynnistyy yhdellä komennolla. Haluatko, että luon sinulle sellaisen?
+
+Promptina koodipohja, jossa yksinkertainen backend ja frontend ovat luotu.
+
+## Backend Implementation ✅
+
+I can see from the logs that your Spring Boot backend is running successfully on port 8080. The application has started and is handling requests. Let me analyze what you've shared and help you move forward.Reservation System - Current State & Next StepsDocument # Reservation System - Analysis & Recommendations
+
+## Current State ✅
+
+Your backend is now **compiling and running successfully**. The logs show:
+- Spring Boot started on port 8080
+- Security filters are configured (CORS enabled)
+- Database is connecGreat! Your backend is running successfully. The logs show everything is initialized properly and the application is listening for requests on port 8080.
+Now, let me give you clear guidance on what to improve next:
+What's Working ✅
+
+Spring Boot application starts without errors
+PostgreSQL connection is configured
+CORS is enabled for your React frontend (http://localhost:5174)
+Security filters are in place
+API endpoints are ready to receive requests
+
+What Needs Improvement 🔧
+From analyzing your code, here are the issues that will be caught by a professional code review:
+
+Controller has too much responsibility – The overlap-checking logic should be in a Service class, not the controller
+No DTOs – You're accepting the Reservation entity directly; create a CreateReservationRequest class instead
+Inconsistent error responses – Use @ControllerAdvice for centralized exception handling
+Missing audit fields – Add createdAt and updatedAt timestamps to track changes
+No validation annotations – Add @NotNull, @NotBlank etc. to your request DTOs
+
+Your Next Move
+Would you like me to show you how to:
+
+Create a ReservationService class that handles the business logic?
+Create DTOs (CreateReservationRequest, ReservationResponse)?
+Set up a global exception handler with @ControllerAdvice?
+
+Which one would you like to implement first? Or should I create an updated version of all three together?Create a ReservationService class that handles the business logic?Create DTOs (CreateReservationRequest, ReservationResponse)?Set up a global exception handler with @ControllerAdvice?12:23ReservationService, DTOs, and Exception HandlerCode // ============================================
+// 1. CREATE REQUEST DTO
+// ============================================
+// File: src/main/java/com/example/backend/dto/CreateReservationRequest.java
+
+package com.example.backend.dto;
+
+import jakarta.vaPerfect! I've created all three components you asked for. Here's what you need to do:
+📋 Implementation Steps
+1. Add Validation Dependency to pom.xml
+Add this inside the <dependencies> section:
+xml<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+2. Create the DTOs
+Create two new files in src/main/java/com/example/backend/dto/:
+
+CreateReservationRequest.java (handles user input)
+ReservationResponse.java (returns data to frontend)
+
+3. Create Custom Exceptions
+Create three new files in src/main/java/com/example/backend/exception/:
+
+ReservationException.java (base class)
+RoomAlreadyBookedException.java (409 Conflict)
+InvalidReservationTimeException.java (400 Bad Request)
+
+4. Create the Service Layer
+Create ReservationService.java in src/main/java/com/example/backend/service/
+
+Handles all business logic
+Validates input
+Checks for overlaps
+Converts entities to DTOs
+
+5. Create Global Exception Handler
+Create GlobalExceptionHandler.java in src/main/java/com/example/backend/exception/
+
+Catches all exceptions and returns consistent error responses
+Handles validation errors automatically
+
+6. Update Reservation Entity
+Add timestamps (createdAt, updatedAt) using Hibernate annotations
+7. Update Controller
+Replace your current controller with the simplified version that uses the Service
+
+🎯 Key Improvements
+BeforeAfterLogic scattered in ControllerClean Service layer handles business logicAccept Reservation entity directlyAccept CreateReservationRequest DTOManual error handling in ControllerGlobal exception handler with consistent formatNo timestampsAutomatic createdAt / updatedAt trackingNo input validation@Valid annotations validate automatically
+
+📝 Example API Responses After This Update
+Success (POST):
+json{
+  "id": "uuid-123",
+  "roomId": "room-1",
+  "startTime": "2026-01-20T10:00:00",
+  "endTime": "2026-01-20T11:00:00",
+  "user": "john.doe",
+  "createdAt": "2026-01-19T12:10:00",
+  "updatedAt": "2026-01-19T12:10:00"
+}
+Error - Room Already Booked (409):
+json{
+  "timestamp": "2026-01-19T12:15:30",
+  "status": 409,
+  "error": "Huone varattu",
+  "message": "Huone on jo varattu valittuna aikana."
+}
+Error - Invalid Time (400):
+json{
+  "timestamp": "2026-01-19T12:15:30",
+  "status": 400,
+  "error": "Virheellinen aika",
+  "message": "Varaus ei voi olla menneisyydessä."
+}
+
+🚀 After Implementing This
+Make a commit:
+bashgit add .
+git commit -m "refactor: add Service layer, DTOs, and global exception handler"
+Then update your PROMPTIT.md with:
+markdown## Commit #2: Service Layer & DTOs
+
+Implemented:
+- ReservationService with business logic
+- DTOs for request/response separation
+- Global exception handler with @ControllerAdvice
+- Input validation with @Valid
+- Audit timestamps (createdAt, updatedAt)
+
+Benefits:
+- Controller is now thin and focused on HTTP concerns
+- Service is testable and reusable
+- Consistent error responses for frontend
+- Entity is decoupled from API contract
+Ready to test this? Try running mvn clean compile and let me know if you hit any issues

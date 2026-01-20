@@ -1,5 +1,5 @@
 // ============================================
-// 1. CREATE REQUEST DTO
+// CreateReservationRequest DTO
 // ============================================
 // File: src/main/java/com/example/backend/dto/CreateReservationRequest.java
 
@@ -7,13 +7,7 @@ package com.example.backend.dto;
 
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class CreateReservationRequest {
     
     @NotBlank(message = "Huoneen ID on pakollinen")
@@ -27,4 +21,60 @@ public class CreateReservationRequest {
     
     @NotBlank(message = "Käyttäjän nimi on pakollinen")
     private String user;
+
+    // Constructors
+    public CreateReservationRequest() {
+    }
+
+    public CreateReservationRequest(String roomId, LocalDateTime startTime, 
+            LocalDateTime endTime, String user) {
+        this.roomId = roomId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.user = user;
+    }
+
+    // Getters
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    // Setters
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "CreateReservationRequest{" +
+                "roomId='" + roomId + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", user='" + user + '\'' +
+                '}';
+    }
 }

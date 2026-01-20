@@ -1,0 +1,63 @@
+/* ============================================
+   4. ROOM SELECTOR COMPONENT STYLES
+   ============================================ */
+/* File: src/styles/RoomSelector.css */
+
+.room-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.room-button {
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-light);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+.room-button:hover {
+  background: #e9ecef;
+  border-color: var(--primary-color);
+  transform: translateX(4px);
+}
+
+.room-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 0.5rem 1rem rgba(102, 126, 234, 0.4);
+}
+
+.room-button.active .room-capacity {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.room-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: currentColor;
+}
+
+.room-capacity {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.room-button.active .room-name,
+.room-button.active .room-capacity {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .room-button {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}

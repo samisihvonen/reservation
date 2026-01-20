@@ -1,0 +1,87 @@
+/* ============================================
+   5. RESERVATION FORM COMPONENT STYLES
+   ============================================ */
+/* File: src/styles/ReservationForm.css */
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: var(--transition);
+  font-family: inherit;
+  background: white;
+  color: var(--text-dark);
+}
+
+.form-input::placeholder {
+  color: var(--text-light);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  background: #f8f9ff;
+}
+
+.form-error {
+  color: var(--error-color);
+  margin-bottom: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-success {
+  color: var(--success-color);
+  margin-bottom: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-button {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.form-button:hover:not(:disabled) {
+  box-shadow: 0 0.75rem 1.5rem rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.form-button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .form-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}

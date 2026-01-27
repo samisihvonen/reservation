@@ -6,11 +6,31 @@
 import type { Room } from "../types/room";
 
 export const ROOMS: Room[] = [
-  { id: "room-1", name: "Neukkari 1", capacity: 6 },
-  { id: "room-2", name: "Neukkari 2", capacity: 8 },
-  { id: "room-3", name: "Neuvotteluhuone A", capacity: 4 },
-  { id: "room-4", name: "Neuvotteluhuone B", capacity: 10 },
-  { id: "room-5", name: "Kokoustila C", capacity: 12 },
+  {
+    id: "room-1", name: "Neukkari 1", capacity: 6,
+    isActive: false,
+    createdAt: ""
+  },
+  {
+    id: "room-2", name: "Neukkari 2", capacity: 8,
+    isActive: false,
+    createdAt: ""
+  },
+  {
+    id: "room-3", name: "Neuvotteluhuone A", capacity: 4,
+    isActive: false,
+    createdAt: ""
+  },
+  {
+    id: "room-4", name: "Neuvotteluhuone B", capacity: 10,
+    isActive: false,
+    createdAt: ""
+  },
+  {
+    id: "room-5", name: "Kokoustila C", capacity: 12,
+    isActive: false,
+    createdAt: ""
+  },
 ];
 
 class ReservationService {

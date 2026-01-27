@@ -3,7 +3,7 @@
 // ============================================
 // File: src/components/Dashboard.tsx
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type { Reservation } from '../types/reservation';
 import type { Room } from '../types/room';
 import { ROOMS } from '../services/reservationService';

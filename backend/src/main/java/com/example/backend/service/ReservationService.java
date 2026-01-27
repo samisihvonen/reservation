@@ -1,5 +1,5 @@
 // ============================================
-// 5. BUSINESS LOGIC SERVICE
+// EXTENDED RESERVATION SERVICE
 // ============================================
 // File: src/main/java/com/example/backend/service/ReservationService.java
 
@@ -32,6 +32,15 @@ public class ReservationService {
                 .stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Haetaan yksittäinen varaus ID:n perusteella
+     */
+    public ReservationResponse getReservationById(String id) {
+        Reservation reservation = repository.findById(id)
+                .orElseThrow(() -> new ReservationException("Varausta ei löydy ID:llä: " + id));
+        return toResponse(reservation);
     }
 
     /**
@@ -72,6 +81,45 @@ public class ReservationService {
     }
 
     /**
+     * Päivitetään olemassa olevaa varausta
+     */
+    public ReservationResponse updateReservation(String id, CreateReservationRequest request) {
+        Reservation reservation = repository.findById(id)
+                .orElseThrow(() -> new ReservationException("Varausta ei löydy ID:llä: " + id));
+
+        // Validoi uuden ajan
+        if (request.getStartTime().isBefore(LocalDateTime.now())) {
+            throw new InvalidReservationTimeException(
+                    "Varauksen alkamisaika ei voi olla menneisyydessä.");
+        }
+
+        if (request.getEndTime().isBefore(request.getStartTime())) {
+            throw new InvalidReservationTimeException(
+                    "Päättymisaika ei voi olla alkamisaikaa ennen.");
+        }
+
+        // Tarkista päällekkäisyydet (poislukien tämä varaus)
+        List<Reservation> existingReservations = repository.findByRoomId(request.getRoomId());
+        boolean hasOverlap = existingReservations.stream()
+                .filter(r -> !r.getId().equals(id))
+                .anyMatch(r -> isOverlapping(request, r));
+
+        if (hasOverlap) {
+            throw new RoomAlreadyBookedException(
+                    "Huone on varattu uuden ajan osalta.");
+        }
+
+        // Päivitä varaus
+        reservation.setRoomId(request.getRoomId());
+        reservation.setStartTime(request.getStartTime());
+        reservation.setEndTime(request.getEndTime());
+        reservation.setUser(request.getUser());
+
+        Reservation updated = repository.save(reservation);
+        return toResponse(updated);
+    }
+
+    /**
      * Poistaa varauksen ID:n perusteella
      */
     public void deleteReservation(String id) {
@@ -83,8 +131,6 @@ public class ReservationService {
 
     /**
      * Tarkista, ovatko kaksi varausta päällekkäisiä
-     * Varaukset ovat päällekkäisiä jos uuden varauksen aika leikkaa olemassa olevan
-     * kanssa
      */
     private boolean isOverlapping(CreateReservationRequest request, Reservation existing) {
         return request.getStartTime().isBefore(existing.getEndTime()) &&

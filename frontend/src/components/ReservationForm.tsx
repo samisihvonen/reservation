@@ -3,7 +3,7 @@
 // ============================================
 // File: src/components/ReservationForm.tsx
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Room } from '../types/room';
 import api from '../services/api';
 import '../styles/ReservationForm.css';

@@ -1,560 +1,258 @@
-2026-01-27 13:15:21 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2026-01-27 13:15:21 [main] INFO  c.e.backend.BackendApplicationTests - Starting BackendApplicationTests using Java 25.0.1 with PID 32640 (started by sami_ in C:\Users\sami_\Tiedostot\dev\reservation\backend)
-2026-01-27 13:15:21 [main] DEBUG c.e.backend.BackendApplicationTests - Running with Spring Boot v3.2.6, Spring v6.1.8
-2026-01-27 13:15:21 [main] INFO  c.e.backend.BackendApplicationTests - No active profile set, falling back to 1 default profile: "default"
-2026-01-27 13:15:21 [main] DEBUG o.s.w.c.s.GenericWebApplicationContext - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@383f3558
-2026-01-27 13:15:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-01-27 13:15:23 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 125 ms. Found 3 JPA repository interfaces.
-2026-01-27 13:15:25 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-01-27 13:15:25 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.8.Final
-2026-01-27 13:15:25 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-01-27 13:15:26 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-01-27 13:15:26 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-01-27 13:15:26 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2026-01-27 13:15:26 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-01-27 13:15:26 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-01-27 13:15:28 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-01-27 13:15:28 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-01-27 13:15:29 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-01-27 13:15:29 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+2026-01-30 10:16:05 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-01-30 10:16:05 [main] INFO  c.e.backend.BackendApplicationTests - Starting BackendApplicationTests using Java 25.0.1 with PID 17332 (started by sami_ in C:\Users\sami_\Tiedostot\dev\reservation\backend)
+2026-01-30 10:16:05 [main] DEBUG c.e.backend.BackendApplicationTests - Running with Spring Boot v3.2.6, Spring v6.1.8
+2026-01-30 10:16:05 [main] INFO  c.e.backend.BackendApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-01-30 10:16:05 [main] DEBUG o.s.w.c.s.GenericWebApplicationContext - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@383f3558
+2026-01-30 10:16:09 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-01-30 10:16:09 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 282 ms. Found 3 JPA repository interfaces.
+2026-01-30 10:16:11 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-01-30 10:16:11 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.8.Final
+2026-01-30 10:16:11 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-01-30 10:16:12 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-01-30 10:16:12 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-01-30 10:16:12 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-01-30 10:16:12 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-01-30 10:16:12 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-01-30 10:16:14 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-01-30 10:16:14 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-01-30 10:16:14 [main] WARN  o.s.w.c.s.GenericWebApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'adminController': Lookup method resolution failed
+2026-01-30 10:16:14 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-01-30 10:16:14 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-01-30 10:16:14 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-01-30 10:16:14 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
 
-Using generated security password: 97bec704-f3bc-4fe4-bc46-83cc8d914861
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2026-01-27 13:15:30 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 24 mappings in 'requestMappingHandlerMapping'
-2026-01-27 13:15:30 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
-2026-01-27 13:15:31 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoint(s) beneath base path '/actuator'
-2026-01-27 13:15:31 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6ac9742e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@411b75b4, org.springframework.security.web.context.SecurityContextHolderFilter@6c418f0b, org.springframework.security.web.header.HeaderWriterFilter@672710d5, org.springframework.web.filter.CorsFilter@21298c3a, org.springframework.security.web.authentication.logout.LogoutFilter@731a5a39, com.example.backend.security.AuthTokenFilter@1f2d0ca2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@21dd405a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@ab5d5c8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4f63219e, org.springframework.security.web.session.SessionManagementFilter@63b0aeb1, org.springframework.security.web.access.ExceptionTranslationFilter@406cf37f, org.springframework.security.web.access.intercept.AuthorizationFilter@68f1e261]
-2026-01-27 13:15:31 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
-2026-01-27 13:15:31 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
-2026-01-27 13:15:32 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
-2026-01-27 13:15:32 [main] INFO  c.e.backend.BackendApplicationTests - Started BackendApplicationTests in 12.392 seconds (process running for 14.724)
-2026-01-27 13:15:33 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.backend.controller.ReservationControllerTest]: ReservationControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-01-27 13:15:33 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.backend.BackendApplication for test class com.example.backend.controller.ReservationControllerTest
-2026-01-27 13:15:33 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.backend.controller.ReservationControllerTest$DeleteReservation]: DeleteReservation does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-01-27 13:15:33 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.backend.BackendApplication for test class com.example.backend.controller.ReservationControllerTest$DeleteReservation
-2026-01-27 13:15:34 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
-2026-01-27 13:15:34 [main] INFO  c.e.b.c.ReservationControllerTest - Starting ReservationControllerTest using Java 25.0.1 with PID 32640 (started by sami_ in C:\Users\sami_\Tiedostot\dev\reservation\backend)
-2026-01-27 13:15:34 [main] DEBUG c.e.b.c.ReservationControllerTest - Running with Spring Boot v3.2.6, Spring v6.1.8
-2026-01-27 13:15:34 [main] INFO  c.e.b.c.ReservationControllerTest - No active profile set, falling back to 1 default profile: "default"
-2026-01-27 13:15:34 [main] DEBUG o.s.w.c.s.GenericWebApplicationContext - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@736905fe
-2026-01-27 13:15:35 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-01-27 13:15:35 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 17 ms. Found 3 JPA repository interfaces.
-2026-01-27 13:15:35 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-01-27 13:15:35 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-01-27 13:15:35 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-01-27 13:15:35 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
-2026-01-27 13:15:35 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection conn5: url=jdbc:h2:mem:testdb user=SA
-2026-01-27 13:15:35 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
-2026-01-27 13:15:35 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-01-27 13:15:35 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-01-27 13:15:35 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-01-27 13:15:36 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-01-27 13:15:36 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
-
-Using generated security password: adad4ba3-8e66-461e-a4f6-c038fb19176b
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-2026-01-27 13:15:36 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - 24 mappings in 'requestMappingHandlerMapping'
-2026-01-27 13:15:36 [main] DEBUG o.s.w.s.h.SimpleUrlHandlerMapping - Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
-2026-01-27 13:15:36 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoint(s) beneath base path '/actuator'
-2026-01-27 13:15:36 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6ff185a3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@320d98f5, org.springframework.security.web.context.SecurityContextHolderFilter@34c9c4be, org.springframework.security.web.header.HeaderWriterFilter@271fdeaf, org.springframework.web.filter.CorsFilter@3c20af2, org.springframework.security.web.authentication.logout.LogoutFilter@5a0379e2, com.example.backend.security.AuthTokenFilter@6f1af8c3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@39a7fff, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3dbcdd4a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@29e63bc3, org.springframework.security.web.session.SessionManagementFilter@5c5812c, org.springframework.security.web.access.ExceptionTranslationFilter@51470a6c, org.springframework.security.web.access.intercept.AuthorizationFilter@12e9e909]
-2026-01-27 13:15:37 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerAdapter - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
-2026-01-27 13:15:37 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
-2026-01-27 13:15:37 [main] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
-2026-01-27 13:15:37 [main] DEBUG o.s.w.f.ServerHttpObservationFilter - Filter 'webMvcObservationFilter' configured for use
-2026-01-27 13:15:37 [main] DEBUG c.e.backend.security.AuthTokenFilter - Filter 'authTokenFilter' configured for use
-2026-01-27 13:15:37 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
-2026-01-27 13:15:37 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2026-01-27 13:15:37 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2026-01-27 13:15:37 [main] INFO  c.e.b.c.ReservationControllerTest - Started ReservationControllerTest in 3.569 seconds (process running for 19.611)
-2026-01-27 13:15:37 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:37 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:38 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@736b145b]
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@79b24f79]
-2026-01-27 13:15:38 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:38 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:38 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@470dbce9]
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@6ddb5117]
-2026-01-27 13:15:38 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:38 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:37.886072300, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='1dc236ed-0363-415b-8594-f5dabb3debd6', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:38 [main] DEBUG o.s.security.web.FilterChainProxy - Securing DELETE /api/reservations/1dc236ed-0363-415b-8594-f5dabb3debd6
-2026-01-27 13:15:38 [main] DEBUG o.s.security.web.FilterChainProxy - Secured DELETE /api/reservations/1dc236ed-0363-415b-8594-f5dabb3debd6
-2026-01-27 13:15:38 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#delete(String)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Nothing to write: null body
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/reservations/detail/1dc236ed-0363-415b-8594-f5dabb3debd6
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/reservations/detail/1dc236ed-0363-415b-8594-f5dabb3debd6
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#getById(String)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleReservationException(ReservationException)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Varausvirhe, message=Varausta ei löydy ID:llä: 1dc236ed-0363-415b-8594-f5dabb3debd6, timestam (truncated)...]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.ReservationException: Varausta ei löydy ID:llä: 1dc236ed-0363-415b-8594-f5dabb3debd6]
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:39 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@24ad3cd0]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@4ddb882]
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:39 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@68e5b609]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@4334aa1b]
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing DELETE /api/reservations/non-existent-id
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured DELETE /api/reservations/non-existent-id
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#delete(String)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleReservationException(ReservationException)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Varausvirhe, message=Varausta ei löydy ID:llä: non-existent-id, timestamp=2026-01-27T13:15:39 (truncated)...]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.ReservationException: Varausta ei löydy ID:llä: non-existent-id]
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:39 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@bf0e435]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@637721f4]
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:39 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@620f99dd]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@7650e219]
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:39.667100400, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='3e57e7f0-1568-4fe4-a206-fd46e0e78cb9', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing DELETE /api/reservations/3e57e7f0-1568-4fe4-a206-fd46e0e78cb9
-2026-01-27 13:15:39 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:39 [main] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2026-01-27 13:15:39 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.backend.controller.ReservationControllerTest$UpdateReservation]: UpdateReservation does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-01-27 13:15:39 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.backend.BackendApplication for test class com.example.backend.controller.ReservationControllerTest$UpdateReservation
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:39 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:39 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:39 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@2d01bc46]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@5d489be4]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:40 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@30a7dcd4]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@76c6a458]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:39.963624500, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='aeb24747-0186-488b-8351-50418f4cf10b', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing PUT /api/reservations/aeb24747-0186-488b-8351-50418f4cf10b
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured PUT /api/reservations/aeb24747-0186-488b-8351-50418f4cf10b
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#update(String, CreateReservationRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T17:15:39.963624500, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='aeb24747-0186-488b-8351-50418f4cf10b', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:40 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@5d7341a8]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@6beb047e]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:40 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@50099588]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@68bfaa16]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:40.335225400, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='9eb0f614-f764-4637-8b64-0f1af259ae1a', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T17:15:40.335225400, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='34aa0d5d-dd33-4b37-b0fb-de6abb480ded', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing PUT /api/reservations/9eb0f614-f764-4637-8b64-0f1af259ae1a
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured PUT /api/reservations/9eb0f614-f764-4637-8b64-0f1af259ae1a
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#update(String, CreateReservationRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T16:45:40.335225400, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleRoomAlreadyBooked(RoomAlreadyBookedException)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Huone varattu, message=Huone on varattu uuden ajan osalta., timestamp=2026-01-27T13:15:40.596 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.RoomAlreadyBookedException: Huone on varattu uuden ajan osalta.]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:40 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@747ef51d]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@47c90585]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:40 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@7cf6ea5b]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@8019a5]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:40.628599500, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='232c4bf4-5451-4d66-a53e-0ebe8abbdf19', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing PUT /api/reservations/232c4bf4-5451-4d66-a53e-0ebe8abbdf19
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured PUT /api/reservations/232c4bf4-5451-4d66-a53e-0ebe8abbdf19
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#update(String, CreateReservationRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T12:15:40.886581900, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleInvalidTime(InvalidReservationTimeException)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Virheellinen aika, message=Varauksen alkamisaika ei voi olla menneisyydessä., timestamp=2026- (truncated)...]
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.InvalidReservationTimeException: Varauksen alkamisaika ei voi olla menneisyydessä.]
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:40 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:40 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:40 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@69f2cff6]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@4aa136ff]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@6537c17c]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@68263c3e]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing PUT /api/reservations/non-existent-id
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured PUT /api/reservations/non-existent-id
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#update(String, CreateReservationRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:40.914473, endTime=2026-01-27T1 (truncated)...]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleReservationException(ReservationException)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Varausvirhe, message=Varausta ei löydy ID:llä: non-existent-id, timestamp=2026-01-27T13:15:41 (truncated)...]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.ReservationException: Varausta ei löydy ID:llä: non-existent-id]
-2026-01-27 13:15:41 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.backend.controller.ReservationControllerTest$GetReservationById]: GetReservationById does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-01-27 13:15:41 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.backend.BackendApplication for test class com.example.backend.controller.ReservationControllerTest$GetReservationById
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:41 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@6ed810f3]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@5284d7f2]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@52ce11b5]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@691ff4fe]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/reservations/detail/non-existent-id
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/reservations/detail/non-existent-id
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#getById(String)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleReservationException(ReservationException)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Varausvirhe, message=Varausta ei löydy ID:llä: non-existent-id, timestamp=2026-01-27T13:15:41 (truncated)...]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.ReservationException: Varausta ei löydy ID:llä: non-existent-id]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:41 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@48b4fecb]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@5fa7cb3]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@5ac3a89d]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@536af138]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:41.487002700, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='4df8bfb1-2138-4fa6-8909-52cad42b351a', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/reservations/detail/4df8bfb1-2138-4fa6-8909-52cad42b351a
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/reservations/detail/4df8bfb1-2138-4fa6-8909-52cad42b351a
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#getById(String)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='4df8bfb1-2138-4fa6-8909-52cad42b351a', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:41 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.backend.controller.ReservationControllerTest$CreateReservation]: CreateReservation does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-01-27 13:15:41 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.backend.BackendApplication for test class com.example.backend.controller.ReservationControllerTest$CreateReservation
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:41 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@50bb6465]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@108b257f]
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:41 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:41 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@5022aaa3]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@7c80c68f]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T11:15:42.096299900, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleInvalidTime(InvalidReservationTimeException)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Virheellinen aika, message=Varaus ei voi olla menneisyydessä., timestamp=2026-01-27T13:15:42. (truncated)...]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.InvalidReservationTimeException: Varaus ei voi olla menneisyydessä.]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:42 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@3fddbcb1]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@25832704]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:42 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@7ae76b2]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@261a0d86]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=null, endTime=null, user='null'}]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleValidationException(MethodArgumentNotValidException)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Validointivirhe, message={startTime=Alkamisaika on pakollinen, endTime=Päättymisaika on pakol (truncated)...]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<com.example.backend.dto.ReservationResponse> com.example.backend.controller.ReservationController.create(com.example.backend.dto.CreateReservationRequest) with 3 errors: [Field error in object 'createReservationRequest' on field 'user': rejected value [null]; codes [NotBlank.createReservationRequest.user,NotBlank.user,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [createReservationRequest.user,user]; arguments []; default message [user]]; default message [Käyttäjän nimi on pakollinen]] [Field error in object 'createReservationRequest' on field 'startTime': rejected value [null]; codes [NotNull.createReservationRequest.startTime,NotNull.startTime,NotNull.java.time.LocalDateTime,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [createReservationRequest.startTime,startTime]; arguments []; default message [startTime]]; default message [Alkamisaika on pakollinen]] [Field error in object 'createReservationRequest' on field 'endTime': rejected value [null]; codes [NotNull.createReservationRequest.endTime,NotNull.endTime,NotNull.java.time.LocalDateTime,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [createReservationRequest.endTime,endTime]; arguments []; default message [endTime]]; default message [Päättymisaika on pakollinen]] ]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:42 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@66e6b022]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@56dc6b33]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:42 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@31373fc1]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@12ce5274]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:42.468281100, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='273fdbb4-ca96-4148-9f25-1ab63af6ff33', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:45:42.468281100, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleRoomAlreadyBooked(RoomAlreadyBookedException)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Huone varattu, message=Huone on jo varattu valittuna aikana., timestamp=2026-01-27T13:15:42.7 (truncated)...]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.RoomAlreadyBookedException: Huone on jo varattu valittuna aikana.]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:42 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@7d0c21]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@1fe24f79]
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:42 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:42 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:42 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@4f9a0139]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@28e6f5c7]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:42.785725300, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='9a051252-1509-4057-ab72-c4016d349702', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@38e4697d]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@5d5984aa]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@3338057a]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@6d37c176]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T16:15:43.127664600, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Using @ExceptionHandler com.example.backend.exception.GlobalExceptionHandler#handleInvalidTime(InvalidReservationTimeException)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [{error=Virheellinen aika, message=Päättymisaika ei voi olla alkamisaikaa ennen., timestamp=2026-01-2 (truncated)...]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.example.backend.exception.InvalidReservationTimeException: Päättymisaika ei voi olla alkamisaikaa ennen.]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@304d96b5]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@47c5ad11]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@7882f2e2]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@64845c40]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.Http403ForbiddenEntryPoint - Pre-authenticated entry point called. Rejecting access
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@469dfbf7]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@11275783]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@69db41bc]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@3f851ccf]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:43.687975100, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='9fa4c905-2637-45b7-ac7c-67cd47def1fb', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:43 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:43 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@25ad3681]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@32c2f3ee]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@a47611a]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@78b00778]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T16:15:43.687975100, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='a1599988-2201-433c-a3e4-ffd67c73309b', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:44 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.backend.controller.ReservationControllerTest$GetReservationsByRoom]: GetReservationsByRoom does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-01-27 13:15:44 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.backend.BackendApplication for test class com.example.backend.controller.ReservationControllerTest$GetReservationsByRoom
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:44 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@4dca07d5]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@42b479e7]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@6678411e]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@774d1f78]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T14:15:44.285271400, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='ecfbed55-12c4-4d6b-a5b0-0672a87cf23b', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/reservations
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/reservations
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#create(CreateReservationRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [CreateReservationRequest{roomId='room-1', startTime=2026-01-27T17:15:44.285271400, endTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [ReservationResponse{id='23505cea-467c-442d-b912-b05e0538c916', roomId='room-1', startTime=2026-01-27 (truncated)...]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/reservations/room-1
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/reservations/room-1
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#getByRoom(String)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[ReservationResponse{id='ecfbed55-12c4-4d6b-a5b0-0672a87cf23b', roomId='room-1', startTime=2026-01-2 (truncated)...]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:44 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@27631923]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@b52d046]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@65bc66bb]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@375a068f]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/reservations/room-1
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/reservations/room-1
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#getByRoom(String)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/register
-2026-01-27 13:15:44 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/register
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#register(RegisterRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.RegisterRequest@6ce6b828]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@29457ad2]
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Securing POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.s.w.a.AnonymousAuthenticationFilter - Set SecurityContextHolder to anonymous SecurityContext
-2026-01-27 13:15:44 [main] DEBUG o.s.security.web.FilterChainProxy - Secured POST /api/auth/login
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.AuthController#login(LoginRequest)
-2026-01-27 13:15:44 [main] DEBUG o.s.w.s.m.m.a.RequestResponseBodyMethodProcessor - Read "application/json;charset=UTF-8" to [com.example.backend.dto.LoginRequest@5a050bf9]
-2026-01-27 13:15:45 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:45 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [com.example.backend.dto.AuthResponse@6c8eab63]
-2026-01-27 13:15:45 [main] DEBUG o.s.security.web.FilterChainProxy - Securing GET /api/reservations/non-existent-room
-2026-01-27 13:15:45 [main] DEBUG o.s.security.web.FilterChainProxy - Secured GET /api/reservations/non-existent-room
-2026-01-27 13:15:45 [main] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.backend.controller.ReservationController#getByRoom(String)
-2026-01-27 13:15:45 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2026-01-27 13:15:45 [main] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Writing [[]]
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] DEBUG o.s.w.c.s.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@383f3558, started on Tue Jan 27 13:15:21 EET 2026
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] DEBUG o.s.w.c.s.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@736905fe, started on Tue Jan 27 13:15:34 EET 2026
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
-2026-01-27 13:15:45 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-01-30 10:16:14 [main] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'adminController': Lookup method resolution failed
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.checkLookupMethods(AutowiredAnnotationBeanPostProcessor.java:497)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:367)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineConstructorsFromBeanPostProcessors(AbstractAutowireCapableBeanFactory.java:1296)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:962)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.test.context.SpringBootContextLoader.lambda$loadContext$3(SpringBootContextLoader.java:137)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:58)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:46)
+	at org.springframework.boot.SpringApplication.withHook(SpringApplication.java:1463)
+	at org.springframework.boot.test.context.SpringBootContextLoader$ContextLoaderHook.run(SpringBootContextLoader.java:553)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:137)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:108)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:225)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:152)
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
+	at org.springframework.test.context.web.ServletTestExecutionListener.setUpRequestContextIfNecessary(ServletTestExecutionListener.java:191)
+	at org.springframework.test.context.web.ServletTestExecutionListener.prepareTestInstance(ServletTestExecutionListener.java:130)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:260)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:163)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$10(ClassBasedTestDescriptor.java:378)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:383)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$11(ClassBasedTestDescriptor.java:378)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:214)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1716)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:570)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:315)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:803)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:377)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$6(ClassBasedTestDescriptor.java:290)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:289)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$4(ClassBasedTestDescriptor.java:279)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$5(ClassBasedTestDescriptor.java:278)
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:106)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:105)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$2(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:90)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:55)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:223)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:175)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:139)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:456)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:169)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
+Caused by: java.lang.IllegalStateException: Failed to introspect Class [com.example.backend.controller.AdminController] from ClassLoader [jdk.internal.loader.ClassLoaders$AppClassLoader@105be200]
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:483)
+	at org.springframework.util.ReflectionUtils.doWithLocalMethods(ReflectionUtils.java:320)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.checkLookupMethods(AutowiredAnnotationBeanPostProcessor.java:475)
+	... 97 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: com/example/backend/dto/RoomNameChangeRequest
+	at java.base/java.lang.Class.getDeclaredMethods0(Native Method)
+	at java.base/java.lang.Class.privateGetDeclaredMethods(Class.java:3010)
+	at java.base/java.lang.Class.getDeclaredMethods(Class.java:2329)
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:465)
+	... 99 common frames omitted
+Caused by: java.lang.ClassNotFoundException: com.example.backend.dto.RoomNameChangeRequest
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
+	... 103 common frames omitted
+2026-01-30 10:16:14 [main] WARN  o.s.test.context.TestContextManager - Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener] to prepare test instance [com.example.backend.BackendApplicationTests@492a220e]
+java.lang.IllegalStateException: Failed to load ApplicationContext for [WebMergedContextConfiguration@77f95e19 testClass = com.example.backend.BackendApplicationTests, locations = [], classes = [com.example.backend.BackendApplication], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [PropertySourceDescriptor[locations=[classpath:application-test.properties], ignoreResourceNotFound=false, name=null, propertySourceFactory=null, encoding=null]], propertySourceProperties = ["org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true"], contextCustomizers = [org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@3e08ff24, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@70ed52de, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@6f10d5b6, org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@eadd4fb, org.springframework.boot.test.context.SpringBootTestAnnotation@b0e76353], resourceBasePath = "src/main/webapp", contextLoader = org.springframework.boot.test.context.SpringBootContextLoader, parent = null]
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:180)
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130)
+	at org.springframework.test.context.web.ServletTestExecutionListener.setUpRequestContextIfNecessary(ServletTestExecutionListener.java:191)
+	at org.springframework.test.context.web.ServletTestExecutionListener.prepareTestInstance(ServletTestExecutionListener.java:130)
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:260)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:163)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$10(ClassBasedTestDescriptor.java:378)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:383)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$11(ClassBasedTestDescriptor.java:378)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:214)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1716)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:570)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:315)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:803)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:377)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$6(ClassBasedTestDescriptor.java:290)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:289)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$4(ClassBasedTestDescriptor.java:279)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$5(ClassBasedTestDescriptor.java:278)
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:106)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:105)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$2(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:123)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:90)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:55)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:223)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:175)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:139)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:456)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:169)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:595)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:581)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'adminController': Lookup method resolution failed
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.checkLookupMethods(AutowiredAnnotationBeanPostProcessor.java:497)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:367)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineConstructorsFromBeanPostProcessors(AbstractAutowireCapableBeanFactory.java:1296)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:562)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:962)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:624)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:335)
+	at org.springframework.boot.test.context.SpringBootContextLoader.lambda$loadContext$3(SpringBootContextLoader.java:137)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:58)
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:46)
+	at org.springframework.boot.SpringApplication.withHook(SpringApplication.java:1463)
+	at org.springframework.boot.test.context.SpringBootContextLoader$ContextLoaderHook.run(SpringBootContextLoader.java:553)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:137)
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:108)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:225)
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:152)
+	... 73 common frames omitted
+Caused by: java.lang.IllegalStateException: Failed to introspect Class [com.example.backend.controller.AdminController] from ClassLoader [jdk.internal.loader.ClassLoaders$AppClassLoader@105be200]
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:483)
+	at org.springframework.util.ReflectionUtils.doWithLocalMethods(ReflectionUtils.java:320)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.checkLookupMethods(AutowiredAnnotationBeanPostProcessor.java:475)
+	... 97 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: com/example/backend/dto/RoomNameChangeRequest
+	at java.base/java.lang.Class.getDeclaredMethods0(Native Method)
+	at java.base/java.lang.Class.privateGetDeclaredMethods(Class.java:3010)
+	at java.base/java.lang.Class.getDeclaredMethods(Class.java:2329)
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:465)
+	... 99 common frames omitted
+Caused by: java.lang.ClassNotFoundException: com.example.backend.dto.RoomNameChangeRequest
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
+	... 103 common frames omitted
+2026-01-30 10:16:14 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.backend.controller.ReservationControllerTest]: ReservationControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.

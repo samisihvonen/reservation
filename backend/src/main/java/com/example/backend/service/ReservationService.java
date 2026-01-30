@@ -47,8 +47,9 @@ public class ReservationService {
      * Luodaan uusi varaus validoinnin kanssa
      */
     public ReservationResponse createReservation(CreateReservationRequest request) {
+        LocalDateTime now = LocalDateTime.now();
         // 1. Validoi että alkamisaika on tulevaisuudessa
-        if (request.getStartTime().isBefore(LocalDateTime.now())) {
+        if (request.getStartTime().isBefore(now)) {
             throw new InvalidReservationTimeException(
                     "Varaus ei voi olla menneisyydessä.");
         }
@@ -86,9 +87,9 @@ public class ReservationService {
     public ReservationResponse updateReservation(String id, CreateReservationRequest request) {
         Reservation reservation = repository.findById(id)
                 .orElseThrow(() -> new ReservationException("Varausta ei löydy ID:llä: " + id));
-
+        LocalDateTime now = LocalDateTime.now();
         // Validoi uuden ajan
-        if (request.getStartTime().isBefore(LocalDateTime.now())) {
+        if (request.getStartTime().isBefore(now)) {
             throw new InvalidReservationTimeException(
                     "Varauksen alkamisaika ei voi olla menneisyydessä.");
         }
@@ -133,8 +134,8 @@ public class ReservationService {
      * Tarkista, ovatko kaksi varausta päällekkäisiä
      */
     private boolean isOverlapping(CreateReservationRequest request, Reservation existing) {
-        return request.getStartTime().isBefore(existing.getEndTime()) &&
-                request.getEndTime().isAfter(existing.getStartTime());
+        return request.getStartTime().isBefore(existing.getEndTime())
+                && request.getEndTime().isAfter(existing.getStartTime());
     }
 
     /**

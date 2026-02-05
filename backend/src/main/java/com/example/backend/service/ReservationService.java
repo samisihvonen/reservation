@@ -5,6 +5,10 @@
 
 package com.example.backend.service;
 
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import com.example.backend.dto.CreateReservationRequest;
 import com.example.backend.dto.ReservationResponse;
 import com.example.backend.exception.InvalidReservationTimeException;

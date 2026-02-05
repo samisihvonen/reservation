@@ -5,6 +5,9 @@
 
 package com.example.backend.service;
 
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import com.example.backend.dto.CreateReservationRequest;
 import com.example.backend.dto.ReservationResponse;
 import com.example.backend.exception.InvalidReservationTimeException;

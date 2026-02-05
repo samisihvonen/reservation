@@ -5,6 +5,10 @@
 
 package com.example.backend.service;
 
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.RoomRequest;

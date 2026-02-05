@@ -5,6 +5,10 @@
 
 package com.example.backend.dto;
 
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 
 public class ReservationResponse {

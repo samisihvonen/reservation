@@ -1,6 +1,10 @@
 // File 1: src/main/java/com/example/backend/dto/UserResponse.java
 package com.example.backend.dto;
 
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 
 public class UserResponse {

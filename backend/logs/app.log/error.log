@@ -1,0 +1,36 @@
+2026-02-05 14:58:45 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field adminService in com.example.backend.controller.AdminController required a bean of type 'com.example.backend.service.AdminService' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.backend.service.AdminService' in your configuration.
+
+2026-02-05 14:58:46 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field authService in com.example.backend.controller.AuthController required a bean of type 'com.example.backend.service.AuthService' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.backend.service.AuthService' in your configuration.
+

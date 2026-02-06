@@ -5,6 +5,8 @@
 
 package com.example.backend.controller;
 
+
+import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.dto.AuthResponse;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;

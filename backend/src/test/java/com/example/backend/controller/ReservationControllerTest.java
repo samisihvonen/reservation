@@ -5,6 +5,8 @@
 
 package com.example.backend.controller;
 
+
+import java.util.List;
 import com.example.backend.dto.CreateReservationRequest;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @DisplayName("Reservation Controller Integration Tests")
 @TestPropertySource(locations = "classpath:application-test.properties")

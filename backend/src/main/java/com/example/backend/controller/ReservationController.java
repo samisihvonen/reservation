@@ -5,6 +5,8 @@
 
 package com.example.backend.controller;
 
+
+import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.dto.CreateReservationRequest;
 import com.example.backend.dto.ReservationResponse;
 import com.example.backend.service.ReservationService;

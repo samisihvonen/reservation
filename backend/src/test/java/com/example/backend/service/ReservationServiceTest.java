@@ -5,6 +5,8 @@
 
 package com.example.backend.service;
 
+
+import org.springframework.stereotype.Service;
 import com.example.backend.dto.CreateReservationRequest;
 import com.example.backend.dto.ReservationResponse;
 import com.example.backend.exception.InvalidReservationTimeException;

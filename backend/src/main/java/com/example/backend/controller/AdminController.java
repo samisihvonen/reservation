@@ -5,6 +5,8 @@
 
 package com.example.backend.controller;
 
+
+import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.dto.UserResponse;
 import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.EmailChangeRequest;

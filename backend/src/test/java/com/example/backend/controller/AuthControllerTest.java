@@ -1,7 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.LoginRequest;
-import com.example.backend.dto.RegisterRequest;
+import com.example.backend.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -35,11 +33,11 @@ class AuthControllerTest {
     void testRegister() throws Exception {
         // Arrange
         // TODO: Mock service calls using authService
-        
+
         // Act
         ResultActions result = mockMvc.perform(get("/register")
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         // Assert
         result.andExpect(status().isOk());
     }
@@ -49,11 +47,11 @@ class AuthControllerTest {
     void testLogin() throws Exception {
         // Arrange
         // TODO: Mock service calls using authService
-        
+
         // Act
         ResultActions result = mockMvc.perform(get("/login")
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         // Assert
         result.andExpect(status().isOk());
     }

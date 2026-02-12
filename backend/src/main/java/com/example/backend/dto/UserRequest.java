@@ -1,5 +1,3 @@
-// File: src/main/java/com/example/backend/dto/UserRequest.java
-
 package com.example.backend.dto;
 
 import jakarta.validation.constraints.Email;

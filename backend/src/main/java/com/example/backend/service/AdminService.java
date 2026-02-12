@@ -1,26 +1,19 @@
-// ============================================
-// ADMIN SERVICE - User & Room Management
-// ============================================
-// File: src/main/java/com/example/backend/service/AdminService.java
-
 package com.example.backend.service;
 
-import com.example.backend.dto.UserResponse;
-import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.RoomRequest;
 import com.example.backend.dto.RoomResponse;
+import com.example.backend.dto.UserRequest;
+import com.example.backend.dto.UserResponse;
 import com.example.backend.exception.ReservationException;
-import com.example.backend.model.User;
 import com.example.backend.model.Room;
-import com.example.backend.repository.UserRepository;
+import com.example.backend.model.User;
 import com.example.backend.repository.RoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.backend.repository.UserRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Service
 public class AdminService {
 
     @Autowired

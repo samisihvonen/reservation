@@ -1,4 +1,3 @@
-// File 1: src/main/java/com/example/backend/dto/UserResponse.java
 package com.example.backend.dto;
 
 import java.time.LocalDateTime;

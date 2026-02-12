@@ -1,8 +1,3 @@
-// ============================================
-// 5. Auth Request DTOs
-// ============================================
-// File: src/main/java/com/example/backend/dto/LoginRequest.java
-
 package com.example.backend.dto;
 
 import jakarta.validation.constraints.Email;

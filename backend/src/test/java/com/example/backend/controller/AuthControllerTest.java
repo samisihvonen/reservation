@@ -1,5 +1,7 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.LoginRequest;
+import com.example.backend.dto.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-class HealthControllerTest {
+class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -21,18 +23,35 @@ class HealthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private AuthService authService;
+
     @BeforeEach
     void setUp() {
     }
 
     @Test
-    @DisplayName("Should handle health request")
-    void testHealth() throws Exception {
+    @DisplayName("Should handle register request")
+    void testRegister() throws Exception {
         // Arrange
-        // TODO: Mock service calls
+        // TODO: Mock service calls using authService
         
         // Act
-        ResultActions result = mockMvc.perform(get("/health")
+        ResultActions result = mockMvc.perform(get("/register")
+                .contentType(MediaType.APPLICATION_JSON));
+        
+        // Assert
+        result.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Should handle login request")
+    void testLogin() throws Exception {
+        // Arrange
+        // TODO: Mock service calls using authService
+        
+        // Act
+        ResultActions result = mockMvc.perform(get("/login")
                 .contentType(MediaType.APPLICATION_JSON));
         
         // Assert

@@ -1,4 +1,3 @@
-// File 3: src/main/java/com/example/backend/dto/RoomResponse.java
 package com.example.backend.dto;
 
 import java.time.LocalDateTime;

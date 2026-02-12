@@ -1,8 +1,3 @@
-// ============================================
-// ReservationResponse DTO
-// ============================================
-// File: src/main/java/com/example/backend/dto/ReservationResponse.java
-
 package com.example.backend.dto;
 
 import java.time.LocalDateTime;

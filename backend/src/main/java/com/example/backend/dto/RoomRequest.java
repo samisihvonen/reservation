@@ -1,9 +1,8 @@
-// File 2: src/main/java/com/example/backend/dto/RoomRequest.java
 package com.example.backend.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Min;
 
 public class RoomRequest {
     @NotBlank(message = "Huoneen nimi on pakollinen")

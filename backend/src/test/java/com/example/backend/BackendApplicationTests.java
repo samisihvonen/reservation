@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-@SpringBootTest
-@DisplayName("Backend Application Context Tests")
-@TestPropertySource(locations = "classpath:application-test.properties")
 class BackendApplicationTests {
 
     @Test

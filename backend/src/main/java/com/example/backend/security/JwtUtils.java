@@ -1,26 +1,16 @@
-// ============================================
-// FIXED: JwtUtils - JWT Token Generation & Validation
-// ============================================
-// File: src/main/java/com/example/backend/security/JwtUtils.java
-
 package com.example.backend.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import javax.crypto.SecretKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-import javax.crypto.SecretKey;
-
-@Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 

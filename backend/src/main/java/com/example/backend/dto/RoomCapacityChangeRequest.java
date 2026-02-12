@@ -1,5 +1,3 @@
-// File: src/main/java/com/example/backend/dto/RoomCapacityChangeRequest.java
-
 package com.example.backend.dto;
 
 import jakarta.validation.constraints.Min;

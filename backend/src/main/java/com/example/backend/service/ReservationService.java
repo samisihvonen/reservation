@@ -1,8 +1,3 @@
-// ============================================
-// EXTENDED RESERVATION SERVICE
-// ============================================
-// File: src/main/java/com/example/backend/service/ReservationService.java
-
 package com.example.backend.service;
 
 import com.example.backend.dto.CreateReservationRequest;
@@ -12,13 +7,11 @@ import com.example.backend.exception.ReservationException;
 import com.example.backend.exception.RoomAlreadyBookedException;
 import com.example.backend.model.Reservation;
 import com.example.backend.repository.ReservationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Service
 public class ReservationService {
 
     @Autowired

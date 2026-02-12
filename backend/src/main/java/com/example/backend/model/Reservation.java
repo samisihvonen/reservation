@@ -1,18 +1,13 @@
-// ============================================
-// Reservation Entity - Manual Getters/Setters
-// ============================================
-// File: src/main/java/com/example/backend/model/Reservation.java
-
 package com.example.backend.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Entity
-@Table(name = "reservations")
 public class Reservation {
     
     @Id

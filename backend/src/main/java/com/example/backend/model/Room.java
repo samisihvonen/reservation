@@ -1,17 +1,12 @@
-// ============================================
-// ROOM ENTITY - Conference Rooms
-// ============================================
-// File: src/main/java/com/example/backend/model/Room.java
-
 package com.example.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "rooms")
 public class Room {
     
     @Id

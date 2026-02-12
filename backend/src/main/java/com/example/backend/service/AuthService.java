@@ -1,8 +1,3 @@
-// ============================================
-// 6. Auth Service
-// ============================================
-// File: src/main/java/com/example/backend/service/AuthService.java
-
 package com.example.backend.service;
 
 import com.example.backend.dto.AuthResponse;
@@ -14,9 +9,7 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-@Service
 public class AuthService {
 
     @Autowired

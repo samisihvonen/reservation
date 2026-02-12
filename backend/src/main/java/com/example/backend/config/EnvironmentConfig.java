@@ -1,20 +1,9 @@
 package com.example.backend.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import java.io.File;
 import org.springframework.context.annotation.Configuration;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
-import java.io.File;
-
-/**
- * Configuration class to load environment variables from .env files
- * 
- * Load order:
- * 1. .env.{profile} (e.g., .env.local, .env.staging, .env.production)
- * 2. .env (default)
- * 3. System environment variables (fallback)
- */
-@Configuration
 public class EnvironmentConfig {
     
     static {

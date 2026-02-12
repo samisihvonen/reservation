@@ -1,5 +1,3 @@
-// File: src/main/java/com/example/backend/dto/AuthResponse.java
-
 package com.example.backend.dto;
 
 public class AuthResponse {

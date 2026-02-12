@@ -1,11 +1,7 @@
-// ============================================
-// CreateReservationRequest DTO
-// ============================================
-// File: src/main/java/com/example/backend/dto/CreateReservationRequest.java
-
 package com.example.backend.dto;
 
 import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class CreateReservationRequest {

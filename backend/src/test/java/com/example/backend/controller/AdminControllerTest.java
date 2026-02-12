@@ -61,7 +61,7 @@ class AdminControllerTest {
 
         // Act
         ResultActions result = mockMvc.perform(put("/update-user/{id}")
-                .content(objectMapper.writeValueAsString(/* TODO: create request body */))
+                .content(objectMapper.writeValueAsString(new Long()))
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert
@@ -104,7 +104,7 @@ class AdminControllerTest {
 
         // Act
         ResultActions result = mockMvc.perform(post("/create-room")
-                .content(objectMapper.writeValueAsString(/* TODO: create request body */))
+                .content(objectMapper.writeValueAsString(new RoomRequest()))
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert
@@ -119,7 +119,7 @@ class AdminControllerTest {
 
         // Act
         ResultActions result = mockMvc.perform(put("/update-room/{id}")
-                .content(objectMapper.writeValueAsString(/* TODO: create request body */))
+                .content("test-body")
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert

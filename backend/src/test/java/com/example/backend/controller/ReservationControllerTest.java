@@ -43,7 +43,7 @@ class ReservationControllerTest {
 
         // Act
         ResultActions result = mockMvc.perform(post("/create")
-                .content(objectMapper.writeValueAsString(/* TODO: create request body */))
+                .content(objectMapper.writeValueAsString(new CreateReservationRequest()))
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert
@@ -58,7 +58,7 @@ class ReservationControllerTest {
 
         // Act
         ResultActions result = mockMvc.perform(put("/update/{id}")
-                .content(objectMapper.writeValueAsString(/* TODO: create request body */))
+                .content("test-body")
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert

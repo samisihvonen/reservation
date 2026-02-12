@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.CreateReservationRequest;
+import com.example.backend.service.ReservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -34,12 +33,12 @@ class ReservationControllerTest {
     void testCreate() throws Exception {
         // Arrange
         // TODO: Mock service calls using service
-        
+
         // Act
         ResultActions result = mockMvc.perform(post("/create")
                 .content(objectMapper.writeValueAsString(/* TODO: create request body */))
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         // Assert
         result.andExpect(status().isOk());
     }
@@ -49,12 +48,12 @@ class ReservationControllerTest {
     void testUpdate() throws Exception {
         // Arrange
         // TODO: Mock service calls using service
-        
+
         // Act
         ResultActions result = mockMvc.perform(put("/update/{id}")
                 .content(objectMapper.writeValueAsString(/* TODO: create request body */))
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         // Assert
         result.andExpect(status().isOk());
     }
@@ -64,11 +63,11 @@ class ReservationControllerTest {
     void testDelete() throws Exception {
         // Arrange
         // TODO: Mock service calls using service
-        
+
         // Act
         ResultActions result = mockMvc.perform(delete("/delete/{id}")
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         // Assert
         result.andExpect(status().isOk());
     }
@@ -78,11 +77,11 @@ class ReservationControllerTest {
     void testGetById() throws Exception {
         // Arrange
         // TODO: Mock service calls using service
-        
+
         // Act
         ResultActions result = mockMvc.perform(get("/{id}/{id}")
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         // Assert
         result.andExpect(status().isOk());
     }

@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -30,11 +29,11 @@ class HealthControllerTest {
     void testHealth() throws Exception {
         // Arrange
         // TODO: Mock service calls
-        
+
         // Act
         ResultActions result = mockMvc.perform(get("/health")
                 .contentType(MediaType.APPLICATION_JSON));
-        
+
         // Assert
         result.andExpect(status().isOk());
     }

@@ -43,7 +43,7 @@ class ReservationControllerTest {
 
         // Act
         ResultActions result = mockMvc.perform(post("/create")
-                .content(objectMapper.writeValueAsString(null))
+                .content(objectMapper.writeValueAsString(null /* TODO: create CreateReservationRequest */))
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert

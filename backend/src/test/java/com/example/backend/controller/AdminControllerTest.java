@@ -104,7 +104,7 @@ class AdminControllerTest {
 
         // Act
         ResultActions result = mockMvc.perform(post("/create-room")
-                .content(objectMapper.writeValueAsString(null))
+                .content(objectMapper.writeValueAsString(null /* TODO: create RoomRequest */))
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert

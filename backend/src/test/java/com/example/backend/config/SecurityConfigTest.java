@@ -3,18 +3,20 @@ package com.example.backend.config;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SecurityConfigTest {
 
-    private SecurityConfig securityConfig;
+    private SecurityConfig instance;
 
     @BeforeEach
     void setUp() {
-        securityConfig = new SecurityConfig();
+        instance = new SecurityConfig();
     }
 
     @Test
@@ -31,7 +33,7 @@ class SecurityConfigTest {
 
     @Test
     @DisplayName("Should security_filter_chain successfully")
-    void testSecurityFilterChain() throws Exception {
+    void testSecurityFilterChain() {
         // Arrange
 
         // Act

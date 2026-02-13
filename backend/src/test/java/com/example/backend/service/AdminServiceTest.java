@@ -1,8 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.RoomRequest;
 import com.example.backend.dto.RoomResponse;
-import com.example.backend.dto.UserRequest;
 import com.example.backend.dto.UserResponse;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +16,12 @@ import static org.mockito.Mockito.*;
 
 class AdminServiceTest {
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private RoomRepository roomRepository;
+
     @InjectMocks
     private AdminService adminService;
 
@@ -30,6 +34,8 @@ class AdminServiceTest {
     @DisplayName("Should get_all_users successfully")
     void testGetAllUsers() {
         // Arrange
+        // Mock repository
+        when(userRepository.findAll()).thenReturn(java.util.Collections.emptyList());
 
         // Act
         List<UserResponse> result = adminService.getAllUsers();
@@ -42,6 +48,8 @@ class AdminServiceTest {
     @DisplayName("Should get_user_by_id successfully")
     void testGetUserById() {
         // Arrange
+        // Mock repository
+        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
         UserResponse result = adminService.getUserById(1L);
@@ -54,9 +62,11 @@ class AdminServiceTest {
     @DisplayName("Should update_user successfully")
     void testUpdateUser() {
         // Arrange
+        // Mock repository
+        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
-        UserResponse result = adminService.updateUser(1L, null);
+        UserResponse result = adminService.updateUser(1L, null /* TODO: create UserRequest */);
 
         // Assert
         assertThat(result).isNotNull();
@@ -78,6 +88,8 @@ class AdminServiceTest {
     @DisplayName("Should change_user_email successfully")
     void testChangeUserEmail() {
         // Arrange
+        // Mock repository
+        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
         UserResponse result = adminService.changeUserEmail(1L, "test-value");
@@ -90,6 +102,8 @@ class AdminServiceTest {
     @DisplayName("Should get_all_rooms successfully")
     void testGetAllRooms() {
         // Arrange
+        // Mock repository
+        when(userRepository.findAll()).thenReturn(java.util.Collections.emptyList());
 
         // Act
         List<RoomResponse> result = adminService.getAllRooms();
@@ -102,9 +116,11 @@ class AdminServiceTest {
     @DisplayName("Should create_room successfully")
     void testCreateRoom() {
         // Arrange
+        // Mock repository
+        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
-        RoomResponse result = adminService.createRoom(null);
+        RoomResponse result = adminService.createRoom(null /* TODO: create RoomRequest */);
 
         // Assert
         assertThat(result).isNotNull();
@@ -114,9 +130,11 @@ class AdminServiceTest {
     @DisplayName("Should update_room successfully")
     void testUpdateRoom() {
         // Arrange
+        // Mock repository
+        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
-        RoomResponse result = adminService.updateRoom("test-value", null);
+        RoomResponse result = adminService.updateRoom("test-value", null /* TODO: create RoomRequest */);
 
         // Assert
         assertThat(result).isNotNull();
@@ -138,6 +156,8 @@ class AdminServiceTest {
     @DisplayName("Should change_room_name successfully")
     void testChangeRoomName() {
         // Arrange
+        // Mock repository
+        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
         RoomResponse result = adminService.changeRoomName("test-value", "test-value");
@@ -150,6 +170,8 @@ class AdminServiceTest {
     @DisplayName("Should change_room_capacity successfully")
     void testChangeRoomCapacity() {
         // Arrange
+        // Mock repository
+        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
         RoomResponse result = adminService.changeRoomCapacity("test-value", 1);

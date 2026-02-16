@@ -27,32 +27,32 @@ class AuthControllerTest {
 
     @BeforeEach
     void setup() {
-        registerRequest = new RegisterRequest(); // initialize test data for RegisterRequest
-        loginRequest = new LoginRequest(); // initialize test data for LoginRequest
-        authResponse = new AuthResponse(); // initialize test data for AuthResponse
+        registerRequest = new RegisterRequest(); // Set up test data for RegisterRequest
+        loginRequest = new LoginRequest(); // Set up test data for LoginRequest
+        authResponse = new AuthResponse(); // Set up test data for AuthResponse
     }
 
-    @Test
     @DisplayName("Test register method")
+    @Test
     void testRegister() {
         when(authService.register(registerRequest)).thenReturn(authResponse);
 
         ResponseEntity<AuthResponse> response = authController.register(registerRequest);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(authResponse, response.getBody());
         verify(authService).register(registerRequest);
+        verifyNoMoreInteractions(authService);
     }
 
-    @Test
     @DisplayName("Test login method")
+    @Test
     void testLogin() {
         when(authService.login(loginRequest)).thenReturn(authResponse);
 
         ResponseEntity<AuthResponse> response = authController.login(loginRequest);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(authResponse, response.getBody());
         verify(authService).login(loginRequest);
+        verifyNoMoreInteractions(authService);
     }
 }

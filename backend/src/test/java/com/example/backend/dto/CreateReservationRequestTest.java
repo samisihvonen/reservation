@@ -18,7 +18,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should get_room_id successfully")
-    void testGetRoomId() throws Exception {
+    void testGetRoomId() {
         // Arrange
 
         // Act
@@ -30,7 +30,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should get_start_time successfully")
-    void testGetStartTime() throws Exception {
+    void testGetStartTime() {
         // Arrange
 
         // Act
@@ -42,7 +42,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should get_end_time successfully")
-    void testGetEndTime() throws Exception {
+    void testGetEndTime() {
         // Arrange
 
         // Act
@@ -54,7 +54,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should get_user successfully")
-    void testGetUser() throws Exception {
+    void testGetUser() {
         // Arrange
 
         // Act
@@ -66,7 +66,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should set_room_id successfully")
-    void testSetRoomId() throws Exception {
+    void testSetRoomId() {
         // Arrange
 
         // Act
@@ -78,7 +78,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should set_start_time successfully")
-    void testSetStartTime() throws Exception {
+    void testSetStartTime() {
         // Arrange
 
         // Act
@@ -90,7 +90,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should set_end_time successfully")
-    void testSetEndTime() throws Exception {
+    void testSetEndTime() {
         // Arrange
 
         // Act
@@ -102,7 +102,7 @@ class CreateReservationRequestTest {
 
     @Test
     @DisplayName("Should set_user successfully")
-    void testSetUser() throws Exception {
+    void testSetUser() {
         // Arrange
 
         // Act

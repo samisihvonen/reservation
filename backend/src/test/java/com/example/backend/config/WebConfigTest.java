@@ -1,30 +1,41 @@
 package com.example.backend.config;
 
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.*;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class WebConfigTest {
 
-    private WebConfig instance;
+    @Mock
+    private CorsRegistry registry;
+    @Mock
+    private WebApplicationContext webApplicationContext;
 
     @BeforeEach
     void setUp() {
-        instance = new WebConfig();
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    @DisplayName("Should add_cors_mappings successfully")
+    @DisplayName("Test addCorsMappings method")
     void testAddCorsMappings() {
-        // Arrange
+        when(webApplicationContext.getBean(CorsRegistry.class)).thenReturn(registry);
 
-        // Act
-        webConfig.addCorsMappings(null);
+        WebConfig webConfig = new WebConfig();
+        webConfig.setApplicationContext(webApplicationContext);
 
-        // Assert
-        // TODO: Verify side effects using Mockito.verify()
+        webConfig.addCorsMappings(registry);
+
+        verify(registry).addMapping("/api/**");
+        verify(registry).allowedOrigins("http://localhost:5174");
+        verify(registry).allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+        verify(registry).allowedHeaders("*");
+        verify(registry, times(1)).allowCredentials(true);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.AuthResponse;
+import com.example.backend.dto.LoginRequest;
+import com.example.backend.dto.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,9 +16,6 @@ import static org.mockito.Mockito.*;
 
 class AuthServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
-
     @InjectMocks
     private AuthService authService;
 
@@ -29,11 +28,9 @@ class AuthServiceTest {
     @DisplayName("Should register successfully")
     void testRegister() {
         // Arrange
-        // Mock repository
-        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
-        AuthResponse result = authService.register(null /* TODO: create RegisterRequest */);
+        AuthResponse result = authService.register(null);
 
         // Assert
         assertThat(result).isNotNull();
@@ -43,11 +40,9 @@ class AuthServiceTest {
     @DisplayName("Should login successfully")
     void testLogin() {
         // Arrange
-        // Mock repository
-        when(userRepository.findById(any())).thenReturn(java.util.Optional.empty());
 
         // Act
-        AuthResponse result = authService.login(null /* TODO: create LoginRequest */);
+        AuthResponse result = authService.login(null);
 
         // Assert
         assertThat(result).isNotNull();

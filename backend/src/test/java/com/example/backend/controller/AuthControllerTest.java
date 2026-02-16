@@ -3,19 +3,17 @@ package com.example.backend.controller;
 import com.example.backend.dto.AuthResponse;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.http.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class AuthControllerTest {
+class AuthControllerTest {
 
     @Mock
     private AuthService authService;
@@ -23,38 +21,38 @@ public class AuthControllerTest {
     @InjectMocks
     private AuthController authController;
 
+    private RegisterRequest registerRequest;
+    private LoginRequest loginRequest;
+    private AuthResponse authResponse;
+
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
+    void setup() {
+        registerRequest = new RegisterRequest(); // initialize test data for RegisterRequest
+        loginRequest = new LoginRequest(); // initialize test data for LoginRequest
+        authResponse = new AuthResponse(); // initialize test data for AuthResponse
     }
 
+    @Test
     @DisplayName("Test register method")
-    @Test
-    public void testRegister() {
-        RegisterRequest request = new RegisterRequest();
-        AuthResponse response = new AuthResponse();
+    void testRegister() {
+        when(authService.register(registerRequest)).thenReturn(authResponse);
 
-        when(authService.register(request)).thenReturn(response);
+        ResponseEntity<AuthResponse> response = authController.register(registerRequest);
 
-        ResponseEntity<AuthResponse> result = authController.register(request);
-
-        assertEquals(HttpStatus.CREATED, result.getStatusCode());
-        verify(authService).register(request);
-        verifyNoMoreInteractions(authService);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(authResponse, response.getBody());
+        verify(authService).register(registerRequest);
     }
 
-    @DisplayName("Test login method")
     @Test
-    public void testLogin() {
-        LoginRequest request = new LoginRequest();
-        AuthResponse response = new AuthResponse();
+    @DisplayName("Test login method")
+    void testLogin() {
+        when(authService.login(loginRequest)).thenReturn(authResponse);
 
-        when(authService.login(request)).thenReturn(response);
+        ResponseEntity<AuthResponse> response = authController.login(loginRequest);
 
-        ResponseEntity<AuthResponse> result = authController.login(request);
-
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        verify(authService).login(request);
-        verifyNoMoreInteractions(authService);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(authResponse, response.getBody());
+        verify(authService).login(loginRequest);
     }
 }

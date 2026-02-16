@@ -15,6 +15,10 @@ public class AuthResponse {
         this.displayName = displayName;
     }
 
+    public AuthResponse() {
+        //TODO Auto-generated constructor stub
+    }
+
     public String getToken() { return token; }
     public void setToken(String token) { this.token = token; }
 

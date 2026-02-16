@@ -1,66 +1,60 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.AuthResponse;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
-import com.example.backend.service.AuthService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class AuthControllerTest {
+public class AuthControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
+    @Mock
     private AuthService authService;
 
+    @InjectMocks
+    private AuthController authController;
+
     @BeforeEach
-    void setUp() {
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
+    @DisplayName("Test register method")
     @Test
-    @DisplayName("Should handle register request")
-    void testRegister() throws Exception {
-        // Arrange
-        // TODO: Mock service calls using authService
+    public void testRegister() {
+        RegisterRequest request = new RegisterRequest();
+        AuthResponse response = new AuthResponse();
 
-        // Act
-        ResultActions result = mockMvc.perform(get("/register")
-                .contentType(MediaType.APPLICATION_JSON));
+        when(authService.register(request)).thenReturn(response);
 
-        // Assert
-        result.andExpect(status().isOk());
+        ResponseEntity<AuthResponse> result = authController.register(request);
+
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        verify(authService).register(request);
+        verifyNoMoreInteractions(authService);
     }
 
+    @DisplayName("Test login method")
     @Test
-    @DisplayName("Should handle login request")
-    void testLogin() throws Exception {
-        // Arrange
-        // TODO: Mock service calls using authService
+    public void testLogin() {
+        LoginRequest request = new LoginRequest();
+        AuthResponse response = new AuthResponse();
 
-        // Act
-        ResultActions result = mockMvc.perform(get("/login")
-                .contentType(MediaType.APPLICATION_JSON));
+        when(authService.login(request)).thenReturn(response);
 
-        // Assert
-        result.andExpect(status().isOk());
+        ResponseEntity<AuthResponse> result = authController.login(request);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        verify(authService).login(request);
+        verifyNoMoreInteractions(authService);
     }
 }

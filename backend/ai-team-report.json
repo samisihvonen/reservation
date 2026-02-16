@@ -1,0 +1,375 @@
+{
+  "timestamp": "2026-02-13T10:01:49.911Z",
+  "stages": {
+    "analysis": {
+      "totalClasses": 26,
+      "controllers": 4,
+      "services": 3,
+      "repositories": 0,
+      "others": 19,
+      "classes": [
+        {
+          "name": "SecurityConfig",
+          "type": "Unknown",
+          "package": "com.example.backend.config",
+          "methodCount": 3
+        },
+        {
+          "name": "SwaggerConfig",
+          "type": "Unknown",
+          "package": "com.example.backend.config",
+          "methodCount": 1
+        },
+        {
+          "name": "WebConfig",
+          "type": "Unknown",
+          "package": "com.example.backend.config",
+          "methodCount": 1
+        },
+        {
+          "name": "AdminController",
+          "type": "Controller",
+          "package": "com.example.backend.controller",
+          "methodCount": 9
+        },
+        {
+          "name": "AuthController",
+          "type": "Controller",
+          "package": "com.example.backend.controller",
+          "methodCount": 2
+        },
+        {
+          "name": "HealthController",
+          "type": "Controller",
+          "package": "com.example.backend.controller",
+          "methodCount": 1
+        },
+        {
+          "name": "ReservationController",
+          "type": "Controller",
+          "package": "com.example.backend.controller",
+          "methodCount": 4
+        },
+        {
+          "name": "AuthResponse",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 10
+        },
+        {
+          "name": "CreateReservationRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 8
+        },
+        {
+          "name": "EmailChangeRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 2
+        },
+        {
+          "name": "LoginRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 4
+        },
+        {
+          "name": "RegisterRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 6
+        },
+        {
+          "name": "ReservationResponse",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 14
+        },
+        {
+          "name": "RoomCapacityChangeRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 2
+        },
+        {
+          "name": "RoomNameChangeRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 2
+        },
+        {
+          "name": "RoomRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 8
+        },
+        {
+          "name": "RoomResponse",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 8
+        },
+        {
+          "name": "UserRequest",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 4
+        },
+        {
+          "name": "UserResponse",
+          "type": "Unknown",
+          "package": "com.example.backend.dto",
+          "methodCount": 4
+        },
+        {
+          "name": "Reservation",
+          "type": "Unknown",
+          "package": "com.example.backend.model",
+          "methodCount": 14
+        },
+        {
+          "name": "Room",
+          "type": "Unknown",
+          "package": "com.example.backend.model",
+          "methodCount": 16
+        },
+        {
+          "name": "User",
+          "type": "Unknown",
+          "package": "com.example.backend.model",
+          "methodCount": 14
+        },
+        {
+          "name": "JwtUtils",
+          "type": "Unknown",
+          "package": "com.example.backend.security",
+          "methodCount": 5
+        },
+        {
+          "name": "AdminService",
+          "type": "Service",
+          "package": "com.example.backend.service",
+          "methodCount": 11
+        },
+        {
+          "name": "AuthService",
+          "type": "Service",
+          "package": "com.example.backend.service",
+          "methodCount": 2
+        },
+        {
+          "name": "ReservationService",
+          "type": "Service",
+          "package": "com.example.backend.service",
+          "methodCount": 5
+        }
+      ]
+    },
+    "testGeneration": {
+      "totalClasses": 26,
+      "testsGenerated": 26,
+      "generatedTests": [
+        {
+          "className": "SecurityConfig",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\config\\SecurityConfigTest.java",
+          "methodsGenerated": 3
+        },
+        {
+          "className": "SwaggerConfig",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\config\\SwaggerConfigTest.java",
+          "methodsGenerated": 1
+        },
+        {
+          "className": "WebConfig",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\config\\WebConfigTest.java",
+          "methodsGenerated": 1
+        },
+        {
+          "className": "AdminController",
+          "type": "Controller",
+          "testFile": "src\\test\\java\\com\\example\\backend\\controller\\AdminControllerTest.java",
+          "methodsGenerated": 9
+        },
+        {
+          "className": "AuthController",
+          "type": "Controller",
+          "testFile": "src\\test\\java\\com\\example\\backend\\controller\\AuthControllerTest.java",
+          "methodsGenerated": 2
+        },
+        {
+          "className": "HealthController",
+          "type": "Controller",
+          "testFile": "src\\test\\java\\com\\example\\backend\\controller\\HealthControllerTest.java",
+          "methodsGenerated": 1
+        },
+        {
+          "className": "ReservationController",
+          "type": "Controller",
+          "testFile": "src\\test\\java\\com\\example\\backend\\controller\\ReservationControllerTest.java",
+          "methodsGenerated": 4
+        },
+        {
+          "className": "AuthResponse",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\AuthResponseTest.java",
+          "methodsGenerated": 10
+        },
+        {
+          "className": "CreateReservationRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\CreateReservationRequestTest.java",
+          "methodsGenerated": 8
+        },
+        {
+          "className": "EmailChangeRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\EmailChangeRequestTest.java",
+          "methodsGenerated": 2
+        },
+        {
+          "className": "LoginRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\LoginRequestTest.java",
+          "methodsGenerated": 4
+        },
+        {
+          "className": "RegisterRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\RegisterRequestTest.java",
+          "methodsGenerated": 6
+        },
+        {
+          "className": "ReservationResponse",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\ReservationResponseTest.java",
+          "methodsGenerated": 14
+        },
+        {
+          "className": "RoomCapacityChangeRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\RoomCapacityChangeRequestTest.java",
+          "methodsGenerated": 2
+        },
+        {
+          "className": "RoomNameChangeRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\RoomNameChangeRequestTest.java",
+          "methodsGenerated": 2
+        },
+        {
+          "className": "RoomRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\RoomRequestTest.java",
+          "methodsGenerated": 8
+        },
+        {
+          "className": "RoomResponse",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\RoomResponseTest.java",
+          "methodsGenerated": 8
+        },
+        {
+          "className": "UserRequest",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\UserRequestTest.java",
+          "methodsGenerated": 4
+        },
+        {
+          "className": "UserResponse",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\dto\\UserResponseTest.java",
+          "methodsGenerated": 4
+        },
+        {
+          "className": "Reservation",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\model\\ReservationTest.java",
+          "methodsGenerated": 14
+        },
+        {
+          "className": "Room",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\model\\RoomTest.java",
+          "methodsGenerated": 16
+        },
+        {
+          "className": "User",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\model\\UserTest.java",
+          "methodsGenerated": 14
+        },
+        {
+          "className": "JwtUtils",
+          "type": "Unknown",
+          "testFile": "src\\test\\java\\com\\example\\backend\\security\\JwtUtilsTest.java",
+          "methodsGenerated": 5
+        },
+        {
+          "className": "AdminService",
+          "type": "Service",
+          "testFile": "src\\test\\java\\com\\example\\backend\\service\\AdminServiceTest.java",
+          "methodsGenerated": 11
+        },
+        {
+          "className": "AuthService",
+          "type": "Service",
+          "testFile": "src\\test\\java\\com\\example\\backend\\service\\AuthServiceTest.java",
+          "methodsGenerated": 2
+        },
+        {
+          "className": "ReservationService",
+          "type": "Service",
+          "testFile": "src\\test\\java\\com\\example\\backend\\service\\ReservationServiceTest.java",
+          "methodsGenerated": 5
+        }
+      ]
+    },
+    "compilation": {
+      "success": true,
+      "attempts": 1
+    },
+    "testExecution": {
+      "success": false,
+      "output": "[0.029s][warning][cds] This file is not the one used while building the shared archive file: 'C:\\Users\\sami_\\AppData\\Roaming\\Code\\User\\globalStorage\\pleiades.java-extension-pack-jdk\\java\\latest\\lib\\modules', size has changed\n[INFO] Scanning for projects...\r\n[INFO] \r\n[INFO] ------------------------< com.example:backend >-------------------------\r\n[INFO] Building backend 0.0.1-SNAPSHOT\r\n[INFO]   from pom.xml\r\n[INFO] --------------------------------[ jar ]---------------------------------\r\n[INFO] \r\n[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---\r\n[INFO] Copying 2 resources from src\\main\\resources to target\\classes\r\n[INFO] Copying 2 resources from src\\main\\resources to target\\classes\r\n[INFO] \r\n[INFO] --- compiler:3.11.0:compile (default-compile) @ backend ---\r\n[INFO] Nothing to compile - all classes are up to date\r\n[INFO] \r\n[INFO] --- resources:3.3.1:testResources (default-testResources) @ backend ---\r\n[INFO] skip non existing resourceDirectory C:\\Users\\sami_\\Tiedost",
+      "error": "Command failed: mvnw.cmd test"
+    },
+    "security": {
+      "secrets": [],
+      "jwtLeaks": [],
+      "suspiciousFiles": [],
+      "envIssues": [],
+      "recommendations": [
+        {
+          "title": "Use .env files",
+          "priority": "HIGH",
+          "action": "Move secrets to .env and add to .gitignore"
+        },
+        {
+          "title": "Enable secrets scanning",
+          "priority": "MEDIUM",
+          "action": "Enable GitHub secrets scanning or similar tools"
+        }
+      ]
+    },
+    "docker": {
+      "dockerfileExists": true,
+      "dockerComposeExists": false,
+      "canBuild": false,
+      "issues": []
+    }
+  },
+  "agents": {},
+  "summary": {
+    "projectPath": "C:\\Users\\sami_\\Tiedostot\\dev\\reservation\\backend",
+    "totalClasses": 26,
+    "testsGenerated": 26,
+    "compilationSuccess": true,
+    "testsPassed": false,
+    "securityIssues": 0,
+    "dockerConfigured": true
+  }
+}

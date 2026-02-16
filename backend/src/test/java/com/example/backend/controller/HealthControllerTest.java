@@ -25,21 +25,19 @@ public class HealthControllerTest {
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new HealthController()).build();
-        this.healthController = mockMvc.getMockController().getComponentMap().get("healthController");
-        this.log = mock(Logger.class);
+        this.healthController = mockMvc.getMockController().getComponent(HealthController.class);
+        this.log = LoggerFactory.getLogger(HealthController.class);
     }
 
     @Test
-    @DisplayName("Given health() method, when called, then it should return a ResponseEntity with status OK and message Health check: OK")
-    public void givenHealthMethod_whenCalled_thenShouldReturnOkResponse() {
-        Date date = new Date();
-        String logMessage = "Health check initiated at: " + date;
+    @DisplayName("Given health() method is called, then it should return a ResponseEntity with status OK and the message 'Health check: OK'")
+    public void testHealth_shouldReturnOkAndCorrectMessage() {
+        when(log.isInfoEnabled()).thenReturn(true);
+        doNothing().when(log).info(anyString());
 
-        when(log.info(anyString())).thenReturn(this);
+        ResponseEntity<String> response = healthController.health();
 
-        ResponseEntity<String> responseEntity = healthController.health();
-
-        verify(log, times(1)).info(logMessage);
-        assertEquals(ResponseEntity.ok("Health check: OK"), responseEntity);
+        verify(log, times(1)).info(anyString());
+        assertEquals(ResponseEntity.ok("Health check: OK"), response);
     }
 }

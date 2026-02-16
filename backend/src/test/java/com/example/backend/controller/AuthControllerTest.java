@@ -23,36 +23,40 @@ class AuthControllerTest {
 
     private RegisterRequest registerRequest;
     private LoginRequest loginRequest;
-    private AuthResponse authResponse;
+    private AuthResponse registerResponse;
+    private AuthResponse loginResponse;
 
     @BeforeEach
     void setup() {
-        registerRequest = new RegisterRequest(); // Set up test data for RegisterRequest
-        loginRequest = new LoginRequest(); // Set up test data for LoginRequest
-        authResponse = new AuthResponse(); // Set up test data for AuthResponse
+        registerRequest = new RegisterRequest(); // set up test data for RegisterRequest
+        loginRequest = new LoginRequest(); // set up test data for LoginRequest
+        registerResponse = new AuthResponse(); // set up test data for AuthResponse
+        loginResponse = new AuthResponse(); // set up test data for AuthResponse
     }
 
-    @DisplayName("Test register method")
     @Test
+    @DisplayName("Test register method")
     void testRegister() {
-        when(authService.register(registerRequest)).thenReturn(authResponse);
+        when(authService.register(registerRequest)).thenReturn(registerResponse);
 
         ResponseEntity<AuthResponse> response = authController.register(registerRequest);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         verify(authService).register(registerRequest);
         verifyNoMoreInteractions(authService);
+        assertEquals(registerResponse, response.getBody());
     }
 
-    @DisplayName("Test login method")
     @Test
+    @DisplayName("Test login method")
     void testLogin() {
-        when(authService.login(loginRequest)).thenReturn(authResponse);
+        when(authService.login(loginRequest)).thenReturn(loginResponse);
 
         ResponseEntity<AuthResponse> response = authController.login(loginRequest);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(authService).login(loginRequest);
         verifyNoMoreInteractions(authService);
+        assertEquals(loginResponse, response.getBody());
     }
 }

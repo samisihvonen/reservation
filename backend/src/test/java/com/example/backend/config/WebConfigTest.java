@@ -7,68 +7,32 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.result.StatusResultMatchers;
-import org.springframework.web.context.WebApplicationContext;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 public class WebConfigTest {
 
     @Mock
-    private CorsRegistry corsRegistry;
+    private CorsRegistry registry;
 
     private WebConfig webConfig;
 
     @BeforeEach
     public void setup() {
+        initMocks(this);
         webConfig = new WebConfig();
     }
 
-    @DisplayName("Test addCorsMappings method")
     @Test
+    @DisplayName("Test addCorsMappings with correct mappings")
     public void testAddCorsMappings() {
-        when(corsRegistry.addMapping("/api/**"))
-                .thenReturn(corsRegistry);
+        webConfig.addCorsMappings(registry);
 
-        webConfig.addCorsMappings(corsRegistry);
-
-        verify(corsRegistry).addMapping("/api/**")
-                .withCallRealMethod()
-                .withArguments("/api/**");
-    }
-
-    @DisplayName("Test allowedOrigins method")
-    @Test
-    public void testAllowedOrigins() {
-        webConfig.addCorsMappings(corsRegistry);
-
-        verify(corsRegistry).addMapping("/api/**")
-                .allowedOrigins("http://localhost:5174");
-    }
-
-    @DisplayName("Test allowedMethods method")
-    @Test
-    public void testAllowedMethods() {
-        webConfig.addCorsMappings(corsRegistry);
-
-        verify(corsRegistry).addMapping("/api/**")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
-    }
-
-    @DisplayName("Test allowedHeaders method")
-    @Test
-    public void testAllowedHeaders() {
-        webConfig.addCorsMappings(corsRegistry);
-
-        verify(corsRegistry).addMapping("/api/**")
-                .allowedHeaders("*");
-    }
-
-    @DisplayName("Test allowCredentials method")
-    @Test
-    public void testAllowCredentials() {
-        webConfig.addCorsMappings(corsRegistry);
-
-        verify(corsRegistry).addMapping("/api/**")
-                .allowCredentials(true);
+        verify(registry).addMapping("/api/**");
+        verify(registry).allowedOrigins("http://localhost:5174");
+        verify(registry).allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+        verify(registry).allowedHeaders("*");
+        verify(registry).allowCredentials(true);
     }
 }

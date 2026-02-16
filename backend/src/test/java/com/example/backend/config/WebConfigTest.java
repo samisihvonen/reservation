@@ -7,9 +7,9 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.result.StatusResultMatchers;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.web.context.WebApplicationContext;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class WebConfigTest {
 
@@ -20,13 +20,15 @@ public class WebConfigTest {
 
     @BeforeEach
     public void setup() {
-        initMocks(this);
         webConfig = new WebConfig();
     }
 
+    @DisplayName("Test addCorsMappings method")
     @Test
-    @DisplayName("Test addCorsMappings with correct mappings")
     public void testAddCorsMappings() {
+        when(registry.addMapping("/api/**"))
+                .thenReturn(registry);
+
         webConfig.addCorsMappings(registry);
 
         verify(registry).addMapping("/api/**");

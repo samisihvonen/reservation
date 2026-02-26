@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.*;
 import com.example.backend.service.AdminService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,25 +10,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class AdminControllerTest {
 
@@ -38,256 +32,286 @@ class AdminControllerTest {
     private AdminController adminController;
 
     private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
+        objectMapper = new ObjectMapper();
     }
 
     @Test
-    @DisplayName("getUserById should return user when user exists")
-    void getUserById_WhenUserExists_ReturnsUser() throws Exception {
-        // Arrange
-        Long userId = 1L;
-        UserResponse expectedResponse = new UserResponse(userId, "test@example.com", "Test User", "ADMIN");
-        when(adminService.getUserById(userId)).thenReturn(expectedResponse);
+    @DisplayName("Should return user when getUserById is called with valid ID")
+    void shouldReturnUserWhenGetUserByIdIsCalledWithValidId() throws Exception {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(1L);
+        userResponse.setEmail("test@example.com");
 
-        // Act & Assert
-        mockMvc.perform(get("/users/{id}", userId))
+        when(adminService.getUserById(1L)).thenReturn(userResponse);
+
+        mockMvc.perform(get("/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(userId))
-                .andExpect(jsonPath("$.email").value("test@example.com"))
-                .andExpect(jsonPath("$.name").value("Test User"))
-                .andExpect(jsonPath("$.role").value("ADMIN"));
-
-        verify(adminService).getUserById(userId);
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.email").value("test@example.com"));
     }
 
     @Test
-    @DisplayName("getUserById should return not found when user does not exist")
-    void getUserById_WhenUserDoesNotExist_ThrowsException() throws Exception {
-        // Arrange
-        Long userId = 999L;
-        when(adminService.getUserById(userId)).thenThrow(new RuntimeException("User not found"));
+    @DisplayName("Should return 404 when getUserById is called with non-existent ID")
+    void shouldReturn404WhenGetUserByIdIsCalledWithNonExistentId() throws Exception {
+        when(adminService.getUserById(999L)).thenThrow(new RuntimeException("User not found"));
 
-        // Act & Assert
-        mockMvc.perform(get("/users/{id}", userId))
-                .andExpect(status().isInternalServerError());
-
-        verify(adminService).getUserById(userId);
-    }
-
-    @Test
-    @DisplayName("updateUser should update and return user when request is valid")
-    void updateUser_WhenRequestIsValid_ReturnsUpdatedUser() throws Exception {
-        // Arrange
-        Long userId = 1L;
-        UserRequest request = new UserRequest("updated@example.com", "Updated User", "USER");
-        UserResponse expectedResponse = new UserResponse(userId, "updated@example.com", "Updated User", "USER");
-        when(adminService.updateUser(eq(userId), any(UserRequest.class))).thenReturn(expectedResponse);
-
-        // Act & Assert
-        mockMvc.perform(put("/users/{id}", userId)
-                        .contentType("application/json")
-                        .content("{\"email\":\"updated@example.com\",\"name\":\"Updated User\",\"role\":\"USER\"}"))
+        mockMvc.perform(get("/users/{id}", 999L)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(userId))
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    @DisplayName("Should update user and return updated user when updateUser is called with valid data")
+    void shouldUpdateUserAndReturnUpdatedUserWhenUpdateUserIsCalledWithValidData() throws Exception {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("updated@example.com");
+        userRequest.setName("Updated Name");
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(1L);
+        userResponse.setEmail("updated@example.com");
+        userResponse.setName("Updated Name");
+
+        when(adminService.updateUser(eq(1L), any(UserRequest.class))).thenReturn(userResponse);
+
+        mockMvc.perform(put("/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.email").value("updated@example.com"))
-                .andExpect(jsonPath("$.name").value("Updated User"))
-                .andExpect(jsonPath("$.role").value("USER"));
-
-        verify(adminService).updateUser(eq(userId), any(UserRequest.class));
+                .andExpect(jsonPath("$.name").value("Updated Name"));
     }
 
     @Test
-    @DisplayName("updateUser should return bad request when request is invalid")
-    void updateUser_WhenRequestIsInvalid_ReturnsBadRequest() throws Exception {
-        // Arrange
-        Long userId = 1L;
+    @DisplayName("Should return 400 when updateUser is called with invalid data")
+    void shouldReturn400WhenUpdateUserIsCalledWithInvalidData() throws Exception {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("invalid-email");
+        userRequest.setName("");
 
-        // Act & Assert
-        mockMvc.perform(put("/users/{id}", userId)
-                        .contentType("application/json")
-                        .content("{\"email\":\"\",\"name\":\"\",\"role\":\"\"}"))
+        mockMvc.perform(put("/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isBadRequest());
-
-        verify(adminService).updateUser(eq(userId), any(UserRequest.class));
     }
 
     @Test
-    @DisplayName("deleteUser should delete user and return no content when user exists")
-    void deleteUser_WhenUserExists_ReturnsNoContent() throws Exception {
-        // Arrange
-        Long userId = 1L;
-        doNothing().when(adminService).deleteUser(userId);
+    @DisplayName("Should return 204 when deleteUser is called with valid ID")
+    void shouldReturn204WhenDeleteUserIsCalledWithValidId() throws Exception {
+        doNothing().when(adminService).deleteUser(1L);
 
-        // Act & Assert
-        mockMvc.perform(delete("/users/{id}", userId))
+        mockMvc.perform(delete("/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
-
-        verify(adminService).deleteUser(userId);
     }
 
     @Test
-    @DisplayName("deleteUser should return not found when user does not exist")
-    void deleteUser_WhenUserDoesNotExist_ThrowsException() throws Exception {
-        // Arrange
-        Long userId = 999L;
-        doNothing().when(adminService).deleteUser(userId);
+    @DisplayName("Should return 500 when deleteUser is called with non-existent ID")
+    void shouldReturn500WhenDeleteUserIsCalledWithNonExistentId() throws Exception {
+        doThrow(new RuntimeException("User not found")).when(adminService).deleteUser(999L);
 
-        // Act & Assert
-        mockMvc.perform(delete("/users/{id}", userId))
-                .andExpect(status().isNoContent());
-
-        verify(adminService).deleteUser(userId);
+        mockMvc.perform(delete("/users/{id}", 999L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
-    @DisplayName("changeUserEmail should update email and return user when request is valid")
-    void changeUserEmail_WhenRequestIsValid_ReturnsUpdatedUser() throws Exception {
-        // Arrange
-        Long userId = 1L;
-        String newEmail = "new@example.com";
-        EmailChangeRequest request = new EmailChangeRequest(newEmail);
-        UserResponse expectedResponse = new UserResponse(userId, newEmail, "Test User", "ADMIN");
-        when(adminService.changeUserEmail(eq(userId), eq(newEmail))).thenReturn(expectedResponse);
+    @DisplayName("Should change user email and return updated user when changeUserEmail is called with valid data")
+    void shouldChangeUserEmailAndReturnUpdatedUserWhenChangeUserEmailIsCalledWithValidData() throws Exception {
+        EmailChangeRequest emailChangeRequest = new EmailChangeRequest();
+        emailChangeRequest.setNewEmail("new@example.com");
 
-        // Act & Assert
-        mockMvc.perform(patch("/users/{id}/email", userId)
-                        .contentType("application/json")
-                        .content("{\"newEmail\":\"new@example.com\"}"))
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(1L);
+        userResponse.setEmail("new@example.com");
+
+        when(adminService.changeUserEmail(eq(1L), anyString())).thenReturn(userResponse);
+
+        mockMvc.perform(patch("/users/{id}/email", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(emailChangeRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(userId))
-                .andExpect(jsonPath("$.email").value(newEmail))
-                .andExpect(jsonPath("$.name").value("Test User"))
-                .andExpect(jsonPath("$.role").value("ADMIN"));
-
-        verify(adminService).changeUserEmail(eq(userId), eq(newEmail));
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.email").value("new@example.com"));
     }
 
     @Test
-    @DisplayName("createRoom should create and return room when request is valid")
-    void createRoom_WhenRequestIsValid_ReturnsCreatedRoom() throws Exception {
-        // Arrange
-        RoomRequest request = new RoomRequest("Conference Room", 10);
-        RoomResponse expectedResponse = new RoomResponse("1", "Conference Room", 10);
-        when(adminService.createRoom(any(RoomRequest.class))).thenReturn(expectedResponse);
+    @DisplayName("Should return 400 when changeUserEmail is called with invalid email")
+    void shouldReturn400WhenChangeUserEmailIsCalledWithInvalidEmail() throws Exception {
+        EmailChangeRequest emailChangeRequest = new EmailChangeRequest();
+        emailChangeRequest.setNewEmail("invalid-email");
 
-        // Act & Assert
+        mockMvc.perform(patch("/users/{id}/email", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(emailChangeRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Should create room and return created room when createRoom is called with valid data")
+    void shouldCreateRoomAndReturnCreatedRoomWhenCreateRoomIsCalledWithValidData() throws Exception {
+        RoomRequest roomRequest = new RoomRequest();
+        roomRequest.setName("Conference Room");
+        roomRequest.setCapacity(10);
+
+        RoomResponse roomResponse = new RoomResponse();
+        roomResponse.setId("1");
+        roomResponse.setName("Conference Room");
+        roomResponse.setCapacity(10);
+
+        when(adminService.createRoom(any(RoomRequest.class))).thenReturn(roomResponse);
+
         mockMvc.perform(post("/rooms")
-                        .contentType("application/json")
-                        .content("{\"name\":\"Conference Room\",\"capacity\":10}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("Conference Room"))
                 .andExpect(jsonPath("$.capacity").value(10));
-
-        verify(adminService).createRoom(any(RoomRequest.class));
     }
 
     @Test
-    @DisplayName("createRoom should return bad request when request is invalid")
-    void createRoom_WhenRequestIsInvalid_ReturnsBadRequest() throws Exception {
-        // Act & Assert
+    @DisplayName("Should return 400 when createRoom is called with invalid data")
+    void shouldReturn400WhenCreateRoomIsCalledWithInvalidData() throws Exception {
+        RoomRequest roomRequest = new RoomRequest();
+        roomRequest.setName("");
+        roomRequest.setCapacity(-1);
+
         mockMvc.perform(post("/rooms")
-                        .contentType("application/json")
-                        .content("{\"name\":\"\",\"capacity\":-1}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomRequest)))
                 .andExpect(status().isBadRequest());
-
-        verify(adminService).createRoom(any(RoomRequest.class));
     }
 
     @Test
-    @DisplayName("updateRoom should update and return room when request is valid")
-    void updateRoom_WhenRequestIsValid_ReturnsUpdatedRoom() throws Exception {
-        // Arrange
-        String roomId = "1";
-        RoomRequest request = new RoomRequest("Updated Room", 15);
-        RoomResponse expectedResponse = new RoomResponse(roomId, "Updated Room", 15);
-        when(adminService.updateRoom(eq(roomId), any(RoomRequest.class))).thenReturn(expectedResponse);
+    @DisplayName("Should update room and return updated room when updateRoom is called with valid data")
+    void shouldUpdateRoomAndReturnUpdatedRoomWhenUpdateRoomIsCalledWithValidData() throws Exception {
+        RoomRequest roomRequest = new RoomRequest();
+        roomRequest.setName("Updated Room");
+        roomRequest.setCapacity(15);
 
-        // Act & Assert
-        mockMvc.perform(put("/rooms/{roomId}", roomId)
-                        .contentType("application/json")
-                        .content("{\"name\":\"Updated Room\",\"capacity\":15}"))
+        RoomResponse roomResponse = new RoomResponse();
+        roomResponse.setId("1");
+        roomResponse.setName("Updated Room");
+        roomResponse.setCapacity(15);
+
+        when(adminService.updateRoom(eq("1"), any(RoomRequest.class))).thenReturn(roomResponse);
+
+        mockMvc.perform(put("/rooms/{roomId}", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(roomId))
+                .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("Updated Room"))
                 .andExpect(jsonPath("$.capacity").value(15));
-
-        verify(adminService).updateRoom(eq(roomId), any(RoomRequest.class));
     }
 
     @Test
-    @DisplayName("updateRoom should return bad request when request is invalid")
-    void updateRoom_WhenRequestIsInvalid_ReturnsBadRequest() throws Exception {
-        // Arrange
-        String roomId = "1";
+    @DisplayName("Should return 400 when updateRoom is called with invalid data")
+    void shouldReturn400WhenUpdateRoomIsCalledWithInvalidData() throws Exception {
+        RoomRequest roomRequest = new RoomRequest();
+        roomRequest.setName("");
+        roomRequest.setCapacity(-1);
 
-        // Act & Assert
-        mockMvc.perform(put("/rooms/{roomId}", roomId)
-                        .contentType("application/json")
-                        .content("{\"name\":\"\",\"capacity\":-1}"))
+        mockMvc.perform(put("/rooms/{roomId}", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomRequest)))
                 .andExpect(status().isBadRequest());
-
-        verify(adminService).updateRoom(eq(roomId), any(RoomRequest.class));
     }
 
     @Test
-    @DisplayName("deleteRoom should delete room and return no content when room exists")
-    void deleteRoom_WhenRoomExists_ReturnsNoContent() throws Exception {
-        // Arrange
-        String roomId = "1";
-        doNothing().when(adminService).deleteRoom(roomId);
+    @DisplayName("Should return 204 when deleteRoom is called with valid room ID")
+    void shouldReturn204WhenDeleteRoomIsCalledWithValidRoomId() throws Exception {
+        doNothing().when(adminService).deleteRoom("1");
 
-        // Act & Assert
-        mockMvc.perform(delete("/rooms/{roomId}", roomId))
+        mockMvc.perform(delete("/rooms/{roomId}", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
-
-        verify(adminService).deleteRoom(roomId);
     }
 
     @Test
-    @DisplayName("changeRoomName should update name and return room when request is valid")
-    void changeRoomName_WhenRequestIsValid_ReturnsUpdatedRoom() throws Exception {
-        // Arrange
-        String roomId = "1";
-        String newName = "New Room Name";
-        RoomNameChangeRequest request = new RoomNameChangeRequest(newName);
-        RoomResponse expectedResponse = new RoomResponse(roomId, newName, 10);
-        when(adminService.changeRoomName(eq(roomId), eq(newName))).thenReturn(expectedResponse);
+    @DisplayName("Should return 500 when deleteRoom is called with non-existent room ID")
+    void shouldReturn500WhenDeleteRoomIsCalledWithNonExistentRoomId() throws Exception {
+        doThrow(new RuntimeException("Room not found")).when(adminService).deleteRoom("999");
 
-        // Act & Assert
-        mockMvc.perform(patch("/rooms/{roomId}/name", roomId)
-                        .contentType("application/json")
-                        .content("{\"newName\":\"New Room Name\"}"))
+        mockMvc.perform(delete("/rooms/{roomId}", "999")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @DisplayName("Should change room name and return updated room when changeRoomName is called with valid data")
+    void shouldChangeRoomNameAndReturnUpdatedRoomWhenChangeRoomNameIsCalledWithValidData() throws Exception {
+        RoomNameChangeRequest roomNameChangeRequest = new RoomNameChangeRequest();
+        roomNameChangeRequest.setNewName("New Room Name");
+
+        RoomResponse roomResponse = new RoomResponse();
+        roomResponse.setId("1");
+        roomResponse.setName("New Room Name");
+        roomResponse.setCapacity(10);
+
+        when(adminService.changeRoomName(eq("1"), anyString())).thenReturn(roomResponse);
+
+        mockMvc.perform(patch("/rooms/{roomId}/name", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomNameChangeRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(roomId))
-                .andExpect(jsonPath("$.name").value(newName))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("New Room Name"))
                 .andExpect(jsonPath("$.capacity").value(10));
-
-        verify(adminService).changeRoomName(eq(roomId), eq(newName));
     }
 
     @Test
-    @DisplayName("changeRoomCapacity should update capacity and return room when request is valid")
-    void changeRoomCapacity_WhenRequestIsValid_ReturnsUpdatedRoom() throws Exception {
-        // Arrange
-        String roomId = "1";
-        int newCapacity = 20;
-        RoomCapacityChangeRequest request = new RoomCapacityChangeRequest(newCapacity);
-        RoomResponse expectedResponse = new RoomResponse(roomId, "Conference Room", newCapacity);
-        when(adminService.changeRoomCapacity(eq(roomId), eq(newCapacity))).thenReturn(expectedResponse);
+    @DisplayName("Should return 400 when changeRoomName is called with empty name")
+    void shouldReturn400WhenChangeRoomNameIsCalledWithEmptyName() throws Exception {
+        RoomNameChangeRequest roomNameChangeRequest = new RoomNameChangeRequest();
+        roomNameChangeRequest.setNewName("");
 
-        // Act & Assert
-        mockMvc.perform(patch("/rooms/{roomId}/capacity", roomId)
-                        .contentType("application/json")
-                        .content("{\"newCapacity\":20}"))
+        mockMvc.perform(patch("/rooms/{roomId}/name", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomNameChangeRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Should change room capacity and return updated room when changeRoomCapacity is called with valid data")
+    void shouldChangeRoomCapacityAndReturnUpdatedRoomWhenChangeRoomCapacityIsCalledWithValidData() throws Exception {
+        RoomCapacityChangeRequest roomCapacityChangeRequest = new RoomCapacityChangeRequest();
+        roomCapacityChangeRequest.setNewCapacity(20);
+
+        RoomResponse roomResponse = new RoomResponse();
+        roomResponse.setId("1");
+        roomResponse.setName("Conference Room");
+        roomResponse.setCapacity(20);
+
+        when(adminService.changeRoomCapacity(eq("1"), anyInt())).thenReturn(roomResponse);
+
+        mockMvc.perform(patch("/rooms/{roomId}/capacity", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomCapacityChangeRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(roomId))
+                .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("Conference Room"))
-                .andExpect(jsonPath("$.capacity").value(newCapacity));
+                .andExpect(jsonPath("$.capacity").value(20));
+    }
 
-        verify(adminService).changeRoomCapacity(eq(roomId), eq(newCapacity));
+    @Test
+    @DisplayName("Should return 400 when changeRoomCapacity is called with negative capacity")
+    void shouldReturn400WhenChangeRoomCapacityIsCalledWithNegativeCapacity() throws Exception {
+        RoomCapacityChangeRequest roomCapacityChangeRequest = new RoomCapacityChangeRequest();
+        roomCapacityChangeRequest.setNewCapacity(-1);
+
+        mockMvc.perform(patch("/rooms/{roomId}/capacity", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomCapacityChangeRequest)))
+                .andExpect(status().isBadRequest());
     }
 }

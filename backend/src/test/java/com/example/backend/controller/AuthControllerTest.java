@@ -41,19 +41,19 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should register user successfully and return CREATED status")
-    void register_ValidRequest_ReturnsCreatedStatus() throws Exception {
+    @DisplayName("Should register user successfully and return CREATED status with auth response")
+    void register_ValidRequest_ReturnsCreatedWithAuthResponse() throws Exception {
         // Arrange
         RegisterRequest request = new RegisterRequest();
         request.setEmail("test@example.com");
         request.setPassword("password123");
         request.setName("Test User");
 
-        AuthResponse response = new AuthResponse();
-        response.setToken("test-token");
-        response.setEmail("test@example.com");
+        AuthResponse expectedResponse = new AuthResponse();
+        expectedResponse.setToken("test-token");
+        expectedResponse.setExpiresIn(3600L);
 
-        when(authService.register(any(RegisterRequest.class))).thenReturn(response);
+        when(authService.register(any(RegisterRequest.class))).thenReturn(expectedResponse);
 
         // Act & Assert
         mockMvc.perform(post("/register")
@@ -61,7 +61,7 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.token").value("test-token"))
-                .andExpect(jsonPath("$.email").value("test@example.com"));
+                .andExpect(jsonPath("$.expiresIn").value(3600L));
     }
 
     @Test
@@ -71,6 +71,7 @@ class AuthControllerTest {
         RegisterRequest request = new RegisterRequest();
         request.setEmail("invalid-email");
         request.setPassword("short");
+        request.setName("");
 
         // Act & Assert
         mockMvc.perform(post("/register")
@@ -80,36 +81,18 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should return INTERNAL_SERVER_ERROR when register service throws exception")
-    void register_ServiceThrowsException_ReturnsInternalServerError() throws Exception {
-        // Arrange
-        RegisterRequest request = new RegisterRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("password123");
-        request.setName("Test User");
-
-        when(authService.register(any(RegisterRequest.class))).thenThrow(new RuntimeException("Service error"));
-
-        // Act & Assert
-        mockMvc.perform(post("/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    @DisplayName("Should login user successfully and return OK status")
-    void login_ValidRequest_ReturnsOkStatus() throws Exception {
+    @DisplayName("Should login user successfully and return OK status with auth response")
+    void login_ValidRequest_ReturnsOkWithAuthResponse() throws Exception {
         // Arrange
         LoginRequest request = new LoginRequest();
         request.setEmail("test@example.com");
         request.setPassword("password123");
 
-        AuthResponse response = new AuthResponse();
-        response.setToken("test-token");
-        response.setEmail("test@example.com");
+        AuthResponse expectedResponse = new AuthResponse();
+        expectedResponse.setToken("test-token");
+        expectedResponse.setExpiresIn(3600L);
 
-        when(authService.login(any(LoginRequest.class))).thenReturn(response);
+        when(authService.login(any(LoginRequest.class))).thenReturn(expectedResponse);
 
         // Act & Assert
         mockMvc.perform(post("/login")
@@ -117,7 +100,7 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("test-token"))
-                .andExpect(jsonPath("$.email").value("test@example.com"));
+                .andExpect(jsonPath("$.expiresIn").value(3600L));
     }
 
     @Test
@@ -141,7 +124,7 @@ class AuthControllerTest {
         // Arrange
         LoginRequest request = new LoginRequest();
         request.setEmail("test@example.com");
-        request.setPassword("wrongpassword");
+        request.setPassword("wrong-password");
 
         when(authService.login(any(LoginRequest.class))).thenThrow(new RuntimeException("Invalid credentials"));
 
@@ -153,7 +136,25 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should return INTERNAL_SERVER_ERROR when login service throws exception")
+    @DisplayName("Should return INTERNAL_SERVER_ERROR when service throws unexpected exception during register")
+    void register_ServiceThrowsException_ReturnsInternalServerError() throws Exception {
+        // Arrange
+        RegisterRequest request = new RegisterRequest();
+        request.setEmail("test@example.com");
+        request.setPassword("password123");
+        request.setName("Test User");
+
+        when(authService.register(any(RegisterRequest.class))).thenThrow(new RuntimeException("Service error"));
+
+        // Act & Assert
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    @DisplayName("Should return INTERNAL_SERVER_ERROR when service throws unexpected exception during login")
     void login_ServiceThrowsException_ReturnsInternalServerError() throws Exception {
         // Arrange
         LoginRequest request = new LoginRequest();
@@ -170,7 +171,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should return correct response entity for register")
+    @DisplayName("Should return correct response entity for successful registration")
     void register_ReturnsCorrectResponseEntity() {
         // Arrange
         RegisterRequest request = new RegisterRequest();
@@ -178,43 +179,39 @@ class AuthControllerTest {
         request.setPassword("password123");
         request.setName("Test User");
 
-        AuthResponse response = new AuthResponse();
-        response.setToken("test-token");
-        response.setEmail("test@example.com");
+        AuthResponse expectedResponse = new AuthResponse();
+        expectedResponse.setToken("test-token");
+        expectedResponse.setExpiresIn(3600L);
 
-        when(authService.register(any(RegisterRequest.class))).thenReturn(response);
+        when(authService.register(any(RegisterRequest.class))).thenReturn(expectedResponse);
 
         // Act
-        ResponseEntity<AuthResponse> result = authController.register(request);
+        ResponseEntity<AuthResponse> response = authController.register(request);
 
         // Assert
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody().getToken()).isEqualTo("test-token");
-        assertThat(result.getBody().getEmail()).isEqualTo("test@example.com");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isEqualTo(expectedResponse);
     }
 
     @Test
-    @DisplayName("Should return correct response entity for login")
+    @DisplayName("Should return correct response entity for successful login")
     void login_ReturnsCorrectResponseEntity() {
         // Arrange
         LoginRequest request = new LoginRequest();
         request.setEmail("test@example.com");
         request.setPassword("password123");
 
-        AuthResponse response = new AuthResponse();
-        response.setToken("test-token");
-        response.setEmail("test@example.com");
+        AuthResponse expectedResponse = new AuthResponse();
+        expectedResponse.setToken("test-token");
+        expectedResponse.setExpiresIn(3600L);
 
-        when(authService.login(any(LoginRequest.class))).thenReturn(response);
+        when(authService.login(any(LoginRequest.class))).thenReturn(expectedResponse);
 
         // Act
-        ResponseEntity<AuthResponse> result = authController.login(request);
+        ResponseEntity<AuthResponse> response = authController.login(request);
 
         // Assert
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody().getToken()).isEqualTo("test-token");
-        assertThat(result.getBody().getEmail()).isEqualTo("test@example.com");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(expectedResponse);
     }
 }

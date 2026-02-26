@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -30,179 +29,186 @@ class AdminServiceTest {
     @Mock
     private RoomRepository roomRepository;
 
-    @Mock
-    private ModelMapper modelMapper;
-
     @InjectMocks
     private AdminService adminService;
 
+    private UserResponse userResponse1;
+    private UserResponse userResponse2;
     private UserRequest userRequest;
-    private UserResponse userResponse;
+    private RoomResponse roomResponse1;
+    private RoomResponse roomResponse2;
     private RoomRequest roomRequest;
-    private RoomResponse roomResponse;
 
     @BeforeEach
     void setUp() {
-        userRequest = new UserRequest("John Doe", "john.doe@example.com", "password123");
-        userResponse = new UserResponse(1L, "John Doe", "john.doe@example.com");
-        roomRequest = new RoomRequest("Meeting Room 1", 10);
-        roomResponse = new RoomResponse("MR001", "Meeting Room 1", 10);
+        userResponse1 = new UserResponse(1L, "John Doe", "john@example.com", "ADMIN");
+        userResponse2 = new UserResponse(2L, "Jane Smith", "jane@example.com", "USER");
+        userRequest = new UserRequest("Updated Name", "updated@example.com", "USER");
+
+        roomResponse1 = new RoomResponse("A101", "Conference Room 1", 10);
+        roomResponse2 = new RoomResponse("B202", "Meeting Room 2", 20);
+        roomRequest = new RoomRequest("Updated Room", 15);
     }
 
     @Test
-    void getAllUsers_ShouldReturnListOfUserResponse() {
-        List<UserResponse> expectedUsers = Arrays.asList(userResponse);
-        when(userRepository.findAll()).thenReturn(Arrays.asList(new com.example.backend.entity.User()));
-        when(modelMapper.map(any(), eq(UserResponse.class))).thenReturn(userResponse);
+    void getAllUsers_shouldReturnListOfUsers() {
+        when(userRepository.findAll()).thenReturn(Arrays.asList(
+                new com.example.backend.entity.User(1L, "John Doe", "john@example.com", "ADMIN"),
+                new com.example.backend.entity.User(2L, "Jane Smith", "jane@example.com", "USER")
+        ));
 
-        List<UserResponse> actualUsers = adminService.getAllUsers();
+        List<UserResponse> users = adminService.getAllUsers();
 
-        assertNotNull(actualUsers);
-        assertEquals(1, actualUsers.size());
+        assertEquals(2, users.size());
         verify(userRepository, times(1)).findAll();
     }
 
     @Test
-    void getUserById_WithValidId_ShouldReturnUserResponse() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(new com.example.backend.entity.User()));
-        when(modelMapper.map(any(), eq(UserResponse.class))).thenReturn(userResponse);
+    void getUserById_shouldReturnUserWhenExists() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(
+                new com.example.backend.entity.User(1L, "John Doe", "john@example.com", "ADMIN")
+        ));
 
-        UserResponse actualUser = adminService.getUserById(1L);
+        UserResponse user = adminService.getUserById(1L);
 
-        assertNotNull(actualUser);
-        assertEquals(userResponse.getName(), actualUser.getName());
+        assertNotNull(user);
+        assertEquals("John Doe", user.getName());
         verify(userRepository, times(1)).findById(1L);
     }
 
     @Test
-    void getUserById_WithInvalidId_ShouldThrowException() {
+    void getUserById_shouldThrowExceptionWhenNotExists() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> adminService.getUserById(999L));
+        assertThrows(RuntimeException.class, () -> adminService.getUserById(99L));
     }
 
     @Test
-    void updateUser_WithValidData_ShouldReturnUpdatedUserResponse() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(new com.example.backend.entity.User()));
-        when(userRepository.save(any())).thenReturn(new com.example.backend.entity.User());
-        when(modelMapper.map(any(), eq(UserResponse.class))).thenReturn(userResponse);
+    void updateUser_shouldUpdateExistingUser() {
+        com.example.backend.entity.User existingUser = new com.example.backend.entity.User(1L, "Old Name", "old@example.com", "ADMIN");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(any(com.example.backend.entity.User.class))).thenAnswer(i -> i.getArgument(0));
 
         UserResponse updatedUser = adminService.updateUser(1L, userRequest);
 
         assertNotNull(updatedUser);
-        assertEquals(userResponse.getName(), updatedUser.getName());
-        verify(userRepository, times(1)).save(any());
+        assertEquals("Updated Name", updatedUser.getName());
+        assertEquals("updated@example.com", updatedUser.getEmail());
+        verify(userRepository, times(1)).save(existingUser);
     }
 
     @Test
-    void deleteUser_WithValidId_ShouldDeleteUser() {
-        when(userRepository.existsById(anyLong())).thenReturn(true);
-        doNothing().when(userRepository).deleteById(anyLong());
+    void deleteUser_shouldDeleteExistingUser() {
+        when(userRepository.existsById(1L)).thenReturn(true);
 
         assertDoesNotThrow(() -> adminService.deleteUser(1L));
         verify(userRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void deleteUser_WithInvalidId_ShouldThrowException() {
+    void deleteUser_shouldThrowExceptionWhenNotExists() {
         when(userRepository.existsById(anyLong())).thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> adminService.deleteUser(999L));
+        assertThrows(RuntimeException.class, () -> adminService.deleteUser(99L));
     }
 
     @Test
-    void changeUserEmail_WithValidData_ShouldReturnUpdatedUserResponse() {
-        com.example.backend.entity.User user = new com.example.backend.entity.User();
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(userRepository.save(any())).thenReturn(user);
-        when(modelMapper.map(any(), eq(UserResponse.class))).thenReturn(userResponse);
+    void changeUserEmail_shouldUpdateEmail() {
+        com.example.backend.entity.User existingUser = new com.example.backend.entity.User(1L, "John Doe", "old@example.com", "ADMIN");
+        when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(any(com.example.backend.entity.User.class))).thenAnswer(i -> i.getArgument(0));
 
-        UserResponse updatedUser = adminService.changeUserEmail(1L, "new.email@example.com");
+        UserResponse updatedUser = adminService.changeUserEmail(1L, "new@example.com");
 
         assertNotNull(updatedUser);
-        assertEquals(userResponse.getName(), updatedUser.getName());
-        verify(userRepository, times(1)).save(any());
+        assertEquals("new@example.com", updatedUser.getEmail());
+        verify(userRepository, times(1)).save(existingUser);
     }
 
     @Test
-    void getAllRooms_ShouldReturnListOfRoomResponse() {
-        List<RoomResponse> expectedRooms = Arrays.asList(roomResponse);
-        when(roomRepository.findAll()).thenReturn(Arrays.asList(new com.example.backend.entity.Room()));
-        when(modelMapper.map(any(), eq(RoomResponse.class))).thenReturn(roomResponse);
+    void getAllRooms_shouldReturnListOfRooms() {
+        when(roomRepository.findAll()).thenReturn(Arrays.asList(
+                new com.example.backend.entity.Room("A101", "Conference Room 1", 10),
+                new com.example.backend.entity.Room("B202", "Meeting Room 2", 20)
+        ));
 
-        List<RoomResponse> actualRooms = adminService.getAllRooms();
+        List<RoomResponse> rooms = adminService.getAllRooms();
 
-        assertNotNull(actualRooms);
-        assertEquals(1, actualRooms.size());
+        assertEquals(2, rooms.size());
         verify(roomRepository, times(1)).findAll();
     }
 
     @Test
-    void createRoom_WithValidData_ShouldReturnRoomResponse() {
-        when(roomRepository.save(any())).thenReturn(new com.example.backend.entity.Room());
-        when(modelMapper.map(any(), eq(RoomResponse.class))).thenReturn(roomResponse);
+    void createRoom_shouldCreateNewRoom() {
+        when(roomRepository.existsById("A101")).thenReturn(false);
+        when(roomRepository.save(any(com.example.backend.entity.Room.class))).thenAnswer(i -> i.getArgument(0));
 
-        RoomResponse createdRoom = adminService.createRoom(roomRequest);
+        RoomResponse createdRoom = adminService.createRoom(new RoomRequest("Conference Room 1", 10));
 
         assertNotNull(createdRoom);
-        assertEquals(roomResponse.getName(), createdRoom.getName());
-        verify(roomRepository, times(1)).save(any());
+        assertEquals("Conference Room 1", createdRoom.getName());
+        verify(roomRepository, times(1)).save(any(com.example.backend.entity.Room.class));
     }
 
     @Test
-    void updateRoom_WithValidData_ShouldReturnUpdatedRoomResponse() {
-        when(roomRepository.findById(anyString())).thenReturn(Optional.of(new com.example.backend.entity.Room()));
-        when(roomRepository.save(any())).thenReturn(new com.example.backend.entity.Room());
-        when(modelMapper.map(any(), eq(RoomResponse.class))).thenReturn(roomResponse);
+    void createRoom_shouldThrowExceptionWhenRoomExists() {
+        when(roomRepository.existsById(anyString())).thenReturn(true);
 
-        RoomResponse updatedRoom = adminService.updateRoom("MR001", roomRequest);
+        assertThrows(RuntimeException.class, () -> adminService.createRoom(roomRequest));
+    }
+
+    @Test
+    void updateRoom_shouldUpdateExistingRoom() {
+        com.example.backend.entity.Room existingRoom = new com.example.backend.entity.Room("A101", "Old Name", 5);
+        when(roomRepository.findById("A101")).thenReturn(Optional.of(existingRoom));
+        when(roomRepository.save(any(com.example.backend.entity.Room.class))).thenAnswer(i -> i.getArgument(0));
+
+        RoomResponse updatedRoom = adminService.updateRoom("A101", roomRequest);
 
         assertNotNull(updatedRoom);
-        assertEquals(roomResponse.getName(), updatedRoom.getName());
-        verify(roomRepository, times(1)).save(any());
+        assertEquals("Updated Room", updatedRoom.getName());
+        assertEquals(15, updatedRoom.getCapacity());
+        verify(roomRepository, times(1)).save(existingRoom);
     }
 
     @Test
-    void deleteRoom_WithValidId_ShouldDeleteRoom() {
-        when(roomRepository.existsById(anyString())).thenReturn(true);
-        doNothing().when(roomRepository).deleteById(anyString());
+    void deleteRoom_shouldDeleteExistingRoom() {
+        when(roomRepository.existsById("A101")).thenReturn(true);
 
-        assertDoesNotThrow(() -> adminService.deleteRoom("MR001"));
-        verify(roomRepository, times(1)).deleteById("MR001");
+        assertDoesNotThrow(() -> adminService.deleteRoom("A101"));
+        verify(roomRepository, times(1)).deleteById("A101");
     }
 
     @Test
-    void deleteRoom_WithInvalidId_ShouldThrowException() {
+    void deleteRoom_shouldThrowExceptionWhenNotExists() {
         when(roomRepository.existsById(anyString())).thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> adminService.deleteRoom("INVALID"));
+        assertThrows(RuntimeException.class, () -> adminService.deleteRoom("XXX"));
     }
 
     @Test
-    void changeRoomName_WithValidData_ShouldReturnUpdatedRoomResponse() {
-        com.example.backend.entity.Room room = new com.example.backend.entity.Room();
-        when(roomRepository.findById(anyString())).thenReturn(Optional.of(room));
-        when(roomRepository.save(any())).thenReturn(room);
-        when(modelMapper.map(any(), eq(RoomResponse.class))).thenReturn(roomResponse);
+    void changeRoomName_shouldUpdateName() {
+        com.example.backend.entity.Room existingRoom = new com.example.backend.entity.Room("A101", "Old Name", 10);
+        when(roomRepository.findById("A101")).thenReturn(Optional.of(existingRoom));
+        when(roomRepository.save(any(com.example.backend.entity.Room.class))).thenAnswer(i -> i.getArgument(0));
 
-        RoomResponse updatedRoom = adminService.changeRoomName("MR001", "New Room Name");
+        RoomResponse updatedRoom = adminService.changeRoomName("A101", "New Name");
 
         assertNotNull(updatedRoom);
-        assertEquals(roomResponse.getName(), updatedRoom.getName());
-        verify(roomRepository, times(1)).save(any());
+        assertEquals("New Name", updatedRoom.getName());
+        verify(roomRepository, times(1)).save(existingRoom);
     }
 
     @Test
-    void changeRoomCapacity_WithValidData_ShouldReturnUpdatedRoomResponse() {
-        com.example.backend.entity.Room room = new com.example.backend.entity.Room();
-        when(roomRepository.findById(anyString())).thenReturn(Optional.of(room));
-        when(roomRepository.save(any())).thenReturn(room);
-        when(modelMapper.map(any(), eq(RoomResponse.class))).thenReturn(roomResponse);
+    void changeRoomCapacity_shouldUpdateCapacity() {
+        com.example.backend.entity.Room existingRoom = new com.example.backend.entity.Room("A101", "Conference Room", 5);
+        when(roomRepository.findById("A101")).thenReturn(Optional.of(existingRoom));
+        when(roomRepository.save(any(com.example.backend.entity.Room.class))).thenAnswer(i -> i.getArgument(0));
 
-        RoomResponse updatedRoom = adminService.changeRoomCapacity("MR001", 20);
+        RoomResponse updatedRoom = adminService.changeRoomCapacity("A101", 20);
 
         assertNotNull(updatedRoom);
-        assertEquals(roomResponse.getCapacity(), updatedRoom.getCapacity());
-        verify(roomRepository, times(1)).save(any());
+        assertEquals(20, updatedRoom.getCapacity());
+        verify(roomRepository, times(1)).save(existingRoom);
     }
 }

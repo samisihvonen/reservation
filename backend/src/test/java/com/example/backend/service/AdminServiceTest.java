@@ -1,160 +1,193 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.RoomRequest;
-import com.example.backend.dto.RoomResponse;
-import com.example.backend.dto.UserRequest;
-import com.example.backend.dto.UserResponse;
+import com.example.backend.model.request.RoomRequest;
+import com.example.backend.model.request.UserRequest;
+import com.example.backend.model.response.RoomResponse;
+import com.example.backend.model.response.UserResponse;
+import com.example.backend.repository.RoomRepository;
+import com.example.backend.repository.UserRepository;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class AdminServiceTest {
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private RoomRepository roomRepository;
+
     @InjectMocks
     private AdminService adminService;
 
+    private UserRequest userRequest;
+    private UserResponse userResponse;
+    private RoomRequest roomRequest;
+    private RoomResponse roomResponse;
+
     @BeforeEach
     void setUp() {
-        // Initialize test fixtures
+        userRequest = new UserRequest("testUser", "test@example.com", "password");
+        userResponse = new UserResponse(1L, "testUser", "test@example.com");
+        roomRequest = new RoomRequest("Test Room", 10);
+        roomResponse = new RoomResponse("ROOM1", "Test Room", 10);
     }
 
     @Test
-    @DisplayName("Should get_all_users successfully")
-    void testGetAllUsers() {
-        // Arrange
+    void getAllUsers_ShouldReturnListOfUsers() {
+        when(userRepository.findAllProjectedBy()).thenReturn(Arrays.asList(userResponse));
 
-        // Act
         List<UserResponse> result = adminService.getAllUsers();
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(userRepository, times(1)).findAllProjectedBy();
     }
 
     @Test
-    @DisplayName("Should get_user_by_id successfully")
-    void testGetUserById() {
-        // Arrange
+    void getUserById_WithValidId_ShouldReturnUser() {
+        when(userRepository.findProjectedById(anyLong())).thenReturn(Optional.of(userResponse));
 
-        // Act
         UserResponse result = adminService.getUserById(1L);
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertNotNull(result);
+        assertEquals("testUser", result.getUsername());
+        verify(userRepository, times(1)).findProjectedById(1L);
     }
 
     @Test
-    @DisplayName("Should update_user successfully")
-    void testUpdateUser() {
-        // Arrange
+    void getUserById_WithInvalidId_ShouldThrowException() {
+        when(userRepository.findProjectedById(anyLong())).thenReturn(Optional.empty());
 
-        // Act
-        UserResponse result = adminService.updateUser(1L, null);
-
-        // Assert
-        assertThat(result).isNotNull();
+        assertThrows(RuntimeException.class, () -> adminService.getUserById(999L));
     }
 
     @Test
-    @DisplayName("Should delete_user successfully")
-    void testDeleteUser() {
-        // Arrange
+    void updateUser_WithValidData_ShouldReturnUpdatedUser() {
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(new com.example.backend.entity.User()));
+        when(userRepository.save(any())).thenReturn(new com.example.backend.entity.User(1L, "updatedUser", "updated@example.com", "password"));
 
-        // Act
-        adminService.deleteUser(1L);
+        UserRequest updateRequest = new UserRequest("updatedUser", "updated@example.com", "newPassword");
+        UserResponse result = adminService.updateUser(1L, updateRequest);
 
-        // Assert
-        // TODO: Verify side effects using Mockito.verify()
+        assertNotNull(result);
+        assertEquals("updatedUser", result.getUsername());
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
-    @DisplayName("Should change_user_email successfully")
-    void testChangeUserEmail() {
-        // Arrange
+    void deleteUser_WithValidId_ShouldDeleteUser() {
+        when(userRepository.existsById(anyLong())).thenReturn(true);
 
-        // Act
-        UserResponse result = adminService.changeUserEmail(1L, "test-value");
-
-        // Assert
-        assertThat(result).isNotNull();
+        assertDoesNotThrow(() -> adminService.deleteUser(1L));
+        verify(userRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    @DisplayName("Should get_all_rooms successfully")
-    void testGetAllRooms() {
-        // Arrange
+    void deleteUser_WithInvalidId_ShouldThrowException() {
+        when(userRepository.existsById(anyLong())).thenReturn(false);
 
-        // Act
+        assertThrows(RuntimeException.class, () -> adminService.deleteUser(999L));
+    }
+
+    @Test
+    void changeUserEmail_WithValidData_ShouldReturnUpdatedUser() {
+        com.example.backend.entity.User user = new com.example.backend.entity.User(1L, "testUser", "old@example.com", "password");
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(userRepository.save(any())).thenReturn(new com.example.backend.entity.User(1L, "testUser", "new@example.com", "password"));
+
+        UserResponse result = adminService.changeUserEmail(1L, "new@example.com");
+
+        assertNotNull(result);
+        assertEquals("new@example.com", result.getEmail());
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).save(any());
+    }
+
+    @Test
+    void getAllRooms_ShouldReturnListOfRooms() {
+        when(roomRepository.findAllProjectedBy()).thenReturn(Arrays.asList(roomResponse));
+
         List<RoomResponse> result = adminService.getAllRooms();
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(roomRepository, times(1)).findAllProjectedBy();
     }
 
     @Test
-    @DisplayName("Should create_room successfully")
-    void testCreateRoom() {
-        // Arrange
+    void createRoom_WithValidData_ShouldReturnCreatedRoom() {
+        when(roomRepository.save(any())).thenReturn(new com.example.backend.entity.Room("ROOM1", "Test Room", 10));
 
-        // Act
-        RoomResponse result = adminService.createRoom(null);
+        RoomResponse result = adminService.createRoom(roomRequest);
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertNotNull(result);
+        assertEquals("Test Room", result.getName());
+        verify(roomRepository, times(1)).save(any());
     }
 
     @Test
-    @DisplayName("Should update_room successfully")
-    void testUpdateRoom() {
-        // Arrange
+    void updateRoom_WithValidData_ShouldReturnUpdatedRoom() {
+        com.example.backend.entity.Room room = new com.example.backend.entity.Room("ROOM1", "Old Name", 5);
+        when(roomRepository.findById(anyString())).thenReturn(Optional.of(room));
+        when(roomRepository.save(any())).thenReturn(new com.example.backend.entity.Room("ROOM1", "New Name", 15));
 
-        // Act
-        RoomResponse result = adminService.updateRoom("test-value", null);
+        RoomRequest updateRequest = new RoomRequest("New Name", 15);
+        RoomResponse result = adminService.updateRoom("ROOM1", updateRequest);
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertNotNull(result);
+        assertEquals("New Name", result.getName());
+        assertEquals(15, result.getCapacity());
+        verify(roomRepository, times(1)).findById("ROOM1");
+        verify(roomRepository, times(1)).save(any());
     }
 
     @Test
-    @DisplayName("Should delete_room successfully")
-    void testDeleteRoom() {
-        // Arrange
+    void deleteRoom_WithValidId_ShouldDeleteRoom() {
+        when(roomRepository.existsById(anyString())).thenReturn(true);
 
-        // Act
-        adminService.deleteRoom("test-value");
-
-        // Assert
-        // TODO: Verify side effects using Mockito.verify()
+        assertDoesNotThrow(() -> adminService.deleteRoom("ROOM1"));
+        verify(roomRepository, times(1)).deleteById("ROOM1");
     }
 
     @Test
-    @DisplayName("Should change_room_name successfully")
-    void testChangeRoomName() {
-        // Arrange
+    void changeRoomName_WithValidData_ShouldReturnUpdatedRoom() {
+        com.example.backend.entity.Room room = new com.example.backend.entity.Room("ROOM1", "Old Name", 10);
+        when(roomRepository.findById(anyString())).thenReturn(Optional.of(room));
+        when(roomRepository.save(any())).thenReturn(new com.example.backend.entity.Room("ROOM1", "New Name", 10));
 
-        // Act
-        RoomResponse result = adminService.changeRoomName("test-value", "test-value");
+        RoomResponse result = adminService.changeRoomName("ROOM1", "New Name");
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertNotNull(result);
+        assertEquals("New Name", result.getName());
+        verify(roomRepository, times(1)).findById("ROOM1");
+        verify(roomRepository, times(1)).save(any());
     }
 
     @Test
-    @DisplayName("Should change_room_capacity successfully")
-    void testChangeRoomCapacity() {
-        // Arrange
+    void changeRoomCapacity_WithValidData_ShouldReturnUpdatedRoom() {
+        com.example.backend.entity.Room room = new com.example.backend.entity.Room("ROOM1", "Test Room", 5);
+        when(roomRepository.findById(anyString())).thenReturn(Optional.of(room));
+        when(roomRepository.save(any())).thenReturn(new com.example.backend.entity.Room("ROOM1", "Test Room", 20));
 
-        // Act
-        RoomResponse result = adminService.changeRoomCapacity("test-value", 1);
+        RoomResponse result = adminService.changeRoomCapacity("ROOM1", 20);
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertNotNull(result);
+        assertEquals(20, result.getCapacity());
+        verify(roomRepository, times(1)).findById("ROOM1");
+        verify(roomRepository, times(1)).save(any());
     }
 }

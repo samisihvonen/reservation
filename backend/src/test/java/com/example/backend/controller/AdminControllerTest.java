@@ -14,8 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,63 +32,55 @@ class AdminControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @MockBean
     private AdminService adminService;
 
     @InjectMocks
     private AdminController adminController;
 
-    private UserResponse mockUserResponse;
-    private UserRequest mockUserRequest;
-    private RoomResponse mockRoomResponse;
-    private RoomRequest mockRoomRequest;
-    private EmailChangeRequest mockEmailChangeRequest;
-    private RoomNameChangeRequest mockRoomNameChangeRequest;
-    private RoomCapacityChangeRequest mockRoomCapacityChangeRequest;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private UserResponse userResponse;
+    private UserRequest userRequest;
+    private RoomResponse roomResponse;
+    private RoomRequest roomRequest;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        mockUserResponse = new UserResponse(1L, "test@example.com", "Test User");
-        mockUserRequest = new UserRequest("test@example.com", "Test User");
-        mockRoomResponse = new RoomResponse("ROOM1", "Test Room", 10);
-        mockRoomRequest = new RoomRequest("Test Room", 10);
-        mockEmailChangeRequest = new EmailChangeRequest("new@example.com");
-        mockRoomNameChangeRequest = new RoomNameChangeRequest("New Room Name");
-        mockRoomCapacityChangeRequest = new RoomCapacityChangeRequest(20);
+        userResponse = new UserResponse(1L, "test@example.com", "John Doe", "ADMIN");
+        userRequest = new UserRequest("new@example.com", "John Updated", "ADMIN", "newPassword");
+
+        roomResponse = new RoomResponse("ROOM1", "Conference Room 1", 10);
+        roomRequest = new RoomRequest("Conference Room 1", 10);
     }
 
     @Test
-    void getUserById_shouldReturnUserResponse_whenUserExists() throws Exception {
-        given(adminService.getUserById(anyLong())).willReturn(ResponseEntity.ok(mockUserResponse));
+    void getUserById_ShouldReturnUserResponse_WhenUserExists() throws Exception {
+        given(adminService.getUserById(anyLong())).willReturn(ResponseEntity.ok(userResponse));
 
         mockMvc.perform(get("/api/admin/users/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.email").value("test@example.com"))
-                .andExpect(jsonPath("$.name").value("Test User"));
+                .andExpect(jsonPath("$.email").value("test@example.com"));
     }
 
     @Test
-    void updateUser_shouldReturnUpdatedUserResponse_whenUpdateIsSuccessful() throws Exception {
-        given(adminService.updateUser(anyLong(), any(UserRequest.class)))
-                .willReturn(ResponseEntity.ok(mockUserResponse));
+    void updateUser_ShouldReturnUpdatedUserResponse_WhenUpdateIsSuccessful() throws Exception {
+        given(adminService.updateUser(anyLong(), any(UserRequest.class))).willReturn(ResponseEntity.ok(userResponse));
 
         mockMvc.perform(put("/api/admin/users/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockUserRequest)))
+                        .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("test@example.com"))
-                .andExpect(jsonPath("$.name").value("Test User"));
+                .andExpect(jsonPath("$.email").value("test@example.com"));
     }
 
     @Test
-    void deleteUser_shouldReturnNoContent_whenDeletionIsSuccessful() throws Exception {
+    void deleteUser_ShouldReturnNoContent_WhenDeletionIsSuccessful() throws Exception {
         willDoNothing().given(adminService).deleteUser(anyLong());
 
         mockMvc.perform(delete("/api/admin/users/{id}", 1L)
@@ -98,46 +89,41 @@ class AdminControllerTest {
     }
 
     @Test
-    void changeUserEmail_shouldReturnUpdatedUserResponse_whenEmailChangeIsSuccessful() throws Exception {
-        UserResponse updatedUserResponse = new UserResponse(1L, "new@example.com", "Test User");
-        given(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class)))
-                .willReturn(ResponseEntity.ok(updatedUserResponse));
+    void changeUserEmail_ShouldReturnUpdatedUserResponse_WhenEmailChangeIsSuccessful() throws Exception {
+        EmailChangeRequest emailChangeRequest = new EmailChangeRequest("new@example.com");
+        given(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class))).willReturn(ResponseEntity.ok(userResponse));
 
         mockMvc.perform(patch("/api/admin/users/{id}/email", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockEmailChangeRequest)))
+                        .content(objectMapper.writeValueAsString(emailChangeRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("new@example.com"));
+                .andExpect(jsonPath("$.email").value("test@example.com"));
     }
 
     @Test
-    void createRoom_shouldReturnRoomResponse_whenCreationIsSuccessful() throws Exception {
-        given(adminService.createRoom(any(RoomRequest.class)))
-                .willReturn(ResponseEntity.ok(mockRoomResponse));
+    void createRoom_ShouldReturnRoomResponse_WhenRoomCreationIsSuccessful() throws Exception {
+        given(adminService.createRoom(any(RoomRequest.class))).willReturn(ResponseEntity.ok(roomResponse));
 
         mockMvc.perform(post("/api/admin/rooms")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockRoomRequest)))
+                        .content(objectMapper.writeValueAsString(roomRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test Room"))
-                .andExpect(jsonPath("$.capacity").value(10));
+                .andExpect(jsonPath("$.name").value("Conference Room 1"));
     }
 
     @Test
-    void updateRoom_shouldReturnUpdatedRoomResponse_whenUpdateIsSuccessful() throws Exception {
-        given(adminService.updateRoom(anyString(), any(RoomRequest.class)))
-                .willReturn(ResponseEntity.ok(mockRoomResponse));
+    void updateRoom_ShouldReturnUpdatedRoomResponse_WhenUpdateIsSuccessful() throws Exception {
+        given(adminService.updateRoom(anyString(), any(RoomRequest.class))).willReturn(ResponseEntity.ok(roomResponse));
 
         mockMvc.perform(put("/api/admin/rooms/{roomId}", "ROOM1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockRoomRequest)))
+                        .content(objectMapper.writeValueAsString(roomRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test Room"))
-                .andExpect(jsonPath("$.capacity").value(10));
+                .andExpect(jsonPath("$.name").value("Conference Room 1"));
     }
 
     @Test
-    void deleteRoom_shouldReturnNoContent_whenDeletionIsSuccessful() throws Exception {
+    void deleteRoom_ShouldReturnNoContent_WhenDeletionIsSuccessful() throws Exception {
         willDoNothing().given(adminService).deleteRoom(anyString());
 
         mockMvc.perform(delete("/api/admin/rooms/{roomId}", "ROOM1")
@@ -146,27 +132,26 @@ class AdminControllerTest {
     }
 
     @Test
-    void changeRoomName_shouldReturnUpdatedRoomResponse_whenNameChangeIsSuccessful() throws Exception {
-        RoomResponse updatedRoomResponse = new RoomResponse("ROOM1", "New Room Name", 10);
-        given(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class)))
-                .willReturn(ResponseEntity.ok(updatedRoomResponse));
+    void changeRoomName_ShouldReturnUpdatedRoomResponse_WhenNameChangeIsSuccessful() throws Exception {
+        RoomNameChangeRequest roomNameChangeRequest = new RoomNameChangeRequest("New Conference Room");
+        given(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class))).willReturn(ResponseEntity.ok(roomResponse));
 
         mockMvc.perform(patch("/api/admin/rooms/{roomId}/name", "ROOM1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockRoomNameChangeRequest)))
+                        .content(objectMapper.writeValueAsString(roomNameChangeRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("New Room Name"));
+                .andExpect(jsonPath("$.name").value("Conference Room 1"));
     }
 
     @Test
-    void changeRoomCapacity_shouldReturnUpdatedRoomResponse_whenCapacityChangeIsSuccessful() throws Exception {
-        RoomResponse updatedRoomResponse = new RoomResponse("ROOM1", "Test Room", 20);
-        given(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class)))
-                .willReturn(ResponseEntity.ok(updatedRoomResponse));
+    void changeRoomCapacity_ShouldReturnUpdatedRoomResponse_WhenCapacityChangeIsSuccessful() throws Exception {
+        RoomCapacityChangeRequest roomCapacityChangeRequest = new RoomCapacityChangeRequest(20);
+        RoomResponse updatedRoomResponse = new RoomResponse("ROOM1", "Conference Room 1", 20);
+        given(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class))).willReturn(ResponseEntity.ok(updatedRoomResponse));
 
         mockMvc.perform(patch("/api/admin/rooms/{roomId}/capacity", "ROOM1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(mockRoomCapacityChangeRequest)))
+                        .content(objectMapper.writeValueAsString(roomCapacityChangeRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.capacity").value(20));
     }

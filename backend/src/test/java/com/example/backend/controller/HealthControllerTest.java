@@ -1,46 +1,49 @@
 package com.example.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HealthControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private HealthController healthController;
 
     @BeforeEach
     void setUp() {
+        healthController = new HealthController();
     }
 
     @Test
-    @DisplayName("Should handle health request")
-    void testHealth() throws Exception {
-        // Arrange
-        // TODO: Mock service calls
-
+    void health_ShouldReturnOkStatus() {
         // Act
-        ResultActions result = mockMvc.perform(get("/health")
-                .contentType(MediaType.APPLICATION_JSON));
+        ResponseEntity<String> response = healthController.health();
 
         // Assert
-        result.andExpect(status().isOk());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("OK", response.getBody());
+    }
+
+    @Test
+    void health_ResponseBodyShouldBeUppercase() {
+        // Act
+        ResponseEntity<String> response = healthController.health();
+
+        // Assert
+        assertEquals("OK", response.getBody());
+    }
+
+    @Test
+    void health_ShouldNotReturnNull() {
+        // Act
+        ResponseEntity<String> response = healthController.health();
+
+        // Assert
+        assertEquals("OK", response.getBody());
     }
 }

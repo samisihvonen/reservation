@@ -54,12 +54,14 @@ class ReservationControllerTest {
     void createReservation_shouldReturnCreatedStatus() throws Exception {
         CreateReservationRequest request = new CreateReservationRequest();
         request.setRoomId("room1");
-        request.setStartDate(LocalDate.now());
-        request.setEndDate(LocalDate.now().plusDays(1));
+        request.setGuestName("John Doe");
+        request.setCheckInDate(LocalDate.now());
+        request.setCheckOutDate(LocalDate.now().plusDays(2));
 
         ReservationResponse response = new ReservationResponse();
         response.setId("res1");
         response.setRoomId("room1");
+        response.setGuestName("John Doe");
 
         when(service.createReservation(any(CreateReservationRequest.class))).thenReturn(response);
 
@@ -68,7 +70,8 @@ class ReservationControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("res1"))
-                .andExpect(jsonPath("$.roomId").value("room1"));
+                .andExpect(jsonPath("$.roomId").value("room1"))
+                .andExpect(jsonPath("$.guestName").value("John Doe"));
 
         verify(service).createReservation(any(CreateReservationRequest.class));
     }
@@ -77,6 +80,10 @@ class ReservationControllerTest {
     @DisplayName("Should return BAD_REQUEST when create reservation request is invalid")
     void createReservation_shouldReturnBadRequestWhenInvalid() throws Exception {
         CreateReservationRequest request = new CreateReservationRequest();
+        request.setRoomId("");
+        request.setGuestName("");
+        request.setCheckInDate(null);
+        request.setCheckOutDate(null);
 
         mockMvc.perform(post("/api/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -90,12 +97,14 @@ class ReservationControllerTest {
         String reservationId = "res1";
         CreateReservationRequest request = new CreateReservationRequest();
         request.setRoomId("room1");
-        request.setStartDate(LocalDate.now());
-        request.setEndDate(LocalDate.now().plusDays(1));
+        request.setGuestName("John Doe Updated");
+        request.setCheckInDate(LocalDate.now());
+        request.setCheckOutDate(LocalDate.now().plusDays(3));
 
         ReservationResponse response = new ReservationResponse();
         response.setId(reservationId);
         response.setRoomId("room1");
+        response.setGuestName("John Doe Updated");
 
         when(service.updateReservation(anyString(), any(CreateReservationRequest.class))).thenReturn(response);
 
@@ -104,19 +113,19 @@ class ReservationControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservationId))
-                .andExpect(jsonPath("$.roomId").value("room1"));
+                .andExpect(jsonPath("$.roomId").value("room1"))
+                .andExpect(jsonPath("$.guestName").value("John Doe Updated"));
 
         verify(service).updateReservation(anyString(), any(CreateReservationRequest.class));
     }
 
     @Test
     @DisplayName("Should return NOT_FOUND when updating non-existent reservation")
-    void updateReservation_shouldReturnNotFoundWhenReservationNotFound() throws Exception {
+    void updateReservation_shouldReturnNotFoundWhenReservationDoesNotExist() throws Exception {
         String reservationId = "nonexistent";
         CreateReservationRequest request = new CreateReservationRequest();
         request.setRoomId("room1");
-        request.setStartDate(LocalDate.now());
-        request.setEndDate(LocalDate.now().plusDays(1));
+        request.setGuestName("John Doe");
 
         when(service.updateReservation(anyString(), any(CreateReservationRequest.class)))
                 .thenThrow(new RuntimeException("Reservation not found"));
@@ -142,7 +151,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("Should return NOT_FOUND when deleting non-existent reservation")
-    void deleteReservation_shouldReturnNotFoundWhenReservationNotFound() throws Exception {
+    void deleteReservation_shouldReturnNotFoundWhenReservationDoesNotExist() throws Exception {
         String reservationId = "nonexistent";
 
         doThrow(new RuntimeException("Reservation not found")).when(service).deleteReservation(anyString());
@@ -153,25 +162,27 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("Should get reservation by ID and return OK status with response")
-    void getById_shouldReturnOkStatusWithReservation() throws Exception {
+    void getReservationById_shouldReturnOkStatus() throws Exception {
         String reservationId = "res1";
         ReservationResponse response = new ReservationResponse();
         response.setId(reservationId);
         response.setRoomId("room1");
+        response.setGuestName("John Doe");
 
         when(service.getReservationById(anyString())).thenReturn(response);
 
         mockMvc.perform(get("/api/reservations/detail/{id}", reservationId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservationId))
-                .andExpect(jsonPath("$.roomId").value("room1"));
+                .andExpect(jsonPath("$.roomId").value("room1"))
+                .andExpect(jsonPath("$.guestName").value("John Doe"));
 
         verify(service).getReservationById(anyString());
     }
 
     @Test
     @DisplayName("Should return NOT_FOUND when getting non-existent reservation by ID")
-    void getById_shouldReturnNotFoundWhenReservationNotFound() throws Exception {
+    void getReservationById_shouldReturnNotFoundWhenReservationDoesNotExist() throws Exception {
         String reservationId = "nonexistent";
 
         when(service.getReservationById(anyString())).thenThrow(new RuntimeException("Reservation not found"));
@@ -181,26 +192,30 @@ class ReservationControllerTest {
     }
 
     @Test
-    @DisplayName("Should get reservations by room and return OK status with list")
-    void getByRoom_shouldReturnOkStatusWithReservations() throws Exception {
+    @DisplayName("Should get reservations by room ID and return OK status with list")
+    void getReservationsByRoom_shouldReturnOkStatus() throws Exception {
         String roomId = "room1";
         ReservationResponse response = new ReservationResponse();
         response.setId("res1");
         response.setRoomId(roomId);
+        response.setGuestName("John Doe");
 
-        when(service.getReservationsByRoom(anyString())).thenReturn(Collections.singletonList(response));
+        List<ReservationResponse> responses = Collections.singletonList(response);
+
+        when(service.getReservationsByRoom(anyString())).thenReturn(responses);
 
         mockMvc.perform(get("/api/reservations/{roomId}", roomId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("res1"))
-                .andExpect(jsonPath("$[0].roomId").value(roomId));
+                .andExpect(jsonPath("$[0].roomId").value(roomId))
+                .andExpect(jsonPath("$[0].guestName").value("John Doe"));
 
         verify(service).getReservationsByRoom(anyString());
     }
 
     @Test
-    @DisplayName("Should return empty list when no reservations found for room")
-    void getByRoom_shouldReturnEmptyListWhenNoReservations() throws Exception {
+    @DisplayName("Should return empty list when no reservations exist for room")
+    void getReservationsByRoom_shouldReturnEmptyListWhenNoReservations() throws Exception {
         String roomId = "emptyRoom";
 
         when(service.getReservationsByRoom(anyString())).thenReturn(Collections.emptyList());
@@ -208,11 +223,13 @@ class ReservationControllerTest {
         mockMvc.perform(get("/api/reservations/{roomId}", roomId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
+
+        verify(service).getReservationsByRoom(anyString());
     }
 
     @Test
-    @DisplayName("Should return BAD_REQUEST when room ID is invalid for getByRoom")
-    void getByRoom_shouldReturnBadRequestWhenRoomIdInvalid() throws Exception {
+    @DisplayName("Should return BAD_REQUEST when room ID is invalid for get by room")
+    void getReservationsByRoom_shouldReturnBadRequestWhenRoomIdInvalid() throws Exception {
         mockMvc.perform(get("/api/reservations/{roomId}", " "))
                 .andExpect(status().isBadRequest());
     }

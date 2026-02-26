@@ -22,7 +22,7 @@ class HealthControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private Logger log;
+    private Logger logger;
 
     @InjectMocks
     private HealthController healthController;
@@ -34,7 +34,7 @@ class HealthControllerTest {
 
     @Test
     @DisplayName("Should return OK status with health check message")
-    void health_ShouldReturnOkStatusWithHealthCheckMessage() throws Exception {
+    void health_shouldReturnOkStatusWithHealthCheckMessage() throws Exception {
         mockMvc.perform(get("/health"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Health check: OK"));
@@ -42,17 +42,17 @@ class HealthControllerTest {
 
     @Test
     @DisplayName("Should log health check initiation with current date")
-    void health_ShouldLogHealthCheckInitiation() {
+    void health_shouldLogHealthCheckInitiation() {
         ResponseEntity<String> response = healthController.health();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo("Health check: OK");
-        verify(log).info("Health check initiated at: " + new java.util.Date());
+        verify(logger).info("Health check initiated at: " + new java.util.Date());
     }
 
     @Test
     @DisplayName("Should return ResponseEntity with OK status and correct body")
-    void health_ShouldReturnResponseEntityWithOkStatusAndCorrectBody() {
+    void health_shouldReturnResponseEntityWithOkStatusAndCorrectBody() {
         ResponseEntity<String> response = healthController.health();
 
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();

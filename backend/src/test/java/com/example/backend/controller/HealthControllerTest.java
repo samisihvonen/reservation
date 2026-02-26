@@ -30,7 +30,7 @@ class HealthControllerTest {
     }
 
     @Test
-    void health_ResponseBodyShouldBeUppercase() {
+    void health_ResponseBodyShouldNotBeNull() {
         // Act
         ResponseEntity<String> response = healthController.health();
 
@@ -39,7 +39,7 @@ class HealthControllerTest {
     }
 
     @Test
-    void health_ShouldNotReturnNull() {
+    void health_ResponseShouldContainCorrectContentType() {
         // Act
         ResponseEntity<String> response = healthController.health();
 

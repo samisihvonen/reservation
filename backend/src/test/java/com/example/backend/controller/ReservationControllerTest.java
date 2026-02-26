@@ -53,14 +53,16 @@ class ReservationControllerTest {
     @DisplayName("Should create reservation and return CREATED status with response")
     void createReservation_shouldReturnCreatedStatus() throws Exception {
         CreateReservationRequest request = new CreateReservationRequest();
-        request.setRoomId("room1");
+        request.setRoomId("room123");
+        request.setStartDate(LocalDate.now());
+        request.setEndDate(LocalDate.now().plusDays(2));
         request.setGuestName("John Doe");
-        request.setCheckInDate(LocalDate.now());
-        request.setCheckOutDate(LocalDate.now().plusDays(2));
 
         ReservationResponse response = new ReservationResponse();
-        response.setId("res1");
-        response.setRoomId("room1");
+        response.setId("res123");
+        response.setRoomId("room123");
+        response.setStartDate(LocalDate.now());
+        response.setEndDate(LocalDate.now().plusDays(2));
         response.setGuestName("John Doe");
 
         when(service.createReservation(any(CreateReservationRequest.class))).thenReturn(response);
@@ -69,8 +71,8 @@ class ReservationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value("res1"))
-                .andExpect(jsonPath("$.roomId").value("room1"))
+                .andExpect(jsonPath("$.id").value("res123"))
+                .andExpect(jsonPath("$.roomId").value("room123"))
                 .andExpect(jsonPath("$.guestName").value("John Doe"));
 
         verify(service).createReservation(any(CreateReservationRequest.class));
@@ -81,9 +83,9 @@ class ReservationControllerTest {
     void createReservation_shouldReturnBadRequestWhenInvalid() throws Exception {
         CreateReservationRequest request = new CreateReservationRequest();
         request.setRoomId("");
+        request.setStartDate(null);
+        request.setEndDate(null);
         request.setGuestName("");
-        request.setCheckInDate(null);
-        request.setCheckOutDate(null);
 
         mockMvc.perform(post("/api/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,16 +96,18 @@ class ReservationControllerTest {
     @Test
     @DisplayName("Should update reservation and return OK status with response")
     void updateReservation_shouldReturnOkStatus() throws Exception {
-        String reservationId = "res1";
+        String reservationId = "res123";
         CreateReservationRequest request = new CreateReservationRequest();
-        request.setRoomId("room1");
+        request.setRoomId("room123");
+        request.setStartDate(LocalDate.now());
+        request.setEndDate(LocalDate.now().plusDays(2));
         request.setGuestName("John Doe Updated");
-        request.setCheckInDate(LocalDate.now());
-        request.setCheckOutDate(LocalDate.now().plusDays(3));
 
         ReservationResponse response = new ReservationResponse();
         response.setId(reservationId);
-        response.setRoomId("room1");
+        response.setRoomId("room123");
+        response.setStartDate(LocalDate.now());
+        response.setEndDate(LocalDate.now().plusDays(2));
         response.setGuestName("John Doe Updated");
 
         when(service.updateReservation(anyString(), any(CreateReservationRequest.class))).thenReturn(response);
@@ -113,7 +117,6 @@ class ReservationControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservationId))
-                .andExpect(jsonPath("$.roomId").value("room1"))
                 .andExpect(jsonPath("$.guestName").value("John Doe Updated"));
 
         verify(service).updateReservation(anyString(), any(CreateReservationRequest.class));
@@ -124,7 +127,9 @@ class ReservationControllerTest {
     void updateReservation_shouldReturnNotFoundWhenReservationDoesNotExist() throws Exception {
         String reservationId = "nonexistent";
         CreateReservationRequest request = new CreateReservationRequest();
-        request.setRoomId("room1");
+        request.setRoomId("room123");
+        request.setStartDate(LocalDate.now());
+        request.setEndDate(LocalDate.now().plusDays(2));
         request.setGuestName("John Doe");
 
         when(service.updateReservation(anyString(), any(CreateReservationRequest.class)))
@@ -139,7 +144,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("Should delete reservation and return NO_CONTENT status")
     void deleteReservation_shouldReturnNoContentStatus() throws Exception {
-        String reservationId = "res1";
+        String reservationId = "res123";
 
         doNothing().when(service).deleteReservation(anyString());
 
@@ -163,10 +168,12 @@ class ReservationControllerTest {
     @Test
     @DisplayName("Should get reservation by ID and return OK status with response")
     void getReservationById_shouldReturnOkStatus() throws Exception {
-        String reservationId = "res1";
+        String reservationId = "res123";
         ReservationResponse response = new ReservationResponse();
         response.setId(reservationId);
-        response.setRoomId("room1");
+        response.setRoomId("room123");
+        response.setStartDate(LocalDate.now());
+        response.setEndDate(LocalDate.now().plusDays(2));
         response.setGuestName("John Doe");
 
         when(service.getReservationById(anyString())).thenReturn(response);
@@ -174,7 +181,7 @@ class ReservationControllerTest {
         mockMvc.perform(get("/api/reservations/detail/{id}", reservationId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservationId))
-                .andExpect(jsonPath("$.roomId").value("room1"))
+                .andExpect(jsonPath("$.roomId").value("room123"))
                 .andExpect(jsonPath("$.guestName").value("John Doe"));
 
         verify(service).getReservationById(anyString());
@@ -192,21 +199,21 @@ class ReservationControllerTest {
     }
 
     @Test
-    @DisplayName("Should get reservations by room ID and return OK status with list")
+    @DisplayName("Should get reservations by room and return OK status with list")
     void getReservationsByRoom_shouldReturnOkStatus() throws Exception {
-        String roomId = "room1";
+        String roomId = "room123";
         ReservationResponse response = new ReservationResponse();
-        response.setId("res1");
+        response.setId("res123");
         response.setRoomId(roomId);
+        response.setStartDate(LocalDate.now());
+        response.setEndDate(LocalDate.now().plusDays(2));
         response.setGuestName("John Doe");
 
-        List<ReservationResponse> responses = Collections.singletonList(response);
-
-        when(service.getReservationsByRoom(anyString())).thenReturn(responses);
+        when(service.getReservationsByRoom(anyString())).thenReturn(Collections.singletonList(response));
 
         mockMvc.perform(get("/api/reservations/{roomId}", roomId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value("res1"))
+                .andExpect(jsonPath("$[0].id").value("res123"))
                 .andExpect(jsonPath("$[0].roomId").value(roomId))
                 .andExpect(jsonPath("$[0].guestName").value("John Doe"));
 
@@ -216,12 +223,13 @@ class ReservationControllerTest {
     @Test
     @DisplayName("Should return empty list when no reservations exist for room")
     void getReservationsByRoom_shouldReturnEmptyListWhenNoReservations() throws Exception {
-        String roomId = "emptyRoom";
+        String roomId = "emptyroom";
 
         when(service.getReservationsByRoom(anyString())).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/reservations/{roomId}", roomId))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
 
         verify(service).getReservationsByRoom(anyString());

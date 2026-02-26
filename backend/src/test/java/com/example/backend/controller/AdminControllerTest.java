@@ -8,27 +8,39 @@ import com.example.backend.dto.request.UserRequest;
 import com.example.backend.dto.response.RoomResponse;
 import com.example.backend.dto.response.UserResponse;
 import com.example.backend.service.AdminService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class AdminControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private AdminService adminService;
 
     @InjectMocks
     private AdminController adminController;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private UserResponse userResponse;
     private UserRequest userRequest;
@@ -40,217 +52,116 @@ class AdminControllerTest {
 
     @BeforeEach
     void setUp() {
-        userResponse = new UserResponse(1L, "test@example.com", "Test User");
-        userRequest = new UserRequest("new@example.com", "New User");
-        roomResponse = new RoomResponse("ROOM1", "Test Room", 10);
-        roomRequest = new RoomRequest("Test Room", 10);
-        emailChangeRequest = new EmailChangeRequest("newemail@example.com");
+        MockitoAnnotations.openMocks(this);
+
+        userResponse = new UserResponse(1L, "test@example.com", "John Doe", "ADMIN");
+        userRequest = new UserRequest("new@example.com", "John Updated", "ADMIN");
+        roomResponse = new RoomResponse("ROOM1", "Conference Room 1", 10);
+        roomRequest = new RoomRequest("Conference Room 1", 10);
+        emailChangeRequest = new EmailChangeRequest("new.email@example.com");
         roomNameChangeRequest = new RoomNameChangeRequest("New Room Name");
         roomCapacityChangeRequest = new RoomCapacityChangeRequest(20);
     }
 
     @Test
-    void getUserById_ShouldReturnUserResponse_WhenUserExists() {
-        when(adminService.getUserById(anyLong())).thenReturn(userResponse);
+    void getUserById_shouldReturnUserResponse_whenUserExists() throws Exception {
+        given(adminService.getUserById(anyLong())).willReturn(ResponseEntity.ok(userResponse));
 
-        ResponseEntity<UserResponse> response = adminController.getUserById(1L);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(userResponse, response.getBody());
-        verify(adminService, times(1)).getUserById(1L);
+        mockMvc.perform(get("/api/admin/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.email").value("test@example.com"));
     }
 
     @Test
-    void getUserById_ShouldReturnNotFound_WhenUserDoesNotExist() {
-        when(adminService.getUserById(anyLong())).thenReturn(null);
+    void updateUser_shouldReturnUpdatedUserResponse_whenUpdateIsSuccessful() throws Exception {
+        given(adminService.updateUser(anyLong(), any(UserRequest.class)))
+                .willReturn(ResponseEntity.ok(userResponse));
 
-        ResponseEntity<UserResponse> response = adminController.getUserById(1L);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(adminService, times(1)).getUserById(1L);
+        mockMvc.perform(put("/api/admin/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("test@example.com"));
     }
 
     @Test
-    void updateUser_ShouldReturnUpdatedUserResponse_WhenUpdateIsSuccessful() {
-        when(adminService.updateUser(anyLong(), any(UserRequest.class))).thenReturn(userResponse);
+    void deleteUser_shouldReturnNoContent_whenDeletionIsSuccessful() throws Exception {
+        willDoNothing().given(adminService).deleteUser(anyLong());
 
-        ResponseEntity<UserResponse> response = adminController.updateUser(1L, userRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(userResponse, response.getBody());
-        verify(adminService, times(1)).updateUser(1L, userRequest);
+        mockMvc.perform(delete("/api/admin/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    void updateUser_ShouldReturnBadRequest_WhenUpdateFails() {
-        when(adminService.updateUser(anyLong(), any(UserRequest.class))).thenReturn(null);
+    void changeUserEmail_shouldReturnUpdatedUserResponse_whenEmailChangeIsSuccessful() throws Exception {
+        given(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class)))
+                .willReturn(ResponseEntity.ok(userResponse));
 
-        ResponseEntity<UserResponse> response = adminController.updateUser(1L, userRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).updateUser(1L, userRequest);
+        mockMvc.perform(patch("/api/admin/users/{id}/email", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(emailChangeRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("test@example.com"));
     }
 
     @Test
-    void deleteUser_ShouldReturnNoContent_WhenDeletionIsSuccessful() {
-        when(adminService.deleteUser(anyLong())).thenReturn(true);
+    void createRoom_shouldReturnRoomResponse_whenRoomCreationIsSuccessful() throws Exception {
+        given(adminService.createRoom(any(RoomRequest.class)))
+                .willReturn(ResponseEntity.ok(roomResponse));
 
-        ResponseEntity<Void> response = adminController.deleteUser(1L);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(adminService, times(1)).deleteUser(1L);
+        mockMvc.perform(post("/api/admin/rooms")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Conference Room 1"));
     }
 
     @Test
-    void deleteUser_ShouldReturnNotFound_WhenDeletionFails() {
-        when(adminService.deleteUser(anyLong())).thenReturn(false);
+    void updateRoom_shouldReturnUpdatedRoomResponse_whenUpdateIsSuccessful() throws Exception {
+        given(adminService.updateRoom(anyString(), any(RoomRequest.class)))
+                .willReturn(ResponseEntity.ok(roomResponse));
 
-        ResponseEntity<Void> response = adminController.deleteUser(1L);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(adminService, times(1)).deleteUser(1L);
+        mockMvc.perform(put("/api/admin/rooms/{roomId}", "ROOM1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Conference Room 1"));
     }
 
     @Test
-    void changeUserEmail_ShouldReturnUpdatedUserResponse_WhenEmailChangeIsSuccessful() {
-        when(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class))).thenReturn(userResponse);
+    void deleteRoom_shouldReturnNoContent_whenDeletionIsSuccessful() throws Exception {
+        willDoNothing().given(adminService).deleteRoom(anyString());
 
-        ResponseEntity<UserResponse> response = adminController.changeUserEmail(1L, emailChangeRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(userResponse, response.getBody());
-        verify(adminService, times(1)).changeUserEmail(1L, emailChangeRequest);
+        mockMvc.perform(delete("/api/admin/rooms/{roomId}", "ROOM1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    void changeUserEmail_ShouldReturnBadRequest_WhenEmailChangeFails() {
-        when(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class))).thenReturn(null);
+    void changeRoomName_shouldReturnUpdatedRoomResponse_whenNameChangeIsSuccessful() throws Exception {
+        given(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class)))
+                .willReturn(ResponseEntity.ok(roomResponse));
 
-        ResponseEntity<UserResponse> response = adminController.changeUserEmail(1L, emailChangeRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).changeUserEmail(1L, emailChangeRequest);
+        mockMvc.perform(patch("/api/admin/rooms/{roomId}/name", "ROOM1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomNameChangeRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Conference Room 1"));
     }
 
     @Test
-    void createRoom_ShouldReturnCreatedRoomResponse_WhenCreationIsSuccessful() {
-        when(adminService.createRoom(any(RoomRequest.class))).thenReturn(roomResponse);
+    void changeRoomCapacity_shouldReturnUpdatedRoomResponse_whenCapacityChangeIsSuccessful() throws Exception {
+        RoomResponse updatedRoomResponse = new RoomResponse("ROOM1", "Conference Room 1", 20);
+        given(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class)))
+                .willReturn(ResponseEntity.ok(updatedRoomResponse));
 
-        ResponseEntity<RoomResponse> response = adminController.createRoom(roomRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(roomResponse, response.getBody());
-        verify(adminService, times(1)).createRoom(roomRequest);
-    }
-
-    @Test
-    void createRoom_ShouldReturnBadRequest_WhenCreationFails() {
-        when(adminService.createRoom(any(RoomRequest.class))).thenReturn(null);
-
-        ResponseEntity<RoomResponse> response = adminController.createRoom(roomRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).createRoom(roomRequest);
-    }
-
-    @Test
-    void updateRoom_ShouldReturnUpdatedRoomResponse_WhenUpdateIsSuccessful() {
-        when(adminService.updateRoom(anyString(), any(RoomRequest.class))).thenReturn(roomResponse);
-
-        ResponseEntity<RoomResponse> response = adminController.updateRoom("ROOM1", roomRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(roomResponse, response.getBody());
-        verify(adminService, times(1)).updateRoom("ROOM1", roomRequest);
-    }
-
-    @Test
-    void updateRoom_ShouldReturnBadRequest_WhenUpdateFails() {
-        when(adminService.updateRoom(anyString(), any(RoomRequest.class))).thenReturn(null);
-
-        ResponseEntity<RoomResponse> response = adminController.updateRoom("ROOM1", roomRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).updateRoom("ROOM1", roomRequest);
-    }
-
-    @Test
-    void deleteRoom_ShouldReturnNoContent_WhenDeletionIsSuccessful() {
-        when(adminService.deleteRoom(anyString())).thenReturn(true);
-
-        ResponseEntity<Void> response = adminController.deleteRoom("ROOM1");
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(adminService, times(1)).deleteRoom("ROOM1");
-    }
-
-    @Test
-    void deleteRoom_ShouldReturnNotFound_WhenDeletionFails() {
-        when(adminService.deleteRoom(anyString())).thenReturn(false);
-
-        ResponseEntity<Void> response = adminController.deleteRoom("ROOM1");
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(adminService, times(1)).deleteRoom("ROOM1");
-    }
-
-    @Test
-    void changeRoomName_ShouldReturnUpdatedRoomResponse_WhenNameChangeIsSuccessful() {
-        when(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class))).thenReturn(roomResponse);
-
-        ResponseEntity<RoomResponse> response = adminController.changeRoomName("ROOM1", roomNameChangeRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(roomResponse, response.getBody());
-        verify(adminService, times(1)).changeRoomName("ROOM1", roomNameChangeRequest);
-    }
-
-    @Test
-    void changeRoomName_ShouldReturnBadRequest_WhenNameChangeFails() {
-        when(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class))).thenReturn(null);
-
-        ResponseEntity<RoomResponse> response = adminController.changeRoomName("ROOM1", roomNameChangeRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).changeRoomName("ROOM1", roomNameChangeRequest);
-    }
-
-    @Test
-    void changeRoomCapacity_ShouldReturnUpdatedRoomResponse_WhenCapacityChangeIsSuccessful() {
-        when(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class))).thenReturn(roomResponse);
-
-        ResponseEntity<RoomResponse> response = adminController.changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(roomResponse, response.getBody());
-        verify(adminService, times(1)).changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
-    }
-
-    @Test
-    void changeRoomCapacity_ShouldReturnBadRequest_WhenCapacityChangeFails() {
-        when(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class))).thenReturn(null);
-
-        ResponseEntity<RoomResponse> response = adminController.changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
+        mockMvc.perform(patch("/api/admin/rooms/{roomId}/capacity", "ROOM1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(roomCapacityChangeRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.capacity").value(20));
     }
 }

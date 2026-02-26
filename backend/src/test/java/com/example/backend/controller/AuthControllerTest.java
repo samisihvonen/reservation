@@ -74,7 +74,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void register_ShouldReturnBadRequest_WhenRegisterRequestIsInvalid() {
+    void register_ShouldThrowException_WhenInputIsInvalid() {
         RegisterRequest invalidRequest = new RegisterRequest(
                 "",
                 "invalid-email",
@@ -83,17 +83,17 @@ class AuthControllerTest {
         );
 
         when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new IllegalArgumentException("Invalid registration data"));
+                .thenThrow(new IllegalArgumentException("Invalid input data"));
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             authController.register(invalidRequest);
         });
 
-        assertEquals("Invalid registration data", exception.getMessage());
+        assertEquals("Invalid input data", exception.getMessage());
     }
 
     @Test
-    void login_ShouldReturnAuthResponse_WhenLoginIsSuccessful() {
+    void login_ShouldReturnAuthResponse_WhenCredentialsAreValid() {
         when(authService.login(any(LoginRequest.class))).thenReturn(authResponse);
 
         ResponseEntity<AuthResponse> response = authController.login(loginRequest);
@@ -116,19 +116,14 @@ class AuthControllerTest {
     }
 
     @Test
-    void login_ShouldReturnBadRequest_WhenLoginRequestIsInvalid() {
-        LoginRequest invalidRequest = new LoginRequest(
-                "",
-                ""
-        );
-
+    void login_ShouldThrowException_WhenAccountIsLocked() {
         when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new IllegalArgumentException("Email and password are required"));
+                .thenThrow(new RuntimeException("Account is locked"));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            authController.login(invalidRequest);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            authController.login(loginRequest);
         });
 
-        assertEquals("Email and password are required", exception.getMessage());
+        assertEquals("Account is locked", exception.getMessage());
     }
 }

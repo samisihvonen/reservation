@@ -31,25 +31,24 @@ class ReservationControllerTest {
     void setUp() {
         createReservationRequest = new CreateReservationRequest(
                 "user123",
-                "2023-12-25",
-                "12:00",
-                4
+                "2023-12-25T18:00:00",
+                4,
+                "Special request"
         );
 
         reservationResponse = new ReservationResponse(
                 "res123",
                 "user123",
-                "2023-12-25",
-                "12:00",
+                "2023-12-25T18:00:00",
                 4,
+                "Special request",
                 "CONFIRMED"
         );
     }
 
     @Test
-    void create_ShouldReturnCreatedReservation_WhenRequestIsValid() {
-        when(reservationService.create(any(CreateReservationRequest.class)))
-                .thenReturn(reservationResponse);
+    void create_shouldReturnCreatedReservation_whenRequestIsValid() {
+        when(reservationService.create(any(CreateReservationRequest.class))).thenReturn(reservationResponse);
 
         ResponseEntity<ReservationResponse> response = reservationController.create(createReservationRequest);
 
@@ -60,12 +59,12 @@ class ReservationControllerTest {
     }
 
     @Test
-    void create_ShouldReturnBadRequest_WhenRequestIsInvalid() {
+    void create_shouldReturnBadRequest_whenRequestIsInvalid() {
         CreateReservationRequest invalidRequest = new CreateReservationRequest(
                 null,
                 null,
-                null,
-                0
+                0,
+                null
         );
 
         when(reservationService.create(any(CreateReservationRequest.class)))
@@ -80,10 +79,9 @@ class ReservationControllerTest {
     }
 
     @Test
-    void update_ShouldReturnUpdatedReservation_WhenIdAndRequestAreValid() {
+    void update_shouldReturnUpdatedReservation_whenIdAndRequestAreValid() {
         String reservationId = "res123";
-        when(reservationService.update(anyString(), any(CreateReservationRequest.class)))
-                .thenReturn(reservationResponse);
+        when(reservationService.update(anyString(), any(CreateReservationRequest.class))).thenReturn(reservationResponse);
 
         ResponseEntity<ReservationResponse> response = reservationController.update(reservationId, createReservationRequest);
 
@@ -94,8 +92,8 @@ class ReservationControllerTest {
     }
 
     @Test
-    void update_ShouldReturnNotFound_WhenReservationDoesNotExist() {
-        String nonExistentId = "nonexistent";
+    void update_shouldReturnNotFound_whenReservationDoesNotExist() {
+        String nonExistentId = "nonExistentId";
         when(reservationService.update(anyString(), any(CreateReservationRequest.class)))
                 .thenThrow(new RuntimeException("Reservation not found"));
 
@@ -108,7 +106,7 @@ class ReservationControllerTest {
     }
 
     @Test
-    void delete_ShouldReturnNoContent_WhenReservationIsDeleted() {
+    void delete_shouldReturnNoContent_whenReservationExists() {
         String reservationId = "res123";
         doNothing().when(reservationService).delete(anyString());
 
@@ -120,8 +118,8 @@ class ReservationControllerTest {
     }
 
     @Test
-    void delete_ShouldThrowException_WhenReservationDoesNotExist() {
-        String nonExistentId = "nonexistent";
+    void delete_shouldThrowException_whenReservationDoesNotExist() {
+        String nonExistentId = "nonExistentId";
         doThrow(new RuntimeException("Reservation not found")).when(reservationService).delete(anyString());
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -133,7 +131,7 @@ class ReservationControllerTest {
     }
 
     @Test
-    void getById_ShouldReturnReservation_WhenReservationExists() {
+    void getById_shouldReturnReservation_whenReservationExists() {
         String reservationId = "res123";
         when(reservationService.getById(anyString())).thenReturn(reservationResponse);
 
@@ -146,8 +144,8 @@ class ReservationControllerTest {
     }
 
     @Test
-    void getById_ShouldThrowException_WhenReservationDoesNotExist() {
-        String nonExistentId = "nonexistent";
+    void getById_shouldReturnNotFound_whenReservationDoesNotExist() {
+        String nonExistentId = "nonExistentId";
         when(reservationService.getById(anyString()))
                 .thenThrow(new RuntimeException("Reservation not found"));
 

@@ -51,7 +51,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void register_ValidRequest_ReturnsAuthResponse() {
+    void register_ShouldReturnAuthResponse_WhenRegistrationIsSuccessful() {
         when(authService.register(any(RegisterRequest.class))).thenReturn(authResponse);
 
         ResponseEntity<AuthResponse> response = authController.register(registerRequest);
@@ -62,7 +62,19 @@ class AuthControllerTest {
     }
 
     @Test
-    void register_InvalidRequest_ReturnsBadRequest() {
+    void register_ShouldThrowException_WhenEmailIsAlreadyTaken() {
+        when(authService.register(any(RegisterRequest.class)))
+                .thenThrow(new RuntimeException("Email is already taken"));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            authController.register(registerRequest);
+        });
+
+        assertEquals("Email is already taken", exception.getMessage());
+    }
+
+    @Test
+    void register_ShouldReturnBadRequest_WhenRegisterRequestIsInvalid() {
         RegisterRequest invalidRequest = new RegisterRequest(
                 "",
                 "invalid-email",
@@ -71,15 +83,17 @@ class AuthControllerTest {
         );
 
         when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new RuntimeException("Validation failed"));
+                .thenThrow(new IllegalArgumentException("Invalid registration data"));
 
-        assertThrows(RuntimeException.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             authController.register(invalidRequest);
         });
+
+        assertEquals("Invalid registration data", exception.getMessage());
     }
 
     @Test
-    void login_ValidCredentials_ReturnsAuthResponse() {
+    void login_ShouldReturnAuthResponse_WhenLoginIsSuccessful() {
         when(authService.login(any(LoginRequest.class))).thenReturn(authResponse);
 
         ResponseEntity<AuthResponse> response = authController.login(loginRequest);
@@ -90,24 +104,31 @@ class AuthControllerTest {
     }
 
     @Test
-    void login_InvalidCredentials_ReturnsUnauthorized() {
+    void login_ShouldThrowException_WhenCredentialsAreInvalid() {
         when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new RuntimeException("Invalid credentials"));
+                .thenThrow(new RuntimeException("Invalid email or password"));
 
-        assertThrows(RuntimeException.class, () -> {
-            authController.login(new LoginRequest("wrong@example.com", "wrongpassword"));
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            authController.login(loginRequest);
         });
+
+        assertEquals("Invalid email or password", exception.getMessage());
     }
 
     @Test
-    void login_EmptyCredentials_ReturnsBadRequest() {
-        LoginRequest emptyRequest = new LoginRequest("", "");
+    void login_ShouldReturnBadRequest_WhenLoginRequestIsInvalid() {
+        LoginRequest invalidRequest = new LoginRequest(
+                "",
+                ""
+        );
 
         when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new RuntimeException("Email and password must not be empty"));
+                .thenThrow(new IllegalArgumentException("Email and password are required"));
 
-        assertThrows(RuntimeException.class, () -> {
-            authController.login(emptyRequest);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            authController.login(invalidRequest);
         });
+
+        assertEquals("Email and password are required", exception.getMessage());
     }
 }

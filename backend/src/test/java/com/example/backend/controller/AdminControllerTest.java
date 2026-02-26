@@ -30,34 +30,34 @@ class AdminControllerTest {
     @InjectMocks
     private AdminController adminController;
 
-    private UserResponse mockUserResponse;
-    private UserRequest mockUserRequest;
-    private RoomResponse mockRoomResponse;
-    private RoomRequest mockRoomRequest;
-    private EmailChangeRequest mockEmailChangeRequest;
-    private RoomNameChangeRequest mockRoomNameChangeRequest;
-    private RoomCapacityChangeRequest mockRoomCapacityChangeRequest;
+    private UserResponse userResponse;
+    private UserRequest userRequest;
+    private RoomResponse roomResponse;
+    private RoomRequest roomRequest;
+    private EmailChangeRequest emailChangeRequest;
+    private RoomNameChangeRequest roomNameChangeRequest;
+    private RoomCapacityChangeRequest roomCapacityChangeRequest;
 
     @BeforeEach
     void setUp() {
-        mockUserResponse = new UserResponse(1L, "test@example.com", "Test User");
-        mockUserRequest = new UserRequest("new@example.com", "New User");
-        mockRoomResponse = new RoomResponse("room123", "Test Room", 10);
-        mockRoomRequest = new RoomRequest("New Room", 20);
-        mockEmailChangeRequest = new EmailChangeRequest("newemail@example.com");
-        mockRoomNameChangeRequest = new RoomNameChangeRequest("Updated Room");
-        mockRoomCapacityChangeRequest = new RoomCapacityChangeRequest(30);
+        userResponse = new UserResponse(1L, "test@example.com", "Test User");
+        userRequest = new UserRequest("new@example.com", "New User");
+        roomResponse = new RoomResponse("ROOM1", "Test Room", 10);
+        roomRequest = new RoomRequest("Test Room", 10);
+        emailChangeRequest = new EmailChangeRequest("newemail@example.com");
+        roomNameChangeRequest = new RoomNameChangeRequest("New Room Name");
+        roomCapacityChangeRequest = new RoomCapacityChangeRequest(20);
     }
 
     @Test
     void getUserById_ShouldReturnUserResponse_WhenUserExists() {
-        when(adminService.getUserById(anyLong())).thenReturn(mockUserResponse);
+        when(adminService.getUserById(anyLong())).thenReturn(userResponse);
 
         ResponseEntity<UserResponse> response = adminController.getUserById(1L);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockUserResponse, response.getBody());
+        assertEquals(userResponse, response.getBody());
         verify(adminService, times(1)).getUserById(1L);
     }
 
@@ -74,25 +74,25 @@ class AdminControllerTest {
 
     @Test
     void updateUser_ShouldReturnUpdatedUserResponse_WhenUpdateIsSuccessful() {
-        when(adminService.updateUser(anyLong(), any(UserRequest.class))).thenReturn(mockUserResponse);
+        when(adminService.updateUser(anyLong(), any(UserRequest.class))).thenReturn(userResponse);
 
-        ResponseEntity<UserResponse> response = adminController.updateUser(1L, mockUserRequest);
+        ResponseEntity<UserResponse> response = adminController.updateUser(1L, userRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockUserResponse, response.getBody());
-        verify(adminService, times(1)).updateUser(eq(1L), any(UserRequest.class));
+        assertEquals(userResponse, response.getBody());
+        verify(adminService, times(1)).updateUser(1L, userRequest);
     }
 
     @Test
     void updateUser_ShouldReturnBadRequest_WhenUpdateFails() {
         when(adminService.updateUser(anyLong(), any(UserRequest.class))).thenReturn(null);
 
-        ResponseEntity<UserResponse> response = adminController.updateUser(1L, mockUserRequest);
+        ResponseEntity<UserResponse> response = adminController.updateUser(1L, userRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).updateUser(eq(1L), any(UserRequest.class));
+        verify(adminService, times(1)).updateUser(1L, userRequest);
     }
 
     @Test
@@ -107,7 +107,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void deleteUser_ShouldReturnNotFound_WhenUserDoesNotExist() {
+    void deleteUser_ShouldReturnNotFound_WhenDeletionFails() {
         when(adminService.deleteUser(anyLong())).thenReturn(false);
 
         ResponseEntity<Void> response = adminController.deleteUser(1L);
@@ -119,138 +119,138 @@ class AdminControllerTest {
 
     @Test
     void changeUserEmail_ShouldReturnUpdatedUserResponse_WhenEmailChangeIsSuccessful() {
-        when(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class))).thenReturn(mockUserResponse);
+        when(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class))).thenReturn(userResponse);
 
-        ResponseEntity<UserResponse> response = adminController.changeUserEmail(1L, mockEmailChangeRequest);
+        ResponseEntity<UserResponse> response = adminController.changeUserEmail(1L, emailChangeRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockUserResponse, response.getBody());
-        verify(adminService, times(1)).changeUserEmail(eq(1L), any(EmailChangeRequest.class));
+        assertEquals(userResponse, response.getBody());
+        verify(adminService, times(1)).changeUserEmail(1L, emailChangeRequest);
     }
 
     @Test
     void changeUserEmail_ShouldReturnBadRequest_WhenEmailChangeFails() {
         when(adminService.changeUserEmail(anyLong(), any(EmailChangeRequest.class))).thenReturn(null);
 
-        ResponseEntity<UserResponse> response = adminController.changeUserEmail(1L, mockEmailChangeRequest);
+        ResponseEntity<UserResponse> response = adminController.changeUserEmail(1L, emailChangeRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).changeUserEmail(eq(1L), any(EmailChangeRequest.class));
+        verify(adminService, times(1)).changeUserEmail(1L, emailChangeRequest);
     }
 
     @Test
     void createRoom_ShouldReturnCreatedRoomResponse_WhenCreationIsSuccessful() {
-        when(adminService.createRoom(any(RoomRequest.class))).thenReturn(mockRoomResponse);
+        when(adminService.createRoom(any(RoomRequest.class))).thenReturn(roomResponse);
 
-        ResponseEntity<RoomResponse> response = adminController.createRoom(mockRoomRequest);
+        ResponseEntity<RoomResponse> response = adminController.createRoom(roomRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(mockRoomResponse, response.getBody());
-        verify(adminService, times(1)).createRoom(any(RoomRequest.class));
+        assertEquals(roomResponse, response.getBody());
+        verify(adminService, times(1)).createRoom(roomRequest);
     }
 
     @Test
     void createRoom_ShouldReturnBadRequest_WhenCreationFails() {
         when(adminService.createRoom(any(RoomRequest.class))).thenReturn(null);
 
-        ResponseEntity<RoomResponse> response = adminController.createRoom(mockRoomRequest);
+        ResponseEntity<RoomResponse> response = adminController.createRoom(roomRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).createRoom(any(RoomRequest.class));
+        verify(adminService, times(1)).createRoom(roomRequest);
     }
 
     @Test
     void updateRoom_ShouldReturnUpdatedRoomResponse_WhenUpdateIsSuccessful() {
-        when(adminService.updateRoom(anyString(), any(RoomRequest.class))).thenReturn(mockRoomResponse);
+        when(adminService.updateRoom(anyString(), any(RoomRequest.class))).thenReturn(roomResponse);
 
-        ResponseEntity<RoomResponse> response = adminController.updateRoom("room123", mockRoomRequest);
+        ResponseEntity<RoomResponse> response = adminController.updateRoom("ROOM1", roomRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockRoomResponse, response.getBody());
-        verify(adminService, times(1)).updateRoom(eq("room123"), any(RoomRequest.class));
+        assertEquals(roomResponse, response.getBody());
+        verify(adminService, times(1)).updateRoom("ROOM1", roomRequest);
     }
 
     @Test
     void updateRoom_ShouldReturnBadRequest_WhenUpdateFails() {
         when(adminService.updateRoom(anyString(), any(RoomRequest.class))).thenReturn(null);
 
-        ResponseEntity<RoomResponse> response = adminController.updateRoom("room123", mockRoomRequest);
+        ResponseEntity<RoomResponse> response = adminController.updateRoom("ROOM1", roomRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).updateRoom(eq("room123"), any(RoomRequest.class));
+        verify(adminService, times(1)).updateRoom("ROOM1", roomRequest);
     }
 
     @Test
     void deleteRoom_ShouldReturnNoContent_WhenDeletionIsSuccessful() {
         when(adminService.deleteRoom(anyString())).thenReturn(true);
 
-        ResponseEntity<Void> response = adminController.deleteRoom("room123");
+        ResponseEntity<Void> response = adminController.deleteRoom("ROOM1");
 
         assertNotNull(response);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(adminService, times(1)).deleteRoom("room123");
+        verify(adminService, times(1)).deleteRoom("ROOM1");
     }
 
     @Test
-    void deleteRoom_ShouldReturnNotFound_WhenRoomDoesNotExist() {
+    void deleteRoom_ShouldReturnNotFound_WhenDeletionFails() {
         when(adminService.deleteRoom(anyString())).thenReturn(false);
 
-        ResponseEntity<Void> response = adminController.deleteRoom("room123");
+        ResponseEntity<Void> response = adminController.deleteRoom("ROOM1");
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(adminService, times(1)).deleteRoom("room123");
+        verify(adminService, times(1)).deleteRoom("ROOM1");
     }
 
     @Test
     void changeRoomName_ShouldReturnUpdatedRoomResponse_WhenNameChangeIsSuccessful() {
-        when(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class))).thenReturn(mockRoomResponse);
+        when(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class))).thenReturn(roomResponse);
 
-        ResponseEntity<RoomResponse> response = adminController.changeRoomName("room123", mockRoomNameChangeRequest);
+        ResponseEntity<RoomResponse> response = adminController.changeRoomName("ROOM1", roomNameChangeRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockRoomResponse, response.getBody());
-        verify(adminService, times(1)).changeRoomName(eq("room123"), any(RoomNameChangeRequest.class));
+        assertEquals(roomResponse, response.getBody());
+        verify(adminService, times(1)).changeRoomName("ROOM1", roomNameChangeRequest);
     }
 
     @Test
     void changeRoomName_ShouldReturnBadRequest_WhenNameChangeFails() {
         when(adminService.changeRoomName(anyString(), any(RoomNameChangeRequest.class))).thenReturn(null);
 
-        ResponseEntity<RoomResponse> response = adminController.changeRoomName("room123", mockRoomNameChangeRequest);
+        ResponseEntity<RoomResponse> response = adminController.changeRoomName("ROOM1", roomNameChangeRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).changeRoomName(eq("room123"), any(RoomNameChangeRequest.class));
+        verify(adminService, times(1)).changeRoomName("ROOM1", roomNameChangeRequest);
     }
 
     @Test
     void changeRoomCapacity_ShouldReturnUpdatedRoomResponse_WhenCapacityChangeIsSuccessful() {
-        when(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class))).thenReturn(mockRoomResponse);
+        when(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class))).thenReturn(roomResponse);
 
-        ResponseEntity<RoomResponse> response = adminController.changeRoomCapacity("room123", mockRoomCapacityChangeRequest);
+        ResponseEntity<RoomResponse> response = adminController.changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockRoomResponse, response.getBody());
-        verify(adminService, times(1)).changeRoomCapacity(eq("room123"), any(RoomCapacityChangeRequest.class));
+        assertEquals(roomResponse, response.getBody());
+        verify(adminService, times(1)).changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
     }
 
     @Test
     void changeRoomCapacity_ShouldReturnBadRequest_WhenCapacityChangeFails() {
         when(adminService.changeRoomCapacity(anyString(), any(RoomCapacityChangeRequest.class))).thenReturn(null);
 
-        ResponseEntity<RoomResponse> response = adminController.changeRoomCapacity("room123", mockRoomCapacityChangeRequest);
+        ResponseEntity<RoomResponse> response = adminController.changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(adminService, times(1)).changeRoomCapacity(eq("room123"), any(RoomCapacityChangeRequest.class));
+        verify(adminService, times(1)).changeRoomCapacity("ROOM1", roomCapacityChangeRequest);
     }
 }

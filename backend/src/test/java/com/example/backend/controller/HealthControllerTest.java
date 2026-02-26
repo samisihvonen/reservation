@@ -33,30 +33,44 @@ class HealthControllerTest {
     }
 
     @Test
-    @DisplayName("health() should return OK status with health check message")
-    void healthShouldReturnOkStatusWithHealthCheckMessage() throws Exception {
+    @DisplayName("Should return OK status with health check message")
+    void health_ShouldReturnOkStatusWithHealthCheckMessage() throws Exception {
         mockMvc.perform(get("/health"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Health check: OK"));
     }
 
     @Test
-    @DisplayName("health() should log health check initiation")
-    void healthShouldLogHealthCheckInitiation() {
+    @DisplayName("Should return ResponseEntity with OK status and correct message")
+    void health_ShouldReturnResponseEntityWithOkStatusAndCorrectMessage() {
         ResponseEntity<String> response = healthController.health();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo("Health check: OK");
+    }
+
+    @Test
+    @DisplayName("Should log health check initiation with current date")
+    void health_ShouldLogHealthCheckInitiationWithCurrentDate() {
+        healthController.health();
+
         verify(logger).info("Health check initiated at: " + new java.util.Date());
     }
 
     @Test
-    @DisplayName("health() should return ResponseEntity with correct body")
-    void healthShouldReturnResponseEntityWithCorrectBody() {
-        ResponseEntity<String> response = healthController.health();
+    @DisplayName("Should return content type as text/plain")
+    void health_ShouldReturnContentTypeAsTextPlain() throws Exception {
+        mockMvc.perform(get("/health"))
+                .andExpect(content().contentType("text/plain;charset=UTF-8"));
+    }
 
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("Health check: OK");
+    @Test
+    @DisplayName("Should handle GET request method only")
+    void health_ShouldHandleGetRequestMethodOnly() throws Exception {
+        mockMvc.perform(get("/health"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/health"))
+                .andExpect(status().isMethodNotAllowed());
     }
 }

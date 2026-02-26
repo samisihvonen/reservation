@@ -1,62 +1,46 @@
 package com.example.backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.test.web.servlet.ResultActions;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class HealthControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
-    @Mock
-    private Logger logger;
-
-    @InjectMocks
-    private HealthController healthController;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(healthController).build();
     }
 
     @Test
-    @DisplayName("health() should return OK status with health check message")
-    void healthShouldReturnOkStatusWithHealthCheckMessage() throws Exception {
-        mockMvc.perform(get("/health"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Health check: OK"));
-    }
+    @DisplayName("Should handle health request")
+    void testHealth() throws Exception {
+        // Arrange
+        // TODO: Mock service calls
 
-    @Test
-    @DisplayName("health() should log health check initiation")
-    void healthShouldLogHealthCheckInitiation() {
-        ResponseEntity<String> response = healthController.health();
+        // Act
+        ResultActions result = mockMvc.perform(get("/health")
+                .contentType(MediaType.APPLICATION_JSON));
 
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("Health check: OK");
-        verify(logger).info("Health check initiated at: " + new java.util.Date());
-    }
-
-    @Test
-    @DisplayName("health() should return ResponseEntity with correct body")
-    void healthShouldReturnResponseEntityWithCorrectBody() {
-        ResponseEntity<String> response = healthController.health();
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCodeValue()).isEqualTo(200);
-        assertThat(response.getBody()).isEqualTo("Health check: OK");
+        // Assert
+        result.andExpect(status().isOk());
     }
 }

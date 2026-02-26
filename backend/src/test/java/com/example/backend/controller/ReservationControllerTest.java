@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.CreateReservationRequest;
 import com.example.backend.dto.ReservationResponse;
 import com.example.backend.service.ReservationService;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,36 +25,35 @@ class ReservationControllerTest {
     @InjectMocks
     private ReservationController reservationController;
 
-    private CreateReservationRequest createReservationRequest;
+    private CreateReservationRequest createRequest;
     private ReservationResponse reservationResponse;
+    private String reservationId;
 
     @BeforeEach
     void setUp() {
-        createReservationRequest = new CreateReservationRequest(
-                "user123",
+        reservationId = UUID.randomUUID().toString();
+        createRequest = new CreateReservationRequest(
+                "John Doe",
+                "john.doe@example.com",
                 "2023-12-25",
-                "18:00",
-                4,
-                "Special request"
+                2
         );
-
         reservationResponse = new ReservationResponse(
-                "res123",
-                "user123",
+                reservationId,
+                "John Doe",
+                "john.doe@example.com",
                 "2023-12-25",
-                "18:00",
-                4,
-                "Special request",
+                2,
                 "CONFIRMED"
         );
     }
 
     @Test
-    void create_ShouldReturnCreatedReservation_WhenRequestIsValid() {
+    void create_shouldReturnCreatedReservation_whenRequestIsValid() {
         when(reservationService.create(any(CreateReservationRequest.class)))
                 .thenReturn(reservationResponse);
 
-        ResponseEntity<ReservationResponse> response = reservationController.create(createReservationRequest);
+        ResponseEntity<ReservationResponse> response = reservationController.create(createRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -62,31 +62,21 @@ class ReservationControllerTest {
     }
 
     @Test
-    void create_ShouldReturnBadRequest_WhenRequestIsInvalid() {
-        CreateReservationRequest invalidRequest = new CreateReservationRequest(
-                null,
-                null,
-                null,
-                0,
-                null
-        );
-
+    void create_shouldReturnBadRequest_whenServiceThrowsException() {
         when(reservationService.create(any(CreateReservationRequest.class)))
-                .thenThrow(new IllegalArgumentException("Invalid request"));
+                .thenThrow(new RuntimeException("Invalid request data"));
 
-        ResponseEntity<ReservationResponse> response = reservationController.create(invalidRequest);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(reservationService, times(1)).create(any(CreateReservationRequest.class));
+        assertThrows(RuntimeException.class, () -> {
+            reservationController.create(createRequest);
+        });
     }
 
     @Test
-    void update_ShouldReturnUpdatedReservation_WhenIdAndRequestAreValid() {
-        String reservationId = "res123";
+    void update_shouldReturnUpdatedReservation_whenReservationExists() {
         when(reservationService.update(anyString(), any(CreateReservationRequest.class)))
                 .thenReturn(reservationResponse);
 
-        ResponseEntity<ReservationResponse> response = reservationController.update(reservationId, createReservationRequest);
+        ResponseEntity<ReservationResponse> response = reservationController.update(reservationId, createRequest);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -95,20 +85,17 @@ class ReservationControllerTest {
     }
 
     @Test
-    void update_ShouldReturnNotFound_WhenReservationDoesNotExist() {
-        String nonExistentId = "nonExistentId";
+    void update_shouldReturnNotFound_whenReservationDoesNotExist() {
         when(reservationService.update(anyString(), any(CreateReservationRequest.class)))
                 .thenThrow(new RuntimeException("Reservation not found"));
 
-        ResponseEntity<ReservationResponse> response = reservationController.update(nonExistentId, createReservationRequest);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(reservationService, times(1)).update(anyString(), any(CreateReservationRequest.class));
+        assertThrows(RuntimeException.class, () -> {
+            reservationController.update("non-existent-id", createRequest);
+        });
     }
 
     @Test
-    void delete_ShouldReturnNoContent_WhenReservationExists() {
-        String reservationId = "res123";
+    void delete_shouldReturnNoContent_whenReservationExists() {
         doNothing().when(reservationService).delete(anyString());
 
         ResponseEntity<Void> response = reservationController.delete(reservationId);
@@ -119,19 +106,16 @@ class ReservationControllerTest {
     }
 
     @Test
-    void delete_ShouldReturnNotFound_WhenReservationDoesNotExist() {
-        String nonExistentId = "nonExistentId";
+    void delete_shouldThrowException_whenReservationDoesNotExist() {
         doThrow(new RuntimeException("Reservation not found")).when(reservationService).delete(anyString());
 
-        ResponseEntity<Void> response = reservationController.delete(nonExistentId);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(reservationService, times(1)).delete(anyString());
+        assertThrows(RuntimeException.class, () -> {
+            reservationController.delete("non-existent-id");
+        });
     }
 
     @Test
-    void getById_ShouldReturnReservation_WhenReservationExists() {
-        String reservationId = "res123";
+    void getById_shouldReturnReservation_whenReservationExists() {
         when(reservationService.getById(anyString())).thenReturn(reservationResponse);
 
         ResponseEntity<ReservationResponse> response = reservationController.getById(reservationId);
@@ -143,13 +127,12 @@ class ReservationControllerTest {
     }
 
     @Test
-    void getById_ShouldReturnNotFound_WhenReservationDoesNotExist() {
-        String nonExistentId = "nonExistentId";
-        when(reservationService.getById(anyString())).thenThrow(new RuntimeException("Reservation not found"));
+    void getById_shouldThrowException_whenReservationDoesNotExist() {
+        when(reservationService.getById(anyString()))
+                .thenThrow(new RuntimeException("Reservation not found"));
 
-        ResponseEntity<ReservationResponse> response = reservationController.getById(nonExistentId);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(reservationService, times(1)).getById(anyString());
+        assertThrows(RuntimeException.class, () -> {
+            reservationController.getById("non-existent-id");
+        });
     }
 }

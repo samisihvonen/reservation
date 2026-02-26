@@ -16,7 +16,7 @@ class HealthControllerTest {
 
     @BeforeEach
     void setUp() {
-        healthController = new HealthController();
+        // Initialization code if needed
     }
 
     @Test

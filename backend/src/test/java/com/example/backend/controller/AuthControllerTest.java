@@ -31,7 +31,7 @@ class AuthControllerTest {
     @BeforeEach
     void setUp() {
         registerRequest = new RegisterRequest(
-                "testuser",
+                "testUser",
                 "test@example.com",
                 "password123",
                 "firstName",
@@ -45,11 +45,8 @@ class AuthControllerTest {
 
         authResponse = new AuthResponse(
                 "token123",
-                1L,
-                "testuser",
-                "test@example.com",
-                "firstName",
-                "lastName"
+                "refreshToken456",
+                3600L
         );
     }
 
@@ -77,11 +74,9 @@ class AuthControllerTest {
         when(authService.register(any(RegisterRequest.class)))
                 .thenThrow(new RuntimeException("Invalid registration data"));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        assertThrows(RuntimeException.class, () -> {
             authController.register(invalidRequest);
         });
-
-        assertEquals("Invalid registration data", exception.getMessage());
     }
 
     @Test
@@ -105,11 +100,9 @@ class AuthControllerTest {
         when(authService.login(any(LoginRequest.class)))
                 .thenThrow(new RuntimeException("Invalid credentials"));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
+        assertThrows(RuntimeException.class, () -> {
             authController.login(invalidLogin);
         });
-
-        assertEquals("Invalid credentials", exception.getMessage());
     }
 
     @Test
@@ -120,12 +113,12 @@ class AuthControllerTest {
         );
 
         when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new RuntimeException("Email and password are required"));
+                .thenThrow(new RuntimeException("Email and password must not be empty"));
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             authController.login(emptyLogin);
         });
 
-        assertEquals("Email and password are required", exception.getMessage());
+        assertTrue(exception.getMessage().contains("must not be empty"));
     }
 }

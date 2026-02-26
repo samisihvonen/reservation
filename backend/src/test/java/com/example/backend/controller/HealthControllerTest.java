@@ -1,41 +1,61 @@
 package com.example.backend.controller;
 
-import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class HealthControllerTest {
+class HealthControllerTest {
 
+    private MockMvc mockMvc;
+
+    @Mock
+    private Logger logger;
+
+    @InjectMocks
     private HealthController healthController;
-    private Logger mockLogger;
 
     @BeforeEach
-    public void setup() {
-        mockLogger = mock(Logger.class);
-        healthController = new HealthController(mockLogger);
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(healthController).build();
     }
 
-    @DisplayName("Health check should return OK status and log a message")
     @Test
-    public void testHealthCheck() {
-        when(mockLogger.info(anyString())).thenReturn(this);
+    @DisplayName("Should return OK status with health check message")
+    void health_ShouldReturnOkStatusWithHealthCheckMessage() throws Exception {
+        mockMvc.perform(get("/health"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Health check: OK"));
+    }
 
+    @Test
+    @DisplayName("Should log health check initiation message")
+    void health_ShouldLogHealthCheckInitiationMessage() {
         ResponseEntity<String> response = healthController.health();
 
-        verify(mockLogger, times(1)).info(containsString("Health check initiated at:"));
-        assertEquals(ResponseEntity.ok("Health check: OK"), response);
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getBody()).isEqualTo("Health check: OK");
+        verify(logger).info("Health check initiated at: " + new java.util.Date());
+    }
+
+    @Test
+    @DisplayName("Should return ResponseEntity with OK status and correct body")
+    void health_ShouldReturnResponseEntityWithOkStatusAndCorrectBody() {
+        ResponseEntity<String> response = healthController.health();
+
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        assertThat(response.getBody()).isEqualTo("Health check: OK");
     }
 }

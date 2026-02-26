@@ -1,18 +1,11 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.EmailChangeRequest;
-import com.example.backend.dto.RoomCapacityChangeRequest;
-import com.example.backend.dto.RoomNameChangeRequest;
-import com.example.backend.dto.RoomRequest;
-import com.example.backend.dto.RoomResponse;
-import com.example.backend.dto.UserRequest;
-import com.example.backend.dto.UserResponse;
+import com.example.backend.dto.*;
 import com.example.backend.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,141 +20,94 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+    // final takaa, että riippuvuus on muuttumaton
+    private final AdminService adminService;
+
+    // Konstruktori-injektio ilman Lombokia
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     // ============ USER MANAGEMENT ============
 
-    /**
-     * Haetaan kaikki käyttäjät
-     * GET /api/admin/users
-     */
     @GetMapping("/users")
-    @Operation(summary = "Get all users", description = "Retrieve list of all users (Admin only)")
+    @Operation(summary = "Get all users")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = adminService.getAllUsers();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(adminService.getAllUsers());
     }
 
-    /**
-     * Haetaan yksittäinen käyttäjä ID:n perusteella
-     * GET /api/admin/users/{id}
-     */
     @GetMapping("/users/{id}")
-    @Operation(summary = "Get user by ID", description = "Retrieve a specific user")
+    @Operation(summary = "Get user by ID")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        UserResponse user = adminService.getUserById(id);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(adminService.getUserById(id));
     }
 
-    /**
-     * Päivitetään käyttäjän tietoja
-     * PUT /api/admin/users/{id}
-     */
     @PutMapping("/users/{id}")
-    @Operation(summary = "Update user", description = "Update user information (Admin only)")
+    @Operation(summary = "Update user")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UserRequest request) {
-        UserResponse user = adminService.updateUser(id, request);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(adminService.updateUser(id, request));
     }
 
-    /**
-     * Poistetaan käyttäjä
-     * DELETE /api/admin/users/{id}
-     */
     @DeleteMapping("/users/{id}")
-    @Operation(summary = "Delete user", description = "Remove a user from the system (Admin only)")
+    @Operation(summary = "Delete user")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         adminService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Muutetaan käyttäjän sähköposti
-     * PATCH /api/admin/users/{id}/email
-     */
     @PatchMapping("/users/{id}/email")
-    @Operation(summary = "Change user email", description = "Update user's email address")
+    @Operation(summary = "Change user email")
     public ResponseEntity<UserResponse> changeUserEmail(
             @PathVariable Long id,
             @RequestBody EmailChangeRequest request) {
-        UserResponse user = adminService.changeUserEmail(id, request.getNewEmail());
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(adminService.changeUserEmail(id, request.getNewEmail()));
     }
 
     // ============ ROOM MANAGEMENT ============
 
-    /**
-     * Haetaan kaikki huoneet
-     * GET /api/admin/rooms
-     */
     @GetMapping("/rooms")
-    @Operation(summary = "Get all rooms", description = "Retrieve list of all conference rooms")
+    @Operation(summary = "Get all rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() {
-        List<RoomResponse> rooms = adminService.getAllRooms();
-        return ResponseEntity.ok(rooms);
+        return ResponseEntity.ok(adminService.getAllRooms());
     }
 
-    /**
-     * Luodaan uusi huone
-     * POST /api/admin/rooms
-     */
     @PostMapping("/rooms")
-    @Operation(summary = "Create room", description = "Add a new conference room (Admin only)")
+    @Operation(summary = "Create room")
     public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody RoomRequest request) {
-        RoomResponse room = adminService.createRoom(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(room);
+        RoomResponse response = adminService.createRoom(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * Päivitetään huoneen tietoja
-     * PUT /api/admin/rooms/{roomId}
-     */
     @PutMapping("/rooms/{roomId}")
-    @Operation(summary = "Update room", description = "Modify room information (Admin only)")
+    @Operation(summary = "Update room")
     public ResponseEntity<RoomResponse> updateRoom(
             @PathVariable String roomId,
             @Valid @RequestBody RoomRequest request) {
-        RoomResponse room = adminService.updateRoom(roomId, request);
-        return ResponseEntity.ok(room);
+        return ResponseEntity.ok(adminService.updateRoom(roomId, request));
     }
 
-    /**
-     * Poistetaan huone
-     * DELETE /api/admin/rooms/{roomId}
-     */
     @DeleteMapping("/rooms/{roomId}")
-    @Operation(summary = "Delete room", description = "Remove a conference room (Admin only)")
+    @Operation(summary = "Delete room")
     public ResponseEntity<Void> deleteRoom(@PathVariable String roomId) {
         adminService.deleteRoom(roomId);
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Muutetaan huoneen nimeä
-     * PATCH /api/admin/rooms/{roomId}/name
-     */
     @PatchMapping("/rooms/{roomId}/name")
-    @Operation(summary = "Change room name", description = "Update room name")
+    @Operation(summary = "Change room name")
     public ResponseEntity<RoomResponse> changeRoomName(
             @PathVariable String roomId,
             @RequestBody RoomNameChangeRequest request) {
-        RoomResponse room = adminService.changeRoomName(roomId, request.getNewName());
-        return ResponseEntity.ok(room);
+        return ResponseEntity.ok(adminService.changeRoomName(roomId, request.getNewName()));
     }
 
-    /**
-     * Muutetaan huoneen kapasiteettia
-     * PATCH /api/admin/rooms/{roomId}/capacity
-     */
     @PatchMapping("/rooms/{roomId}/capacity")
-    @Operation(summary = "Change room capacity", description = "Update room capacity")
+    @Operation(summary = "Change room capacity")
     public ResponseEntity<RoomResponse> changeRoomCapacity(
             @PathVariable String roomId,
             @RequestBody RoomCapacityChangeRequest request) {
-        RoomResponse room = adminService.changeRoomCapacity(roomId, request.getNewCapacity());
-        return ResponseEntity.ok(room);
+        return ResponseEntity.ok(adminService.changeRoomCapacity(roomId, request.getNewCapacity()));
     }
 }

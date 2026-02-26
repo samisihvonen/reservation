@@ -15,12 +15,14 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class AdminService {
+    
+    private final UserRepository userRepository;
+    private final RoomRepository roomRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoomRepository roomRepository;
+    public AdminService(UserRepository userRepository, RoomRepository roomRepository){
+       this.userRepository =  userRepository; 
+        this.roomRepository = roomRepository;
+    }
 
     // ============ USER MANAGEMENT ============
 

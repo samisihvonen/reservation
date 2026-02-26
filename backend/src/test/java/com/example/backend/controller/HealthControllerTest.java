@@ -22,7 +22,7 @@ class HealthControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private Logger logger;
+    private Logger log;
 
     @InjectMocks
     private HealthController healthController;
@@ -41,13 +41,13 @@ class HealthControllerTest {
     }
 
     @Test
-    @DisplayName("Should log health check initiation message")
-    void health_ShouldLogHealthCheckInitiationMessage() {
+    @DisplayName("Should log health check initiation with current date")
+    void health_ShouldLogHealthCheckInitiation() {
         ResponseEntity<String> response = healthController.health();
 
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo("Health check: OK");
-        verify(logger).info("Health check initiated at: " + new java.util.Date());
+        verify(log).info("Health check initiated at: " + new java.util.Date());
     }
 
     @Test

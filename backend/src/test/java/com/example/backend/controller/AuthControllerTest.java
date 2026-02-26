@@ -42,7 +42,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("Should register user successfully and return CREATED status")
-    void register_SuccessfulRegistration_ReturnsCreatedStatus() throws Exception {
+    void register_ValidRequest_ReturnsCreatedStatus() throws Exception {
         // Arrange
         RegisterRequest request = new RegisterRequest();
         request.setEmail("test@example.com");
@@ -51,7 +51,7 @@ class AuthControllerTest {
 
         AuthResponse response = new AuthResponse();
         response.setToken("test-token");
-        response.setEmail(request.getEmail());
+        response.setEmail("test@example.com");
 
         when(authService.register(any(RegisterRequest.class))).thenReturn(response);
 
@@ -65,7 +65,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should return BAD_REQUEST when registration request is invalid")
+    @DisplayName("Should return BAD_REQUEST when register request is invalid")
     void register_InvalidRequest_ReturnsBadRequest() throws Exception {
         // Arrange
         RegisterRequest request = new RegisterRequest();
@@ -80,8 +80,26 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("Should return INTERNAL_SERVER_ERROR when register service throws exception")
+    void register_ServiceThrowsException_ReturnsInternalServerError() throws Exception {
+        // Arrange
+        RegisterRequest request = new RegisterRequest();
+        request.setEmail("test@example.com");
+        request.setPassword("password123");
+        request.setName("Test User");
+
+        when(authService.register(any(RegisterRequest.class))).thenThrow(new RuntimeException("Service error"));
+
+        // Act & Assert
+        mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
     @DisplayName("Should login user successfully and return OK status")
-    void login_SuccessfulLogin_ReturnsOkStatus() throws Exception {
+    void login_ValidRequest_ReturnsOkStatus() throws Exception {
         // Arrange
         LoginRequest request = new LoginRequest();
         request.setEmail("test@example.com");
@@ -89,7 +107,7 @@ class AuthControllerTest {
 
         AuthResponse response = new AuthResponse();
         response.setToken("test-token");
-        response.setEmail(request.getEmail());
+        response.setEmail("test@example.com");
 
         when(authService.login(any(LoginRequest.class))).thenReturn(response);
 
@@ -123,7 +141,7 @@ class AuthControllerTest {
         // Arrange
         LoginRequest request = new LoginRequest();
         request.setEmail("test@example.com");
-        request.setPassword("wrong-password");
+        request.setPassword("wrongpassword");
 
         when(authService.login(any(LoginRequest.class))).thenThrow(new RuntimeException("Invalid credentials"));
 
@@ -135,32 +153,14 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should return INTERNAL_SERVER_ERROR when registration fails")
-    void register_ServiceThrowsException_ReturnsInternalServerError() throws Exception {
-        // Arrange
-        RegisterRequest request = new RegisterRequest();
-        request.setEmail("test@example.com");
-        request.setPassword("password123");
-        request.setName("Test User");
-
-        when(authService.register(any(RegisterRequest.class))).thenThrow(new RuntimeException("Service failure"));
-
-        // Act & Assert
-        mockMvc.perform(post("/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    @DisplayName("Should return INTERNAL_SERVER_ERROR when login fails")
+    @DisplayName("Should return INTERNAL_SERVER_ERROR when login service throws exception")
     void login_ServiceThrowsException_ReturnsInternalServerError() throws Exception {
         // Arrange
         LoginRequest request = new LoginRequest();
         request.setEmail("test@example.com");
         request.setPassword("password123");
 
-        when(authService.login(any(LoginRequest.class))).thenThrow(new RuntimeException("Service failure"));
+        when(authService.login(any(LoginRequest.class))).thenThrow(new RuntimeException("Service error"));
 
         // Act & Assert
         mockMvc.perform(post("/login")
@@ -170,7 +170,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should return correct response entity for successful registration")
+    @DisplayName("Should return correct response entity for register")
     void register_ReturnsCorrectResponseEntity() {
         // Arrange
         RegisterRequest request = new RegisterRequest();
@@ -180,7 +180,7 @@ class AuthControllerTest {
 
         AuthResponse response = new AuthResponse();
         response.setToken("test-token");
-        response.setEmail(request.getEmail());
+        response.setEmail("test@example.com");
 
         when(authService.register(any(RegisterRequest.class))).thenReturn(response);
 
@@ -195,7 +195,7 @@ class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("Should return correct response entity for successful login")
+    @DisplayName("Should return correct response entity for login")
     void login_ReturnsCorrectResponseEntity() {
         // Arrange
         LoginRequest request = new LoginRequest();
@@ -204,7 +204,7 @@ class AuthControllerTest {
 
         AuthResponse response = new AuthResponse();
         response.setToken("test-token");
-        response.setEmail(request.getEmail());
+        response.setEmail("test@example.com");
 
         when(authService.login(any(LoginRequest.class))).thenReturn(response);
 

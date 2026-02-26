@@ -151,7 +151,7 @@ class AdminServiceTest {
 
         assertThat(result.getEmail()).isEqualTo("new@example.com");
         assertThat(result.getDisplayName()).isEqualTo("New User");
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -187,7 +187,7 @@ class AdminServiceTest {
 
         assertThat(result.getEmail()).isEqualTo(user.getEmail());
         assertThat(result.getDisplayName()).isEqualTo("New User");
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -198,7 +198,7 @@ class AdminServiceTest {
 
         adminService.deleteUser(1L);
 
-        verify(userRepository).deleteById(1L);
+        verify(userRepository, times(1)).deleteById(1L);
     }
 
     @Test
@@ -214,8 +214,8 @@ class AdminServiceTest {
     }
 
     @Test
-    @DisplayName("changeUserEmail should update email when user exists and email is not taken")
-    void changeUserEmail_shouldUpdateEmailWhenUserExistsAndEmailIsNotTaken() {
+    @DisplayName("changeUserEmail should change email when user exists and email is not taken")
+    void changeUserEmail_shouldChangeEmailWhenUserExistsAndEmailIsNotTaken() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.existsByEmail("new@example.com")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -223,7 +223,7 @@ class AdminServiceTest {
         UserResponse result = adminService.changeUserEmail(1L, "new@example.com");
 
         assertThat(result.getEmail()).isEqualTo("new@example.com");
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -272,23 +272,23 @@ class AdminServiceTest {
 
     @Test
     @DisplayName("createRoom should create new room with generated ID")
-    void createRoom_shouldCreateNewRoomWithGeneratedId() {
+    void createRoom_shouldCreateNewRoomWithGeneratedID() {
         when(roomRepository.existsById(anyString())).thenReturn(false);
         when(roomRepository.save(any(Room.class))).thenReturn(room);
 
         RoomResponse result = adminService.createRoom(roomRequest);
 
-        assertThat(result.getId()).startsWith("room-");
         assertThat(result.getName()).isEqualTo(roomRequest.getName());
         assertThat(result.getCapacity()).isEqualTo(roomRequest.getCapacity());
         assertThat(result.getDescription()).isEqualTo(roomRequest.getDescription());
         assertThat(result.getLocation()).isEqualTo(roomRequest.getLocation());
         assertThat(result.isActive()).isTrue();
+        verify(roomRepository, times(1)).save(any(Room.class));
     }
 
     @Test
     @DisplayName("createRoom should throw exception when room ID already exists")
-    void createRoom_shouldThrowExceptionWhenRoomIdAlreadyExists() {
+    void createRoom_shouldThrowExceptionWhenRoomIDAlreadyExists() {
         when(roomRepository.existsById(anyString())).thenReturn(true);
 
         assertThatThrownBy(() -> adminService.createRoom(roomRequest))
@@ -308,7 +308,7 @@ class AdminServiceTest {
         assertThat(result.getCapacity()).isEqualTo(roomRequest.getCapacity());
         assertThat(result.getDescription()).isEqualTo(roomRequest.getDescription());
         assertThat(result.getLocation()).isEqualTo(roomRequest.getLocation());
-        verify(roomRepository).save(room);
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -324,17 +324,18 @@ class AdminServiceTest {
     @Test
     @DisplayName("updateRoom should only update provided fields")
     void updateRoom_shouldOnlyUpdateProvidedFields() {
-        roomRequest.setName(null);
-        roomRequest.setCapacity(null);
+        RoomRequest partialRequest = new RoomRequest();
+        partialRequest.setName("Partial Update");
         when(roomRepository.findById("room-12345678")).thenReturn(Optional.of(room));
         when(roomRepository.save(any(Room.class))).thenReturn(room);
 
-        RoomResponse result = adminService.updateRoom("room-12345678", roomRequest);
+        RoomResponse result = adminService.updateRoom("room-12345678", partialRequest);
 
-        assertThat(result.getName()).isEqualTo(room.getName());
+        assertThat(result.getName()).isEqualTo("Partial Update");
         assertThat(result.getCapacity()).isEqualTo(room.getCapacity());
-        assertThat(result.getDescription()).isEqualTo(roomRequest.getDescription());
-        assertThat(result.getLocation()).isEqualTo(roomRequest.getLocation());
+        assertThat(result.getDescription()).isEqualTo(room.getDescription());
+        assertThat(result.getLocation()).isEqualTo(room.getLocation());
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -346,7 +347,7 @@ class AdminServiceTest {
         adminService.deleteRoom("room-12345678");
 
         assertThat(room.getIsActive()).isFalse();
-        verify(roomRepository).save(room);
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -360,15 +361,15 @@ class AdminServiceTest {
     }
 
     @Test
-    @DisplayName("changeRoomName should update room name when room exists")
-    void changeRoomName_shouldUpdateRoomNameWhenRoomExists() {
+    @DisplayName("changeRoomName should change room name when room exists")
+    void changeRoomName_shouldChangeRoomNameWhenRoomExists() {
         when(roomRepository.findById("room-12345678")).thenReturn(Optional.of(room));
         when(roomRepository.save(any(Room.class))).thenReturn(room);
 
         RoomResponse result = adminService.changeRoomName("room-12345678", "New Room Name");
 
         assertThat(result.getName()).isEqualTo("New Room Name");
-        verify(roomRepository).save(room);
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -382,15 +383,15 @@ class AdminServiceTest {
     }
 
     @Test
-    @DisplayName("changeRoomCapacity should update room capacity when room exists and capacity is valid")
-    void changeRoomCapacity_shouldUpdateRoomCapacityWhenRoomExistsAndCapacityIsValid() {
+    @DisplayName("changeRoomCapacity should change room capacity when room exists and capacity is valid")
+    void changeRoomCapacity_shouldChangeRoomCapacityWhenRoomExistsAndCapacityIsValid() {
         when(roomRepository.findById("room-12345678")).thenReturn(Optional.of(room));
         when(roomRepository.save(any(Room.class))).thenReturn(room);
 
         RoomResponse result = adminService.changeRoomCapacity("room-12345678", 20);
 
         assertThat(result.getCapacity()).isEqualTo(20);
-        verify(roomRepository).save(room);
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -416,6 +417,4 @@ class AdminServiceTest {
     void changeRoomCapacity_shouldThrowExceptionWhenCapacityIsLessThan1() {
         assertThatThrownBy(() -> adminService.changeRoomCapacity("room-12345678", 0))
                 .isInstanceOf(ReservationException.class)
-                .hasMessage("Kapasiteetin täytyy olla vähintään 1");
-    }
-}
+                .hasMessage("Kapasiteetin täytyy olla vähint

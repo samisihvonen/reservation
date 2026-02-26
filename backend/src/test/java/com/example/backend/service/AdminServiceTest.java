@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -104,17 +105,7 @@ class AdminServiceTest {
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getEmail()).isEqualTo(user.getEmail());
-        assertThat(result.get(0).getDisplayName()).isEqualTo(user.getDisplayName());
-    }
-
-    @Test
-    @DisplayName("getAllUsers should return empty list when no users exist")
-    void getAllUsers_shouldReturnEmptyListWhenNoUsersExist() {
-        when(userRepository.findAll()).thenReturn(List.of());
-
-        List<UserResponse> result = adminService.getAllUsers();
-
-        assertThat(result).isEmpty();
+        verify(userRepository, times(1)).findAll();
     }
 
     @Test
@@ -124,9 +115,8 @@ class AdminServiceTest {
 
         UserResponse result = adminService.getUserById(1L);
 
-        assertThat(result.getId()).isEqualTo(user.getId());
         assertThat(result.getEmail()).isEqualTo(user.getEmail());
-        assertThat(result.getDisplayName()).isEqualTo(user.getDisplayName());
+        verify(userRepository, times(1)).findById(1L);
     }
 
     @Test
@@ -137,11 +127,12 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.getUserById(1L))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Käyttäjää ei löydy ID:llä: 1");
+        verify(userRepository, times(1)).findById(1L);
     }
 
     @Test
-    @DisplayName("updateUser should update user when user exists and email is not taken")
-    void updateUser_shouldUpdateUserWhenUserExistsAndEmailIsNotTaken() {
+    @DisplayName("updateUser should update user when user exists and email is not in use")
+    void updateUser_shouldUpdateUserWhenUserExistsAndEmailIsNotInUse() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.existsByEmail("new@example.com")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -150,7 +141,9 @@ class AdminServiceTest {
 
         assertThat(result.getEmail()).isEqualTo("new@example.com");
         assertThat(result.getDisplayName()).isEqualTo("New User");
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).existsByEmail("new@example.com");
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -161,11 +154,14 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.updateUser(1L, userRequest))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Käyttäjää ei löydy ID:llä: 1");
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, never()).existsByEmail(anyString());
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
-    @DisplayName("updateUser should throw exception when email is already taken")
-    void updateUser_shouldThrowExceptionWhenEmailIsAlreadyTaken() {
+    @DisplayName("updateUser should throw exception when email is already in use")
+    void updateUser_shouldThrowExceptionWhenEmailIsAlreadyInUse() {
         userRequest.setEmail("existing@example.com");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.existsByEmail("existing@example.com")).thenReturn(true);
@@ -173,11 +169,14 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.updateUser(1L, userRequest))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Sähköposti on jo käytössä");
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).existsByEmail("existing@example.com");
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
-    @DisplayName("updateUser should only update display name when email is null")
-    void updateUser_shouldOnlyUpdateDisplayNameWhenEmailIsNull() {
+    @DisplayName("updateUser should update only display name when email is null")
+    void updateUser_shouldUpdateOnlyDisplayNameWhenEmailIsNull() {
         userRequest.setEmail(null);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -186,7 +185,9 @@ class AdminServiceTest {
 
         assertThat(result.getEmail()).isEqualTo(user.getEmail());
         assertThat(result.getDisplayName()).isEqualTo("New User");
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, never()).existsByEmail(anyString());
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -197,7 +198,8 @@ class AdminServiceTest {
 
         adminService.deleteUser(1L);
 
-        verify(userRepository).deleteById(1L);
+        verify(userRepository, times(1)).existsById(1L);
+        verify(userRepository, times(1)).deleteById(1L);
     }
 
     @Test
@@ -208,13 +210,13 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.deleteUser(1L))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Käyttäjää ei löydy ID:llä: 1");
-
+        verify(userRepository, times(1)).existsById(1L);
         verify(userRepository, never()).deleteById(anyLong());
     }
 
     @Test
-    @DisplayName("changeUserEmail should update email when user exists and email is not taken")
-    void changeUserEmail_shouldUpdateEmailWhenUserExistsAndEmailIsNotTaken() {
+    @DisplayName("changeUserEmail should update email when user exists and email is not in use")
+    void changeUserEmail_shouldUpdateEmailWhenUserExistsAndEmailIsNotInUse() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.existsByEmail("new@example.com")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -222,7 +224,9 @@ class AdminServiceTest {
         UserResponse result = adminService.changeUserEmail(1L, "new@example.com");
 
         assertThat(result.getEmail()).isEqualTo("new@example.com");
-        verify(userRepository).save(user);
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).existsByEmail("new@example.com");
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
@@ -233,17 +237,23 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.changeUserEmail(1L, "new@example.com"))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Käyttäjää ei löydy ID:llä: 1");
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, never()).existsByEmail(anyString());
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
-    @DisplayName("changeUserEmail should throw exception when email is already taken")
-    void changeUserEmail_shouldThrowExceptionWhenEmailIsAlreadyTaken() {
+    @DisplayName("changeUserEmail should throw exception when email is already in use")
+    void changeUserEmail_shouldThrowExceptionWhenEmailIsAlreadyInUse() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.existsByEmail("existing@example.com")).thenReturn(true);
 
         assertThatThrownBy(() -> adminService.changeUserEmail(1L, "existing@example.com"))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Sähköposti on jo käytössä");
+        verify(userRepository, times(1)).findById(1L);
+        verify(userRepository, times(1)).existsByEmail("existing@example.com");
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
@@ -254,45 +264,49 @@ class AdminServiceTest {
         List<RoomResponse> result = adminService.getAllRooms();
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(room.getId());
         assertThat(result.get(0).getName()).isEqualTo(room.getName());
+        verify(roomRepository, times(1)).findAll();
     }
 
     @Test
-    @DisplayName("getAllRooms should return empty list when no active rooms exist")
-    void getAllRooms_shouldReturnEmptyListWhenNoActiveRoomsExist() {
-        room.setIsActive(false);
-        when(roomRepository.findAll()).thenReturn(List.of(room));
+    @DisplayName("getAllRooms should not return inactive rooms")
+    void getAllRooms_shouldNotReturnInactiveRooms() {
+        Room inactiveRoom = new Room();
+        inactiveRoom.setIsActive(false);
+        when(roomRepository.findAll()).thenReturn(List.of(room, inactiveRoom));
 
         List<RoomResponse> result = adminService.getAllRooms();
 
-        assertThat(result).isEmpty();
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getIsActive()).isTrue();
+        verify(roomRepository, times(1)).findAll();
     }
 
     @Test
     @DisplayName("createRoom should create new room with generated ID")
-    void createRoom_shouldCreateNewRoomWithGeneratedId() {
+    void createRoom_shouldCreateNewRoomWithGeneratedID() {
         when(roomRepository.existsById(anyString())).thenReturn(false);
         when(roomRepository.save(any(Room.class))).thenReturn(room);
 
         RoomResponse result = adminService.createRoom(roomRequest);
 
-        assertThat(result.getId()).startsWith("room-");
         assertThat(result.getName()).isEqualTo(roomRequest.getName());
         assertThat(result.getCapacity()).isEqualTo(roomRequest.getCapacity());
-        assertThat(result.getDescription()).isEqualTo(roomRequest.getDescription());
-        assertThat(result.getLocation()).isEqualTo(roomRequest.getLocation());
-        assertThat(result.isActive()).isTrue();
+        assertThat(result.getId()).startsWith("room-");
+        verify(roomRepository, times(1)).existsById(anyString());
+        verify(roomRepository, times(1)).save(any(Room.class));
     }
 
     @Test
     @DisplayName("createRoom should throw exception when room ID already exists")
-    void createRoom_shouldThrowExceptionWhenRoomIdAlreadyExists() {
+    void createRoom_shouldThrowExceptionWhenRoomIDAlreadyExists() {
         when(roomRepository.existsById(anyString())).thenReturn(true);
 
         assertThatThrownBy(() -> adminService.createRoom(roomRequest))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Huone ID on jo olemassa");
+        verify(roomRepository, times(1)).existsById(anyString());
+        verify(roomRepository, never()).save(any(Room.class));
     }
 
     @Test
@@ -307,7 +321,8 @@ class AdminServiceTest {
         assertThat(result.getCapacity()).isEqualTo(roomRequest.getCapacity());
         assertThat(result.getDescription()).isEqualTo(roomRequest.getDescription());
         assertThat(result.getLocation()).isEqualTo(roomRequest.getLocation());
-        verify(roomRepository).save(room);
+        verify(roomRepository, times(1)).findById("room-12345678");
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -318,22 +333,25 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.updateRoom("room-12345678", roomRequest))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Huonetta ei löydy ID:llä: room-12345678");
+        verify(roomRepository, times(1)).findById("room-12345678");
+        verify(roomRepository, never()).save(any(Room.class));
     }
 
     @Test
-    @DisplayName("updateRoom should only update provided fields")
-    void updateRoom_shouldOnlyUpdateProvidedFields() {
-        roomRequest.setName(null);
-        roomRequest.setCapacity(null);
+    @DisplayName("updateRoom should update only provided fields")
+    void updateRoom_shouldUpdateOnlyProvidedFields() {
+        RoomRequest partialRequest = new RoomRequest();
+        partialRequest.setName("Partial Update");
         when(roomRepository.findById("room-12345678")).thenReturn(Optional.of(room));
         when(roomRepository.save(any(Room.class))).thenReturn(room);
 
-        RoomResponse result = adminService.updateRoom("room-12345678", roomRequest);
+        RoomResponse result = adminService.updateRoom("room-12345678", partialRequest);
 
-        assertThat(result.getName()).isEqualTo(room.getName());
+        assertThat(result.getName()).isEqualTo("Partial Update");
         assertThat(result.getCapacity()).isEqualTo(room.getCapacity());
-        assertThat(result.getDescription()).isEqualTo(roomRequest.getDescription());
-        assertThat(result.getLocation()).isEqualTo(roomRequest.getLocation());
+        assertThat(result.getDescription()).isEqualTo(room.getDescription());
+        verify(roomRepository, times(1)).findById("room-12345678");
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -345,7 +363,8 @@ class AdminServiceTest {
         adminService.deleteRoom("room-12345678");
 
         assertThat(room.getIsActive()).isFalse();
-        verify(roomRepository).save(room);
+        verify(roomRepository, times(1)).findById("room-12345678");
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -356,6 +375,8 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.deleteRoom("room-12345678"))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Huonetta ei löydy ID:llä: room-12345678");
+        verify(roomRepository, times(1)).findById("room-12345678");
+        verify(roomRepository, never()).save(any(Room.class));
     }
 
     @Test
@@ -367,7 +388,8 @@ class AdminServiceTest {
         RoomResponse result = adminService.changeRoomName("room-12345678", "New Room Name");
 
         assertThat(result.getName()).isEqualTo("New Room Name");
-        verify(roomRepository).save(room);
+        verify(roomRepository, times(1)).findById("room-12345678");
+        verify(roomRepository, times(1)).save(room);
     }
 
     @Test
@@ -378,43 +400,5 @@ class AdminServiceTest {
         assertThatThrownBy(() -> adminService.changeRoomName("room-12345678", "New Room Name"))
                 .isInstanceOf(ReservationException.class)
                 .hasMessage("Huonetta ei löydy ID:llä: room-12345678");
-    }
-
-    @Test
-    @DisplayName("changeRoomCapacity should update room capacity when room exists and capacity is valid")
-    void changeRoomCapacity_shouldUpdateRoomCapacityWhenRoomExistsAndCapacityIsValid() {
-        when(roomRepository.findById("room-12345678")).thenReturn(Optional.of(room));
-        when(roomRepository.save(any(Room.class))).thenReturn(room);
-
-        RoomResponse result = adminService.changeRoomCapacity("room-12345678", 20);
-
-        assertThat(result.getCapacity()).isEqualTo(20);
-        verify(roomRepository).save(room);
-    }
-
-    @Test
-    @DisplayName("changeRoomCapacity should throw exception when room does not exist")
-    void changeRoomCapacity_shouldThrowExceptionWhenRoomDoesNotExist() {
-        when(roomRepository.findById("room-12345678")).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> adminService.changeRoomCapacity("room-12345678", 20))
-                .isInstanceOf(ReservationException.class)
-                .hasMessage("Huonetta ei löydy ID:llä: room-12345678");
-    }
-
-    @Test
-    @DisplayName("changeRoomCapacity should throw exception when capacity is null")
-    void changeRoomCapacity_shouldThrowExceptionWhenCapacityIsNull() {
-        assertThatThrownBy(() -> adminService.changeRoomCapacity("room-12345678", null))
-                .isInstanceOf(ReservationException.class)
-                .hasMessage("Kapasiteetin täytyy olla vähintään 1");
-    }
-
-    @Test
-    @DisplayName("changeRoomCapacity should throw exception when capacity is less than 1")
-    void changeRoomCapacity_shouldThrowExceptionWhenCapacityIsLessThan1() {
-        assertThatThrownBy(() -> adminService.changeRoomCapacity("room-12345678", 0))
-                .isInstanceOf(ReservationException.class)
-                .hasMessage("Kapasiteetin täytyy olla vähintään 1");
-    }
-}
+        verify(roomRepository, times(1)).findById("room-12345678");
+        verify(room

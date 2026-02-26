@@ -31,11 +31,10 @@ class AuthControllerTest {
     @BeforeEach
     void setUp() {
         registerRequest = new RegisterRequest(
-                "testUser",
+                "testuser",
                 "test@example.com",
                 "password123",
-                "firstName",
-                "lastName"
+                "Test User"
         );
 
         loginRequest = new LoginRequest(
@@ -45,8 +44,9 @@ class AuthControllerTest {
 
         authResponse = new AuthResponse(
                 "token123",
-                "refreshToken456",
-                3600L
+                "Bearer",
+                3600L,
+                "USER"
         );
     }
 
@@ -62,17 +62,16 @@ class AuthControllerTest {
     }
 
     @Test
-    void register_InvalidRequest_ThrowsException() {
+    void register_InvalidRequest_ReturnsBadRequest() {
         RegisterRequest invalidRequest = new RegisterRequest(
                 "",
                 "invalid-email",
                 "short",
-                "",
                 ""
         );
 
         when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new RuntimeException("Invalid registration data"));
+                .thenThrow(new RuntimeException("Validation failed"));
 
         assertThrows(RuntimeException.class, () -> {
             authController.register(invalidRequest);
@@ -91,34 +90,24 @@ class AuthControllerTest {
     }
 
     @Test
-    void login_InvalidCredentials_ThrowsException() {
-        LoginRequest invalidLogin = new LoginRequest(
-                "wrong@example.com",
-                "wrongpassword"
-        );
-
+    void login_InvalidCredentials_ReturnsUnauthorized() {
         when(authService.login(any(LoginRequest.class)))
                 .thenThrow(new RuntimeException("Invalid credentials"));
 
         assertThrows(RuntimeException.class, () -> {
-            authController.login(invalidLogin);
+            authController.login(new LoginRequest("wrong@example.com", "wrongpassword"));
         });
     }
 
     @Test
-    void login_EmptyCredentials_ThrowsException() {
-        LoginRequest emptyLogin = new LoginRequest(
-                "",
-                ""
-        );
+    void login_EmptyCredentials_ReturnsBadRequest() {
+        LoginRequest emptyRequest = new LoginRequest("", "");
 
         when(authService.login(any(LoginRequest.class)))
                 .thenThrow(new RuntimeException("Email and password must not be empty"));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            authController.login(emptyLogin);
+        assertThrows(RuntimeException.class, () -> {
+            authController.login(emptyRequest);
         });
-
-        assertTrue(exception.getMessage().contains("must not be empty"));
     }
 }

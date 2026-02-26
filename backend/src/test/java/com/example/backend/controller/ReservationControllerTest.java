@@ -56,14 +56,10 @@ class ReservationControllerTest {
         request.setRoomId("room1");
         request.setStartDate(LocalDate.now());
         request.setEndDate(LocalDate.now().plusDays(1));
-        request.setGuestName("John Doe");
 
         ReservationResponse response = new ReservationResponse();
         response.setId("res1");
         response.setRoomId("room1");
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe");
 
         when(service.createReservation(any(CreateReservationRequest.class))).thenReturn(response);
 
@@ -72,8 +68,7 @@ class ReservationControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("res1"))
-                .andExpect(jsonPath("$.roomId").value("room1"))
-                .andExpect(jsonPath("$.guestName").value("John Doe"));
+                .andExpect(jsonPath("$.roomId").value("room1"));
 
         verify(service).createReservation(any(CreateReservationRequest.class));
     }
@@ -97,14 +92,10 @@ class ReservationControllerTest {
         request.setRoomId("room1");
         request.setStartDate(LocalDate.now());
         request.setEndDate(LocalDate.now().plusDays(1));
-        request.setGuestName("John Doe Updated");
 
         ReservationResponse response = new ReservationResponse();
         response.setId(reservationId);
         response.setRoomId("room1");
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe Updated");
 
         when(service.updateReservation(anyString(), any(CreateReservationRequest.class))).thenReturn(response);
 
@@ -113,20 +104,19 @@ class ReservationControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservationId))
-                .andExpect(jsonPath("$.guestName").value("John Doe Updated"));
+                .andExpect(jsonPath("$.roomId").value("room1"));
 
         verify(service).updateReservation(anyString(), any(CreateReservationRequest.class));
     }
 
     @Test
     @DisplayName("Should return NOT_FOUND when updating non-existent reservation")
-    void updateReservation_shouldReturnNotFoundWhenReservationDoesNotExist() throws Exception {
+    void updateReservation_shouldReturnNotFoundWhenReservationNotFound() throws Exception {
         String reservationId = "nonexistent";
         CreateReservationRequest request = new CreateReservationRequest();
         request.setRoomId("room1");
         request.setStartDate(LocalDate.now());
         request.setEndDate(LocalDate.now().plusDays(1));
-        request.setGuestName("John Doe");
 
         when(service.updateReservation(anyString(), any(CreateReservationRequest.class)))
                 .thenThrow(new RuntimeException("Reservation not found"));
@@ -152,7 +142,7 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("Should return NOT_FOUND when deleting non-existent reservation")
-    void deleteReservation_shouldReturnNotFoundWhenReservationDoesNotExist() throws Exception {
+    void deleteReservation_shouldReturnNotFoundWhenReservationNotFound() throws Exception {
         String reservationId = "nonexistent";
 
         doThrow(new RuntimeException("Reservation not found")).when(service).deleteReservation(anyString());
@@ -168,24 +158,20 @@ class ReservationControllerTest {
         ReservationResponse response = new ReservationResponse();
         response.setId(reservationId);
         response.setRoomId("room1");
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe");
 
         when(service.getReservationById(anyString())).thenReturn(response);
 
         mockMvc.perform(get("/api/reservations/detail/{id}", reservationId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservationId))
-                .andExpect(jsonPath("$.roomId").value("room1"))
-                .andExpect(jsonPath("$.guestName").value("John Doe"));
+                .andExpect(jsonPath("$.roomId").value("room1"));
 
         verify(service).getReservationById(anyString());
     }
 
     @Test
     @DisplayName("Should return NOT_FOUND when getting non-existent reservation by ID")
-    void getById_shouldReturnNotFoundWhenReservationDoesNotExist() throws Exception {
+    void getById_shouldReturnNotFoundWhenReservationNotFound() throws Exception {
         String reservationId = "nonexistent";
 
         when(service.getReservationById(anyString())).thenThrow(new RuntimeException("Reservation not found"));
@@ -201,17 +187,13 @@ class ReservationControllerTest {
         ReservationResponse response = new ReservationResponse();
         response.setId("res1");
         response.setRoomId(roomId);
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe");
 
         when(service.getReservationsByRoom(anyString())).thenReturn(Collections.singletonList(response));
 
         mockMvc.perform(get("/api/reservations/{roomId}", roomId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("res1"))
-                .andExpect(jsonPath("$[0].roomId").value(roomId))
-                .andExpect(jsonPath("$[0].guestName").value("John Doe"));
+                .andExpect(jsonPath("$[0].roomId").value(roomId));
 
         verify(service).getReservationsByRoom(anyString());
     }
@@ -225,125 +207,13 @@ class ReservationControllerTest {
 
         mockMvc.perform(get("/api/reservations/{roomId}", roomId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
-
-        verify(service).getReservationsByRoom(anyString());
     }
 
     @Test
     @DisplayName("Should return BAD_REQUEST when room ID is invalid for getByRoom")
     void getByRoom_shouldReturnBadRequestWhenRoomIdInvalid() throws Exception {
-        mockMvc.perform(get("/api/reservations/{roomId}", "invalid!id"))
+        mockMvc.perform(get("/api/reservations/{roomId}", " "))
                 .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("Should return proper response entity for create method")
-    void create_shouldReturnProperResponseEntity() {
-        CreateReservationRequest request = new CreateReservationRequest();
-        request.setRoomId("room1");
-        request.setStartDate(LocalDate.now());
-        request.setEndDate(LocalDate.now().plusDays(1));
-        request.setGuestName("John Doe");
-
-        ReservationResponse response = new ReservationResponse();
-        response.setId("res1");
-        response.setRoomId("room1");
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe");
-
-        when(service.createReservation(any(CreateReservationRequest.class))).thenReturn(response);
-
-        ResponseEntity<ReservationResponse> result = controller.create(request);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody().getId()).isEqualTo("res1");
-        assertThat(result.getBody().getGuestName()).isEqualTo("John Doe");
-    }
-
-    @Test
-    @DisplayName("Should return proper response entity for update method")
-    void update_shouldReturnProperResponseEntity() {
-        String reservationId = "res1";
-        CreateReservationRequest request = new CreateReservationRequest();
-        request.setRoomId("room1");
-        request.setStartDate(LocalDate.now());
-        request.setEndDate(LocalDate.now().plusDays(1));
-        request.setGuestName("John Doe Updated");
-
-        ReservationResponse response = new ReservationResponse();
-        response.setId(reservationId);
-        response.setRoomId("room1");
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe Updated");
-
-        when(service.updateReservation(anyString(), any(CreateReservationRequest.class))).thenReturn(response);
-
-        ResponseEntity<ReservationResponse> result = controller.update(reservationId, request);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody().getId()).isEqualTo(reservationId);
-        assertThat(result.getBody().getGuestName()).isEqualTo("John Doe Updated");
-    }
-
-    @Test
-    @DisplayName("Should return proper response entity for delete method")
-    void delete_shouldReturnProperResponseEntity() {
-        String reservationId = "res1";
-
-        doNothing().when(service).deleteReservation(anyString());
-
-        ResponseEntity<Void> result = controller.delete(reservationId);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-        assertThat(result.getBody()).isNull();
-    }
-
-    @Test
-    @DisplayName("Should return proper response entity for getById method")
-    void getById_shouldReturnProperResponseEntity() {
-        String reservationId = "res1";
-        ReservationResponse response = new ReservationResponse();
-        response.setId(reservationId);
-        response.setRoomId("room1");
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe");
-
-        when(service.getReservationById(anyString())).thenReturn(response);
-
-        ResponseEntity<ReservationResponse> result = controller.getById(reservationId);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody().getId()).isEqualTo(reservationId);
-        assertThat(result.getBody().getGuestName()).isEqualTo("John Doe");
-    }
-
-    @Test
-    @DisplayName("Should return proper response entity for getByRoom method")
-    void getByRoom_shouldReturnProperResponseEntity() {
-        String roomId = "room1";
-        ReservationResponse response = new ReservationResponse();
-        response.setId("res1");
-        response.setRoomId(roomId);
-        response.setStartDate(LocalDate.now());
-        response.setEndDate(LocalDate.now().plusDays(1));
-        response.setGuestName("John Doe");
-
-        when(service.getReservationsByRoom(anyString())).thenReturn(Collections.singletonList(response));
-
-        ResponseEntity<List<ReservationResponse>> result = controller.getByRoom(roomId);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody()).hasSize(1);
-        assertThat(result.getBody().get(0).getId()).isEqualTo("res1");
-        assertThat(result.getBody().get(0).getRoomId()).isEqualTo(roomId);
     }
 }

@@ -34,7 +34,8 @@ class AuthControllerTest {
                 "testuser",
                 "test@example.com",
                 "password123",
-                "Test User"
+                "firstName",
+                "lastName"
         );
 
         loginRequest = new LoginRequest(
@@ -44,9 +45,11 @@ class AuthControllerTest {
 
         authResponse = new AuthResponse(
                 "token123",
-                "Bearer",
-                3600L,
-                "USER"
+                1L,
+                "testuser",
+                "test@example.com",
+                "firstName",
+                "lastName"
         );
     }
 
@@ -74,26 +77,19 @@ class AuthControllerTest {
     }
 
     @Test
-    void register_ShouldThrowException_WhenInputIsInvalid() {
-        RegisterRequest invalidRequest = new RegisterRequest(
-                "",
-                "invalid-email",
-                "short",
-                ""
-        );
-
+    void register_ShouldThrowException_WhenUsernameIsAlreadyTaken() {
         when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new IllegalArgumentException("Invalid input data"));
+                .thenThrow(new RuntimeException("Username is already taken"));
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            authController.register(invalidRequest);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            authController.register(registerRequest);
         });
 
-        assertEquals("Invalid input data", exception.getMessage());
+        assertEquals("Username is already taken", exception.getMessage());
     }
 
     @Test
-    void login_ShouldReturnAuthResponse_WhenCredentialsAreValid() {
+    void login_ShouldReturnAuthResponse_WhenLoginIsSuccessful() {
         when(authService.login(any(LoginRequest.class))).thenReturn(authResponse);
 
         ResponseEntity<AuthResponse> response = authController.login(loginRequest);

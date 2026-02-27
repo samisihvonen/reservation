@@ -1,17 +1,16 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.CreateReservationRequest;
-import com.example.backend.dto.ReservationResponse;
+import com.example.backend.model.request.CreateReservationRequest;
+import com.example.backend.model.response.ReservationResponse;
 import com.example.backend.service.ReservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,137 +18,196 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ReservationControllerTest {
 
-    @MockBean
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
+
+    @Mock
     private ReservationService reservationService;
 
     @InjectMocks
     private ReservationController reservationController;
 
-    private MockMvc mockMvc;
-    private ObjectMapper objectMapper;
-    private String baseUrl = "/api/reservations";
-    private String testId;
-    private CreateReservationRequest testRequest;
-    private ReservationResponse testResponse;
-
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(reservationController).build();
         objectMapper = new ObjectMapper();
-        testId = UUID.randomUUID().toString();
+    }
 
-        testRequest = new CreateReservationRequest(
-                "Test User",
-                "test@example.com",
-                "2023-12-31",
+    @Test
+    void create_shouldReturnCreatedReservation_whenRequestIsValid() throws Exception {
+        // Given
+        CreateReservationRequest request = new CreateReservationRequest(
+                "user123",
+                "2023-12-25",
                 "12:00",
-                2
+                4
         );
 
-        testResponse = new ReservationResponse(
-                testId,
-                "Test User",
-                "test@example.com",
-                "2023-12-31",
+        ReservationResponse expectedResponse = new ReservationResponse(
+                UUID.randomUUID().toString(),
+                "user123",
+                "2023-12-25",
                 "12:00",
-                2,
+                4,
                 "CONFIRMED"
         );
-    }
 
-    @Test
-    void create_shouldReturnCreatedReservation_whenValidRequest() throws Exception {
-        given(reservationService.create(any(CreateReservationRequest.class))).willReturn(testResponse);
+        given(reservationService.create(any(CreateReservationRequest.class)))
+                .willReturn(ResponseEntity.ok(expectedResponse));
 
-        mockMvc.perform(post(baseUrl)
+        // When & Then
+        mockMvc.perform(post("/api/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testRequest)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testId))
-                .andExpect(jsonPath("$.customerName").value(testRequest.getCustomerName()))
-                .andExpect(jsonPath("$.status").value("CONFIRMED"));
+                .andExpect(jsonPath("$.userId").value(expectedResponse.getUserId()))
+                .andExpect(jsonPath("$.date").value(expectedResponse.getDate()))
+                .andExpect(jsonPath("$.time").value(expectedResponse.getTime()))
+                .andExpect(jsonPath("$.partySize").value(expectedResponse.getPartySize()))
+                .andExpect(jsonPath("$.status").value(expectedResponse.getStatus()));
     }
 
     @Test
-    void create_shouldReturnBadRequest_whenInvalidRequest() throws Exception {
+    void create_shouldReturnBadRequest_whenRequestIsInvalid() throws Exception {
+        // Given
         CreateReservationRequest invalidRequest = new CreateReservationRequest(
                 "",
-                "invalid-email",
-                "2023-02-30",
-                "25:00",
+                "",
+                "",
                 0
         );
 
-        mockMvc.perform(post(baseUrl)
+        // When & Then
+        mockMvc.perform(post("/api/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void update_shouldReturnUpdatedReservation_whenValidRequestAndId() throws Exception {
-        given(reservationService.update(anyString(), any(CreateReservationRequest.class))).willReturn(testResponse);
+    void update_shouldReturnUpdatedReservation_whenRequestIsValid() throws Exception {
+        // Given
+        String reservationId = UUID.randomUUID().toString();
+        CreateReservationRequest request = new CreateReservationRequest(
+                "user123",
+                "2023-12-26",
+                "13:00",
+                5
+        );
 
-        mockMvc.perform(put(baseUrl + "/{id}", testId)
+        ReservationResponse expectedResponse = new ReservationResponse(
+                reservationId,
+                "user123",
+                "2023-12-26",
+                "13:00",
+                5,
+                "UPDATED"
+        );
+
+        given(reservationService.update(anyString(), any(CreateReservationRequest.class)))
+                .willReturn(ResponseEntity.ok(expectedResponse));
+
+        // When & Then
+        mockMvc.perform(put("/api/reservations/{id}", reservationId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testRequest)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testId))
-                .andExpect(jsonPath("$.customerName").value(testRequest.getCustomerName()));
+                .andExpect(jsonPath("$.id").value(reservationId))
+                .andExpect(jsonPath("$.date").value(expectedResponse.getDate()))
+                .andExpect(jsonPath("$.time").value(expectedResponse.getTime()))
+                .andExpect(jsonPath("$.partySize").value(expectedResponse.getPartySize()));
     }
 
     @Test
-    void update_shouldReturnNotFound_whenInvalidId() throws Exception {
-        String invalidId = "invalid-id";
+    void update_shouldReturnNotFound_whenReservationDoesNotExist() throws Exception {
+        // Given
+        String nonExistentId = UUID.randomUUID().toString();
+        CreateReservationRequest request = new CreateReservationRequest(
+                "user123",
+                "2023-12-26",
+                "13:00",
+                5
+        );
+
         given(reservationService.update(anyString(), any(CreateReservationRequest.class)))
+                .willReturn(ResponseEntity.notFound().build());
+
+        // When & Then
+        mockMvc.perform(put("/api/reservations/{id}", nonExistentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void delete_shouldReturnNoContent_whenReservationExists() throws Exception {
+        // Given
+        String reservationId = UUID.randomUUID().toString();
+        willDoNothing().given(reservationService).delete(reservationId);
+
+        // When & Then
+        mockMvc.perform(delete("/api/reservations/{id}", reservationId))
+                .andExpect(status().isNoContent());
+
+        verify(reservationService).delete(reservationId);
+    }
+
+    @Test
+    void delete_shouldReturnNotFound_whenReservationDoesNotExist() throws Exception {
+        // Given
+        String nonExistentId = UUID.randomUUID().toString();
+        given(reservationService.delete(nonExistentId))
                 .willThrow(new RuntimeException("Reservation not found"));
 
-        mockMvc.perform(put(baseUrl + "/{id}", invalidId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testRequest)))
+        // When & Then
+        mockMvc.perform(delete("/api/reservations/{id}", nonExistentId))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void delete_shouldReturnNoContent_whenValidId() throws Exception {
-        doNothing().when(reservationService).delete(anyString());
+    void getById_shouldReturnReservation_whenReservationExists() throws Exception {
+        // Given
+        String reservationId = UUID.randomUUID().toString();
+        ReservationResponse expectedResponse = new ReservationResponse(
+                reservationId,
+                "user123",
+                "2023-12-25",
+                "12:00",
+                4,
+                "CONFIRMED"
+        );
 
-        mockMvc.perform(delete(baseUrl + "/{id}", testId))
-                .andExpect(status().isNoContent());
-    }
+        given(reservationService.getById(reservationId))
+                .willReturn(ResponseEntity.ok(expectedResponse));
 
-    @Test
-    void delete_shouldReturnNotFound_whenInvalidId() throws Exception {
-        String invalidId = "invalid-id";
-        doNothing().when(reservationService).delete(invalidId);
-
-        mockMvc.perform(delete(baseUrl + "/{id}", invalidId))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void getById_shouldReturnReservation_whenValidId() throws Exception {
-        given(reservationService.getById(anyString())).willReturn(testResponse);
-
-        mockMvc.perform(get(baseUrl + "/{id}", testId))
+        // When & Then
+        mockMvc.perform(get("/api/reservations/{id}", reservationId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testId))
-                .andExpect(jsonPath("$.customerName").value(testResponse.getCustomerName()));
+                .andExpect(jsonPath("$.id").value(reservationId))
+                .andExpect(jsonPath("$.userId").value(expectedResponse.getUserId()))
+                .andExpect(jsonPath("$.date").value(expectedResponse.getDate()))
+                .andExpect(jsonPath("$.time").value(expectedResponse.getTime()))
+                .andExpect(jsonPath("$.partySize").value(expectedResponse.getPartySize()))
+                .andExpect(jsonPath("$.status").value(expectedResponse.getStatus()));
     }
 
     @Test
-    void getById_shouldReturnNotFound_whenInvalidId() throws Exception {
-        String invalidId = "invalid-id";
-        given(reservationService.getById(invalidId)).willThrow(new RuntimeException("Reservation not found"));
+    void getById_shouldReturnNotFound_whenReservationDoesNotExist() throws Exception {
+        // Given
+        String nonExistentId = UUID.randomUUID().toString();
+        given(reservationService.getById(nonExistentId))
+                .willReturn(ResponseEntity.notFound().build());
 
-        mockMvc.perform(get(baseUrl + "/{id}", invalidId))
+        // When & Then
+        mockMvc.perform(get("/api/reservations/{id}", nonExistentId))
                 .andExpect(status().isNotFound());
     }
 }

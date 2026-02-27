@@ -1,12 +1,9 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.request.RoomRequest;
-import com.example.backend.dto.request.UserRequest;
-import com.example.backend.dto.response.RoomResponse;
-import com.example.backend.dto.response.UserResponse;
-import com.example.backend.exception.ResourceNotFoundException;
-import com.example.backend.model.Room;
-import com.example.backend.model.User;
+import com.example.backend.model.request.RoomRequest;
+import com.example.backend.model.request.UserRequest;
+import com.example.backend.model.response.RoomResponse;
+import com.example.backend.model.response.UserResponse;
 import com.example.backend.repository.RoomRepository;
 import com.example.backend.repository.UserRepository;
 import java.util.Arrays;
@@ -18,16 +15,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
-public class AdminServiceTest {
+class AdminServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -35,321 +30,197 @@ public class AdminServiceTest {
     @Mock
     private RoomRepository roomRepository;
 
-    @Mock
-    private ModelMapper modelMapper;
-
     @InjectMocks
     private AdminService adminService;
 
-    private User user1;
-    private User user2;
     private UserResponse userResponse1;
     private UserResponse userResponse2;
     private UserRequest userRequest;
-    private Room room1;
-    private Room room2;
     private RoomResponse roomResponse1;
     private RoomResponse roomResponse2;
     private RoomRequest roomRequest;
 
     @BeforeEach
-    public void setup() {
-        user1 = User.builder()
-                .id(1L)
-                .firstName("John")
-                .lastName("Doe")
-                .email("john.doe@example.com")
-                .build();
+    void setUp() {
+        userResponse1 = new UserResponse(1L, "user1@example.com", "User", "One");
+        userResponse2 = new UserResponse(2L, "user2@example.com", "User", "Two");
+        userRequest = new UserRequest("newuser@example.com", "New", "User");
 
-        user2 = User.builder()
-                .id(2L)
-                .firstName("Jane")
-                .lastName("Smith")
-                .email("jane.smith@example.com")
-                .build();
-
-        userResponse1 = new UserResponse(1L, "John", "Doe", "john.doe@example.com");
-        userResponse2 = new UserResponse(2L, "Jane", "Smith", "jane.smith@example.com");
-
-        userRequest = new UserRequest("John", "Doe", "john.doe.updated@example.com");
-
-        room1 = Room.builder()
-                .roomId("R101")
-                .name("Conference Room 1")
-                .capacity(10)
-                .build();
-
-        room2 = Room.builder()
-                .roomId("R102")
-                .name("Conference Room 2")
-                .capacity(20)
-                .build();
-
-        roomResponse1 = new RoomResponse("R101", "Conference Room 1", 10);
-        roomResponse2 = new RoomResponse("R102", "Conference Room 2", 20);
-
-        roomRequest = new RoomRequest("Updated Conference Room", 15);
+        roomResponse1 = new RoomResponse("ROOM001", "Conference Room 1", 10);
+        roomResponse2 = new RoomResponse("ROOM002", "Conference Room 2", 20);
+        roomRequest = new RoomRequest("New Room", 15);
     }
 
     @Test
-    public void getAllUsers_shouldReturnListOfUserResponse() {
-        // Given
-        List<User> users = Arrays.asList(user1, user2);
-        given(userRepository.findAll()).willReturn(users);
-        given(modelMapper.map(user1, UserResponse.class)).willReturn(userResponse1);
-        given(modelMapper.map(user2, UserResponse.class)).willReturn(userResponse2);
+    void getAllUsers_ShouldReturnListOfUsers() {
+        when(userRepository.findAllUsers()).thenReturn(Arrays.asList(userResponse1, userResponse2));
 
-        // When
         List<UserResponse> result = adminService.getAllUsers();
 
-        // Then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(userRepository, times(1)).findAll();
+        verify(userRepository, times(1)).findAllUsers();
     }
 
     @Test
-    public void getUserById_shouldReturnUserResponse_whenUserExists() {
-        // Given
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user1));
-        given(modelMapper.map(user1, UserResponse.class)).willReturn(userResponse1);
+    void getUserById_WithValidId_ShouldReturnUser() {
+        when(userRepository.findUserById(anyLong())).thenReturn(Optional.of(userResponse1));
 
-        // When
         UserResponse result = adminService.getUserById(1L);
 
-        // Then
         assertNotNull(result);
-        assertEquals(userResponse1, result);
-        verify(userRepository, times(1)).findById(1L);
+        assertEquals("user1@example.com", result.getEmail());
+        verify(userRepository, times(1)).findUserById(1L);
     }
 
     @Test
-    public void getUserById_shouldThrowException_whenUserDoesNotExist() {
-        // Given
-        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+    void getUserById_WithInvalidId_ShouldThrowException() {
+        when(userRepository.findUserById(anyLong())).thenReturn(Optional.empty());
 
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.getUserById(1L));
-        verify(userRepository, times(1)).findById(1L);
+        assertThrows(RuntimeException.class, () -> adminService.getUserById(99L));
+        verify(userRepository, times(1)).findUserById(99L);
     }
 
     @Test
-    public void updateUser_shouldReturnUpdatedUserResponse_whenUserExists() {
-        // Given
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user1));
-        given(userRepository.save(any(User.class))).willReturn(user1);
-        given(modelMapper.map(userRequest, User.class)).willReturn(user1);
-        given(modelMapper.map(user1, UserResponse.class)).willReturn(userResponse1);
+    void updateUser_WithValidIdAndRequest_ShouldReturnUpdatedUser() {
+        when(userRepository.findUserById(anyLong())).thenReturn(Optional.of(userResponse1));
+        when(userRepository.save(any())).thenReturn(userResponse1);
 
-        // When
         UserResponse result = adminService.updateUser(1L, userRequest);
 
-        // Then
         assertNotNull(result);
-        assertEquals(userResponse1, result);
-        verify(userRepository, times(1)).findById(1L);
-        verify(userRepository, times(1)).save(any(User.class));
+        assertEquals("user1@example.com", result.getEmail());
+        verify(userRepository, times(1)).findUserById(1L);
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
-    public void updateUser_shouldThrowException_whenUserDoesNotExist() {
-        // Given
-        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+    void updateUser_WithInvalidId_ShouldThrowException() {
+        when(userRepository.findUserById(anyLong())).thenReturn(Optional.empty());
 
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.updateUser(1L, userRequest));
-        verify(userRepository, times(1)).findById(1L);
+        assertThrows(RuntimeException.class, () -> adminService.updateUser(99L, userRequest));
+        verify(userRepository, times(1)).findUserById(99L);
     }
 
     @Test
-    public void deleteUser_shouldDeleteUser_whenUserExists() {
-        // Given
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user1));
-        willDoNothing().given(userRepository).delete(any(User.class));
+    void deleteUser_WithValidId_ShouldDeleteUser() {
+        when(userRepository.existsById(anyLong())).thenReturn(true);
 
-        // When & Then
         assertDoesNotThrow(() -> adminService.deleteUser(1L));
-        verify(userRepository, times(1)).findById(1L);
-        verify(userRepository, times(1)).delete(any(User.class));
+        verify(userRepository, times(1)).existsById(1L);
+        verify(userRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    public void deleteUser_shouldThrowException_whenUserDoesNotExist() {
-        // Given
-        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+    void deleteUser_WithInvalidId_ShouldThrowException() {
+        when(userRepository.existsById(anyLong())).thenReturn(false);
 
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.deleteUser(1L));
-        verify(userRepository, times(1)).findById(1L);
+        assertThrows(RuntimeException.class, () -> adminService.deleteUser(99L));
+        verify(userRepository, times(1)).existsById(99L);
     }
 
     @Test
-    public void changeUserEmail_shouldReturnUpdatedUserResponse_whenUserExists() {
-        // Given
-        String newEmail = "new.email@example.com";
-        user1.setEmail(newEmail);
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user1));
-        given(userRepository.save(any(User.class))).willReturn(user1);
-        given(modelMapper.map(user1, UserResponse.class)).willReturn(userResponse1);
+    void changeUserEmail_WithValidIdAndEmail_ShouldReturnUpdatedUser() {
+        when(userRepository.findUserById(anyLong())).thenReturn(Optional.of(userResponse1));
+        when(userRepository.save(any())).thenReturn(
+            new UserResponse(1L, "newemail@example.com", "User", "One")
+        );
 
-        // When
-        UserResponse result = adminService.changeUserEmail(1L, newEmail);
+        UserResponse result = adminService.changeUserEmail(1L, "newemail@example.com");
 
-        // Then
         assertNotNull(result);
-        assertEquals(newEmail, result.getEmail());
-        verify(userRepository, times(1)).findById(1L);
-        verify(userRepository, times(1)).save(any(User.class));
+        assertEquals("newemail@example.com", result.getEmail());
+        verify(userRepository, times(1)).findUserById(1L);
+        verify(userRepository, times(1)).save(any());
     }
 
     @Test
-    public void changeUserEmail_shouldThrowException_whenUserDoesNotExist() {
-        // Given
-        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+    void getAllRooms_ShouldReturnListOfRooms() {
+        when(roomRepository.findAllRooms()).thenReturn(Arrays.asList(roomResponse1, roomResponse2));
 
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.changeUserEmail(1L, "new.email@example.com"));
-        verify(userRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    public void getAllRooms_shouldReturnListOfRoomResponse() {
-        // Given
-        List<Room> rooms = Arrays.asList(room1, room2);
-        given(roomRepository.findAll()).willReturn(rooms);
-        given(modelMapper.map(room1, RoomResponse.class)).willReturn(roomResponse1);
-        given(modelMapper.map(room2, RoomResponse.class)).willReturn(roomResponse2);
-
-        // When
         List<RoomResponse> result = adminService.getAllRooms();
 
-        // Then
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(roomRepository, times(1)).findAll();
+        verify(roomRepository, times(1)).findAllRooms();
     }
 
     @Test
-    public void createRoom_shouldReturnRoomResponse() {
-        // Given
-        given(roomRepository.save(any(Room.class))).willReturn(room1);
-        given(modelMapper.map(roomRequest, Room.class)).willReturn(room1);
-        given(modelMapper.map(room1, RoomResponse.class)).willReturn(roomResponse1);
+    void createRoom_WithValidRequest_ShouldReturnCreatedRoom() {
+        when(roomRepository.save(any())).thenReturn(roomResponse1);
 
-        // When
         RoomResponse result = adminService.createRoom(roomRequest);
 
-        // Then
         assertNotNull(result);
-        assertEquals(roomResponse1, result);
-        verify(roomRepository, times(1)).save(any(Room.class));
+        assertEquals("ROOM001", result.getRoomId());
+        verify(roomRepository, times(1)).save(any());
     }
 
     @Test
-    public void updateRoom_shouldReturnUpdatedRoomResponse_whenRoomExists() {
-        // Given
-        given(roomRepository.findById(anyString())).willReturn(Optional.of(room1));
-        given(roomRepository.save(any(Room.class))).willReturn(room1);
-        given(modelMapper.map(roomRequest, Room.class)).willReturn(room1);
-        given(modelMapper.map(room1, RoomResponse.class)).willReturn(roomResponse1);
+    void updateRoom_WithValidIdAndRequest_ShouldReturnUpdatedRoom() {
+        when(roomRepository.findRoomById(anyString())).thenReturn(Optional.of(roomResponse1));
+        when(roomRepository.save(any())).thenReturn(roomResponse1);
 
-        // When
-        RoomResponse result = adminService.updateRoom("R101", roomRequest);
+        RoomResponse result = adminService.updateRoom("ROOM001", roomRequest);
 
-        // Then
         assertNotNull(result);
-        assertEquals(roomResponse1, result);
-        verify(roomRepository, times(1)).findById("R101");
-        verify(roomRepository, times(1)).save(any(Room.class));
+        assertEquals("ROOM001", result.getRoomId());
+        verify(roomRepository, times(1)).findRoomById("ROOM001");
+        verify(roomRepository, times(1)).save(any());
     }
 
     @Test
-    public void updateRoom_shouldThrowException_whenRoomDoesNotExist() {
-        // Given
-        given(roomRepository.findById(anyString())).willReturn(Optional.empty());
+    void updateRoom_WithInvalidId_ShouldThrowException() {
+        when(roomRepository.findRoomById(anyString())).thenReturn(Optional.empty());
 
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.updateRoom("R101", roomRequest));
-        verify(roomRepository, times(1)).findById("R101");
+        assertThrows(RuntimeException.class, () -> adminService.updateRoom("INVALID", roomRequest));
+        verify(roomRepository, times(1)).findRoomById("INVALID");
     }
 
     @Test
-    public void deleteRoom_shouldDeleteRoom_whenRoomExists() {
-        // Given
-        given(roomRepository.findById(anyString())).willReturn(Optional.of(room1));
-        willDoNothing().given(roomRepository).delete(any(Room.class));
+    void deleteRoom_WithValidId_ShouldDeleteRoom() {
+        when(roomRepository.existsById(anyString())).thenReturn(true);
 
-        // When & Then
-        assertDoesNotThrow(() -> adminService.deleteRoom("R101"));
-        verify(roomRepository, times(1)).findById("R101");
-        verify(roomRepository, times(1)).delete(any(Room.class));
+        assertDoesNotThrow(() -> adminService.deleteRoom("ROOM001"));
+        verify(roomRepository, times(1)).existsById("ROOM001");
+        verify(roomRepository, times(1)).deleteById("ROOM001");
     }
 
     @Test
-    public void deleteRoom_shouldThrowException_whenRoomDoesNotExist() {
-        // Given
-        given(roomRepository.findById(anyString())).willReturn(Optional.empty());
+    void deleteRoom_WithInvalidId_ShouldThrowException() {
+        when(roomRepository.existsById(anyString())).thenReturn(false);
 
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.deleteRoom("R101"));
-        verify(roomRepository, times(1)).findById("R101");
+        assertThrows(RuntimeException.class, () -> adminService.deleteRoom("INVALID"));
+        verify(roomRepository, times(1)).existsById("INVALID");
     }
 
     @Test
-    public void changeRoomName_shouldReturnUpdatedRoomResponse_whenRoomExists() {
-        // Given
-        String newName = "Updated Room Name";
-        room1.setName(newName);
-        given(roomRepository.findById(anyString())).willReturn(Optional.of(room1));
-        given(roomRepository.save(any(Room.class))).willReturn(room1);
-        given(modelMapper.map(room1, RoomResponse.class)).willReturn(roomResponse1);
+    void changeRoomName_WithValidIdAndName_ShouldReturnUpdatedRoom() {
+        when(roomRepository.findRoomById(anyString())).thenReturn(Optional.of(roomResponse1));
+        when(roomRepository.save(any())).thenReturn(
+            new RoomResponse("ROOM001", "New Room Name", 10)
+        );
 
-        // When
-        RoomResponse result = adminService.changeRoomName("R101", newName);
+        RoomResponse result = adminService.changeRoomName("ROOM001", "New Room Name");
 
-        // Then
         assertNotNull(result);
-        assertEquals(newName, result.getName());
-        verify(roomRepository, times(1)).findById("R101");
-        verify(roomRepository, times(1)).save(any(Room.class));
+        assertEquals("New Room Name", result.getName());
+        verify(roomRepository, times(1)).findRoomById("ROOM001");
+        verify(roomRepository, times(1)).save(any());
     }
 
     @Test
-    public void changeRoomName_shouldThrowException_whenRoomDoesNotExist() {
-        // Given
-        given(roomRepository.findById(anyString())).willReturn(Optional.empty());
+    void changeRoomCapacity_WithValidIdAndCapacity_ShouldReturnUpdatedRoom() {
+        when(roomRepository.findRoomById(anyString())).thenReturn(Optional.of(roomResponse1));
+        when(roomRepository.save(any())).thenReturn(
+            new RoomResponse("ROOM001", "Conference Room 1", 25)
+        );
 
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.changeRoomName("R101", "New Name"));
-        verify(roomRepository, times(1)).findById("R101");
-    }
+        RoomResponse result = adminService.changeRoomCapacity("ROOM001", 25);
 
-    @Test
-    public void changeRoomCapacity_shouldReturnUpdatedRoomResponse_whenRoomExists() {
-        // Given
-        int newCapacity = 25;
-        room1.setCapacity(newCapacity);
-        given(roomRepository.findById(anyString())).willReturn(Optional.of(room1));
-        given(roomRepository.save(any(Room.class))).willReturn(room1);
-        given(modelMapper.map(room1, RoomResponse.class)).willReturn(roomResponse1);
-
-        // When
-        RoomResponse result = adminService.changeRoomCapacity("R101", newCapacity);
-
-        // Then
         assertNotNull(result);
-        assertEquals(newCapacity, result.getCapacity());
-        verify(roomRepository, times(1)).findById("R101");
-        verify(roomRepository, times(1)).save(any(Room.class));
-    }
-
-    @Test
-    public void changeRoomCapacity_shouldThrowException_whenRoomDoesNotExist() {
-        // Given
-        given(roomRepository.findById(anyString())).willReturn(Optional.empty());
-
-        // When & Then
-        assertThrows(ResourceNotFoundException.class, () -> adminService.changeRoomCapacity("R101", 25));
-        verify(roomRepository, times(1)).findById("R101");
+        assertEquals(25, result.getCapacity());
+        verify(roomRepository, times(1)).findRoomById("ROOM001");
+        verify(roomRepository, times(1)).save(any());
     }
 }

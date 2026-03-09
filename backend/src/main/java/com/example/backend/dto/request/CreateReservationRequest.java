@@ -1,6 +1,7 @@
-package com.example.backend.dto;
+package com.example.backend.dto.request;
 
 import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 

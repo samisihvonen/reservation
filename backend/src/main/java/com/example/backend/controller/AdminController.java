@@ -1,6 +1,12 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.*;
+import com.example.backend.dto.request.EmailChangeRequest;
+import com.example.backend.dto.request.RoomCapacityChangeRequest;
+import com.example.backend.dto.request.RoomNameChangeRequest;
+import com.example.backend.dto.request.RoomRequest;
+import com.example.backend.dto.request.UserRequest;
+import com.example.backend.dto.response.RoomResponse;
+import com.example.backend.dto.response.UserResponse;
 import com.example.backend.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

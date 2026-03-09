@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.AuthResponse;
-import com.example.backend.dto.LoginRequest;
-import com.example.backend.dto.RegisterRequest;
+import com.example.backend.dto.request.LoginRequest;
+import com.example.backend.dto.request.RegisterRequest;
+import com.example.backend.dto.response.AuthResponse;
 import com.example.backend.exception.ReservationException;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;

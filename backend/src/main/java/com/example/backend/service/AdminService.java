@@ -1,9 +1,9 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.RoomRequest;
-import com.example.backend.dto.RoomResponse;
-import com.example.backend.dto.UserRequest;
-import com.example.backend.dto.UserResponse;
+import com.example.backend.dto.request.RoomRequest;
+import com.example.backend.dto.request.UserRequest;
+import com.example.backend.dto.response.RoomResponse;
+import com.example.backend.dto.response.UserResponse;
 import com.example.backend.exception.ReservationException;
 import com.example.backend.model.Room;
 import com.example.backend.model.User;

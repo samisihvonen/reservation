@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.CreateReservationRequest;
-import com.example.backend.dto.ReservationResponse;
+import com.example.backend.dto.request.CreateReservationRequest;
+import com.example.backend.dto.response.ReservationResponse;
 import com.example.backend.exception.InvalidReservationTimeException;
 import com.example.backend.exception.ReservationException;
 import com.example.backend.exception.RoomAlreadyBookedException;

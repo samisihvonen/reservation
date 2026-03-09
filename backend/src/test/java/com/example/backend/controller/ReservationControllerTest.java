@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.CreateReservationRequest;
-import com.example.backend.dto.ReservationResponse;
+import com.example.backend.dto.request.CreateReservationRequest;
+import com.example.backend.dto.response.ReservationResponse;
 import com.example.backend.service.ReservationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
@@ -9,11 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.any;

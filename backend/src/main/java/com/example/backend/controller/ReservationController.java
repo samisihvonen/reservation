@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.CreateReservationRequest;
-import com.example.backend.dto.ReservationResponse;
+import com.example.backend.dto.request.CreateReservationRequest;
+import com.example.backend.dto.response.ReservationResponse;
 import com.example.backend.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

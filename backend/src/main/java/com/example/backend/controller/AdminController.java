@@ -15,10 +15,10 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/admin")
 @Tag(name = "Admin", description = "Admin management endpoints")
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class AdminController {
 
     // final ensures the dependency is immutable

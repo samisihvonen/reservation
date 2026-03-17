@@ -1,6 +1,12 @@
 package com.example.backend.dto.response;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+
 
 public class UserResponse {
     private Long id;

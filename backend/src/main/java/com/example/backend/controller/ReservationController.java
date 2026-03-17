@@ -10,10 +10,10 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/reservations")
 @Tag(name = "Reservations", description = "Room reservation endpoints")
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class ReservationController {
 
     private final ReservationService service;

@@ -1,5 +1,6 @@
 package com.example.backend.exception;
 
+import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;

@@ -2,9 +2,15 @@ package com.example.backend.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users")@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class User {
 
     @Id

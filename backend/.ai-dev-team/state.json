@@ -1,0 +1,35 @@
+{
+  "workflows": {},
+  "features": {},
+  "deployments": {},
+  "sessions": {
+    "run-1773743553824-id8atv": {
+      "id": "run-1773743553824-id8atv",
+      "type": "run",
+      "metadata": {
+        "task": "fix all",
+        "projectPath": "C:\\Users\\sami_\\Tiedostot\\dev\\reservation\\backend",
+        "language": null,
+        "timestamp": "2026-03-17T10:32:33.823Z"
+      },
+      "status": "RUNNING",
+      "createdAt": "2026-03-17T10:32:33.825Z",
+      "updatedAt": "2026-03-17T10:32:33.828Z",
+      "completedAt": null,
+      "success": null,
+      "error": null,
+      "actions": [
+        {
+          "timestamp": "2026-03-17T10:32:33.828Z",
+          "type": "TASK_START",
+          "payload": {
+            "task": "fix all"
+          }
+        }
+      ]
+    }
+  },
+  "records": [],
+  "version": "1.0.0",
+  "lastUpdate": "2026-03-17T10:32:33.828Z"
+}

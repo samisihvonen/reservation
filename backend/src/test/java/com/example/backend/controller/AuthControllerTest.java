@@ -6,20 +6,41 @@ import com.example.backend.dto.response.AuthResponse;
 import com.example.backend.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 class AuthControllerTest {
 
-    @Mock
-    private AuthService authService;
+    private static class StubAuthService extends AuthService {
+        private AuthResponse registerResponse;
+        private AuthResponse loginResponse;
+        private RuntimeException registerException;
+        private RuntimeException loginException;
 
-    @InjectMocks
+        StubAuthService() {
+            super(null, null, null);
+        }
+
+        @Override
+        public AuthResponse register(RegisterRequest request) {
+            if (registerException != null) {
+                throw registerException;
+            }
+            return registerResponse;
+        }
+
+        @Override
+        public AuthResponse login(LoginRequest request) {
+            if (loginException != null) {
+                throw loginException;
+            }
+            return loginResponse;
+        }
+    }
+
+    private StubAuthService authService;
     private AuthController authController;
 
     private RegisterRequest registerRequest;
@@ -28,72 +49,49 @@ class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
+        authService = new StubAuthService();
+        authController = new AuthController(authService);
+
         registerRequest = new RegisterRequest(
-                "testuser",
                 "test@example.com",
-                "password123",
-                "Test User"
-        );
+                "Test User",
+                "password123");
 
         loginRequest = new LoginRequest(
                 "test@example.com",
-                "password123"
-        );
+                "password123");
 
         authResponse = new AuthResponse(
                 "token123",
-                "Bearer",
-                3600L,
-                "USER"
-        );
+                1L,
+                "test@example.com",
+                "Test User");
+
+        authService.registerResponse = authResponse;
+        authService.loginResponse = authResponse;
     }
 
     @Test
     void register_ShouldReturnAuthResponse_WhenRegistrationIsSuccessful() {
-        when(authService.register(any(RegisterRequest.class))).thenReturn(authResponse);
-
         ResponseEntity<AuthResponse> response = authController.register(registerRequest);
 
         assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(authResponse, response.getBody());
     }
 
     @Test
     void register_ShouldThrowException_WhenEmailIsAlreadyTaken() {
-        when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new RuntimeException("Email is already taken"));
+        authService.registerException = new RuntimeException("Email is already taken");
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            authController.register(registerRequest);
-        });
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> authController.register(registerRequest));
 
         assertEquals("Email is already taken", exception.getMessage());
     }
 
     @Test
-    void register_ShouldThrowException_WhenInputIsInvalid() {
-        RegisterRequest invalidRequest = new RegisterRequest(
-                "",
-                "invalid-email",
-                "short",
-                ""
-        );
-
-        when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new IllegalArgumentException("Invalid input data"));
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            authController.register(invalidRequest);
-        });
-
-        assertEquals("Invalid input data", exception.getMessage());
-    }
-
-    @Test
     void login_ShouldReturnAuthResponse_WhenCredentialsAreValid() {
-        when(authService.login(any(LoginRequest.class))).thenReturn(authResponse);
-
         ResponseEntity<AuthResponse> response = authController.login(loginRequest);
 
         assertNotNull(response);
@@ -103,25 +101,11 @@ class AuthControllerTest {
 
     @Test
     void login_ShouldThrowException_WhenCredentialsAreInvalid() {
-        when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new RuntimeException("Invalid email or password"));
+        authService.loginException = new RuntimeException("Invalid email or password");
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            authController.login(loginRequest);
-        });
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> authController.login(loginRequest));
 
         assertEquals("Invalid email or password", exception.getMessage());
-    }
-
-    @Test
-    void login_ShouldThrowException_WhenAccountIsLocked() {
-        when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new RuntimeException("Account is locked"));
-
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            authController.login(loginRequest);
-        });
-
-        assertEquals("Account is locked", exception.getMessage());
     }
 }

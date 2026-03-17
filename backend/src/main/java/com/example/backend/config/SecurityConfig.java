@@ -2,7 +2,6 @@ package com.example.backend.config;
 
 import com.example.backend.security.AuthTokenFilter;
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,10 +15,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private AuthTokenFilter authTokenFilter;
+    private final AuthTokenFilter authTokenFilter;
+
+    public SecurityConfig(AuthTokenFilter authTokenFilter) {
+        this.authTokenFilter = authTokenFilter;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

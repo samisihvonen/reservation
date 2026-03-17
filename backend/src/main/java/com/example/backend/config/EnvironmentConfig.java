@@ -4,12 +4,13 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.io.File;
 import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class EnvironmentConfig {
-    
+
     static {
         loadEnvironmentVariables();
     }
-    
+
     /**
      * Load environment variables from .env files
      * Tries profile-specific file first, then falls back to default .env
@@ -17,14 +18,14 @@ public class EnvironmentConfig {
     private static void loadEnvironmentVariables() {
         String activeProfile = System.getProperty("spring.profiles.active", "local");
         String profileSpecificFile = ".env." + activeProfile;
-        
+
         // Try to load profile-specific .env file
         if (new File(profileSpecificFile).exists()) {
             try {
                 Dotenv.configure()
-                    .directory(System.getProperty("user.dir"))
-                    .filename(profileSpecificFile)
-                    .load();
+                        .directory(System.getProperty("user.dir"))
+                        .filename(profileSpecificFile)
+                        .load();
                 System.out.println("✓ Loaded environment from: " + profileSpecificFile);
             } catch (Exception e) {
                 System.err.println("✗ Failed to load " + profileSpecificFile + ": " + e.getMessage());
@@ -35,7 +36,7 @@ public class EnvironmentConfig {
             loadDefaultEnv();
         }
     }
-    
+
     /**
      * Load default .env file if it exists
      */
@@ -43,10 +44,10 @@ public class EnvironmentConfig {
         if (new File(".env").exists()) {
             try {
                 Dotenv.configure()
-                    .directory(System.getProperty("user.dir"))
-                    .filename(".env")
-                    .ignoreIfMissing()
-                    .load();
+                        .directory(System.getProperty("user.dir"))
+                        .filename(".env")
+                        .ignoreIfMissing()
+                        .load();
                 System.out.println("✓ Loaded environment from: .env");
             } catch (Exception e) {
                 System.err.println("✗ Failed to load .env: " + e.getMessage());

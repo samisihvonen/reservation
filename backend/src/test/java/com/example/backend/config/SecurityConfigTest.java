@@ -1,57 +1,39 @@
 package com.example.backend.config;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.example.backend.security.AuthTokenFilter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class SecurityConfigTest {
 
-    private SecurityConfig instance;
-
-    @BeforeEach
-    void setUp() {
-        instance = new SecurityConfig();
-    }
+    private final SecurityConfig securityConfig = new SecurityConfig(new AuthTokenFilter());
 
     @Test
-    @DisplayName("Should password_encoder successfully")
+    @DisplayName("Should return BCryptPasswordEncoder instance")
     void testPasswordEncoder() {
-        // Arrange
-
-        // Act
         PasswordEncoder result = securityConfig.passwordEncoder();
 
-        // Assert
-        assertThat(result).isNotNull();
+        assertThat(result).isInstanceOf(BCryptPasswordEncoder.class);
+        assertThat(result.encode("password")).isNotEqualTo("password");
     }
 
     @Test
-    @DisplayName("Should security_filter_chain successfully")
-    void testSecurityFilterChain() {
-        // Arrange
-
-        // Act
-        SecurityFilterChain result = securityConfig.securityFilterChain(null);
-
-        // Assert
-        assertThat(result).isNotNull();
-    }
-
-    @Test
-    @DisplayName("Should cors_configuration_source successfully")
+    @DisplayName("Should configure CORS source with correct policy")
     void testCorsConfigurationSource() {
-        // Arrange
-
-        // Act
         CorsConfigurationSource result = securityConfig.corsConfigurationSource();
+        CorsConfiguration config = result.getCorsConfiguration(new MockHttpServletRequest("GET", "/api/test"));
 
-        // Assert
         assertThat(result).isNotNull();
+        assertThat(config.getAllowedOriginPatterns()).contains("http://localhost:*");
+        assertThat(config.getAllowedMethods()).contains("GET", "POST", "DELETE", "PATCH");
+        assertThat(config.getAllowCredentials()).isTrue();
+        assertThat(config.getMaxAge()).isEqualTo(3600L);
     }
 }

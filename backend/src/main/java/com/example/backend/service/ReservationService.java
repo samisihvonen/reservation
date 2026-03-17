@@ -10,15 +10,19 @@ import com.example.backend.repository.ReservationRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ReservationService {
 
-    @Autowired
-    private ReservationRepository repository;
+    private final ReservationRepository repository;
+
+    public ReservationService(ReservationRepository repository) {
+        this.repository = repository;
+    }
 
     /**
-     * Haetaan kaikki varaukset tietylle huoneelle
+     * Get all reservations for a specific room
      */
     public List<ReservationResponse> getReservationsByRoom(String roomId) {
         return repository.findByRoomId(roomId)
@@ -28,42 +32,42 @@ public class ReservationService {
     }
 
     /**
-     * Haetaan yksittäinen varaus ID:n perusteella
+     * Get a single reservation by ID
      */
     public ReservationResponse getReservationById(String id) {
         Reservation reservation = repository.findById(id)
-                .orElseThrow(() -> new ReservationException("Varausta ei löydy ID:llä: " + id));
+                .orElseThrow(() -> new ReservationException("Reservation not found with ID: " + id));
         return toResponse(reservation);
     }
 
     /**
-     * Luodaan uusi varaus validoinnin kanssa
+     * Create a new reservation with validation
      */
     public ReservationResponse createReservation(CreateReservationRequest request) {
         LocalDateTime now = LocalDateTime.now();
-        // 1. Validoi että alkamisaika on tulevaisuudessa
+        // 1. Validate that start time is in the future
         if (request.getStartTime().isBefore(now)) {
             throw new InvalidReservationTimeException(
-                    "Varaus ei voi olla menneisyydessä.");
+                    "Reservation cannot be in the past.");
         }
 
-        // 2. Validoi että päättymisaika on alkamisajan jälkeen
+        // 2. Validate that end time is after start time
         if (request.getEndTime().isBefore(request.getStartTime())) {
             throw new InvalidReservationTimeException(
-                    "Päättymisaika ei voi olla alkamisaikaa ennen.");
+                    "End time cannot be before start time.");
         }
 
-        // 3. Tarkista päällekkäisyydet
+        // 3. Check for overlapping reservations
         List<Reservation> existingReservations = repository.findByRoomId(request.getRoomId());
         boolean hasOverlap = existingReservations.stream()
                 .anyMatch(r -> isOverlapping(request, r));
 
         if (hasOverlap) {
             throw new RoomAlreadyBookedException(
-                    "Huone on jo varattu valittuna aikana.");
+                    "Room is already booked for the selected time.");
         }
 
-        // 4. Tallenna uusi varaus
+        // 4. Save the new reservation
         Reservation reservation = new Reservation();
         reservation.setRoomId(request.getRoomId());
         reservation.setStartTime(request.getStartTime());
@@ -75,24 +79,24 @@ public class ReservationService {
     }
 
     /**
-     * Päivitetään olemassa olevaa varausta
+     * Update an existing reservation
      */
     public ReservationResponse updateReservation(String id, CreateReservationRequest request) {
         Reservation reservation = repository.findById(id)
-                .orElseThrow(() -> new ReservationException("Varausta ei löydy ID:llä: " + id));
+                .orElseThrow(() -> new ReservationException("Reservation not found with ID: " + id));
         LocalDateTime now = LocalDateTime.now();
-        // Validoi uuden ajan
+        // Validate the new time
         if (request.getStartTime().isBefore(now)) {
             throw new InvalidReservationTimeException(
-                    "Varauksen alkamisaika ei voi olla menneisyydessä.");
+                    "Reservation start time cannot be in the past.");
         }
 
         if (request.getEndTime().isBefore(request.getStartTime())) {
             throw new InvalidReservationTimeException(
-                    "Päättymisaika ei voi olla alkamisaikaa ennen.");
+                    "End time cannot be before start time.");
         }
 
-        // Tarkista päällekkäisyydet (poislukien tämä varaus)
+        // Check for overlapping reservations (excluding this reservation)
         List<Reservation> existingReservations = repository.findByRoomId(request.getRoomId());
         boolean hasOverlap = existingReservations.stream()
                 .filter(r -> !r.getId().equals(id))
@@ -100,10 +104,10 @@ public class ReservationService {
 
         if (hasOverlap) {
             throw new RoomAlreadyBookedException(
-                    "Huone on varattu uuden ajan osalta.");
+                    "Room is already booked for the new time slot.");
         }
 
-        // Päivitä varaus
+        // Update the reservation
         reservation.setRoomId(request.getRoomId());
         reservation.setStartTime(request.getStartTime());
         reservation.setEndTime(request.getEndTime());
@@ -114,17 +118,17 @@ public class ReservationService {
     }
 
     /**
-     * Poistaa varauksen ID:n perusteella
+     * Delete a reservation by ID
      */
     public void deleteReservation(String id) {
         if (!repository.existsById(id)) {
-            throw new ReservationException("Varausta ei löydy ID:llä: " + id);
+            throw new ReservationException("Reservation not found with ID: " + id);
         }
         repository.deleteById(id);
     }
 
     /**
-     * Tarkista, ovatko kaksi varausta päällekkäisiä
+     * Check whether two reservations overlap
      */
     private boolean isOverlapping(CreateReservationRequest request, Reservation existing) {
         return request.getStartTime().isBefore(existing.getEndTime())
@@ -132,7 +136,7 @@ public class ReservationService {
     }
 
     /**
-     * Muuntaa Reservation-entityn Response-DTO:ksi
+     * Convert a Reservation entity to a ReservationResponse DTO
      */
     private ReservationResponse toResponse(Reservation reservation) {
         return new ReservationResponse(

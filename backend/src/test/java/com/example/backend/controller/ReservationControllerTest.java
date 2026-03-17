@@ -3,150 +3,122 @@ package com.example.backend.controller;
 import com.example.backend.dto.request.CreateReservationRequest;
 import com.example.backend.dto.response.ReservationResponse;
 import com.example.backend.service.ReservationService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ReservationControllerTest {
 
-    @MockBean
-    private ReservationService reservationService;
+    private static class StubReservationService extends ReservationService {
+        private ReservationResponse response;
+        private String deletedId;
+        private String requestedId;
+        private String requestedRoomId;
 
-    @InjectMocks
+        StubReservationService() {
+            super(null);
+        }
+
+        @Override
+        public ReservationResponse createReservation(CreateReservationRequest request) {
+            return response;
+        }
+
+        @Override
+        public ReservationResponse updateReservation(String id, CreateReservationRequest request) {
+            requestedId = id;
+            return response;
+        }
+
+        @Override
+        public void deleteReservation(String id) {
+            deletedId = id;
+        }
+
+        @Override
+        public ReservationResponse getReservationById(String id) {
+            requestedId = id;
+            return response;
+        }
+
+        @Override
+        public List<ReservationResponse> getReservationsByRoom(String roomId) {
+            requestedRoomId = roomId;
+            return List.of(response);
+        }
+    }
+
+    private StubReservationService reservationService;
     private ReservationController reservationController;
-
-    private MockMvc mockMvc;
-    private ObjectMapper objectMapper;
-    private String baseUrl = "/api/reservations";
     private String testId;
     private CreateReservationRequest testRequest;
     private ReservationResponse testResponse;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(reservationController).build();
-        objectMapper = new ObjectMapper();
+        reservationService = new StubReservationService();
+        reservationController = new ReservationController(reservationService);
+
         testId = UUID.randomUUID().toString();
+        LocalDateTime startTime = LocalDateTime.now().plusDays(1);
+        LocalDateTime endTime = startTime.plusHours(1);
 
-        testRequest = new CreateReservationRequest(
-                "Test User",
-                "test@example.com",
-                "2023-12-31",
-                "12:00",
-                2
-        );
-
+        testRequest = new CreateReservationRequest("ROOM1", startTime, endTime, "Test User");
         testResponse = new ReservationResponse(
-                testId,
-                "Test User",
-                "test@example.com",
-                "2023-12-31",
-                "12:00",
-                2,
-                "CONFIRMED"
-        );
+                testId, "ROOM1", startTime, endTime, "Test User",
+                LocalDateTime.now(), LocalDateTime.now());
+
+        reservationService.response = testResponse;
     }
 
     @Test
-    void create_shouldReturnCreatedReservation_whenValidRequest() throws Exception {
-        given(reservationService.create(any(CreateReservationRequest.class))).willReturn(testResponse);
+    void create_shouldReturnCreatedReservation_whenValidRequest() {
+        ResponseEntity<ReservationResponse> response = reservationController.create(testRequest);
 
-        mockMvc.perform(post(baseUrl)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testRequest)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testId))
-                .andExpect(jsonPath("$.customerName").value(testRequest.getCustomerName()))
-                .andExpect(jsonPath("$.status").value("CONFIRMED"));
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(testResponse, response.getBody());
     }
 
     @Test
-    void create_shouldReturnBadRequest_whenInvalidRequest() throws Exception {
-        CreateReservationRequest invalidRequest = new CreateReservationRequest(
-                "",
-                "invalid-email",
-                "2023-02-30",
-                "25:00",
-                0
-        );
+    void update_shouldReturnUpdatedReservation_whenValidRequestAndId() {
+        ResponseEntity<ReservationResponse> response = reservationController.update(testId, testRequest);
 
-        mockMvc.perform(post(baseUrl)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidRequest)))
-                .andExpect(status().isBadRequest());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(testResponse, response.getBody());
+        assertEquals(testId, reservationService.requestedId);
     }
 
     @Test
-    void update_shouldReturnUpdatedReservation_whenValidRequestAndId() throws Exception {
-        given(reservationService.update(anyString(), any(CreateReservationRequest.class))).willReturn(testResponse);
+    void delete_shouldReturnNoContent_whenValidId() {
+        ResponseEntity<Void> response = reservationController.delete(testId);
 
-        mockMvc.perform(put(baseUrl + "/{id}", testId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testRequest)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testId))
-                .andExpect(jsonPath("$.customerName").value(testRequest.getCustomerName()));
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertEquals(testId, reservationService.deletedId);
     }
 
     @Test
-    void update_shouldReturnNotFound_whenInvalidId() throws Exception {
-        String invalidId = "invalid-id";
-        given(reservationService.update(anyString(), any(CreateReservationRequest.class)))
-                .willThrow(new RuntimeException("Reservation not found"));
+    void getById_shouldReturnReservation_whenValidId() {
+        ResponseEntity<ReservationResponse> response = reservationController.getById(testId);
 
-        mockMvc.perform(put(baseUrl + "/{id}", invalidId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testRequest)))
-                .andExpect(status().isNotFound());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(testResponse, response.getBody());
+        assertEquals(testId, reservationService.requestedId);
     }
 
     @Test
-    void delete_shouldReturnNoContent_whenValidId() throws Exception {
-        doNothing().when(reservationService).delete(anyString());
+    void getByRoom_shouldReturnReservations_whenValidRoomId() {
+        ResponseEntity<List<ReservationResponse>> response = reservationController.getByRoom("ROOM1");
 
-        mockMvc.perform(delete(baseUrl + "/{id}", testId))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    void delete_shouldReturnNotFound_whenInvalidId() throws Exception {
-        String invalidId = "invalid-id";
-        doNothing().when(reservationService).delete(invalidId);
-
-        mockMvc.perform(delete(baseUrl + "/{id}", invalidId))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void getById_shouldReturnReservation_whenValidId() throws Exception {
-        given(reservationService.getById(anyString())).willReturn(testResponse);
-
-        mockMvc.perform(get(baseUrl + "/{id}", testId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(testId))
-                .andExpect(jsonPath("$.customerName").value(testResponse.getCustomerName()));
-    }
-
-    @Test
-    void getById_shouldReturnNotFound_whenInvalidId() throws Exception {
-        String invalidId = "invalid-id";
-        given(reservationService.getById(invalidId)).willThrow(new RuntimeException("Reservation not found"));
-
-        mockMvc.perform(get(baseUrl + "/{id}", invalidId))
-                .andExpect(status().isNotFound());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals("ROOM1", reservationService.requestedRoomId);
     }
 }

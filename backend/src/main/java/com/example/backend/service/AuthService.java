@@ -7,32 +7,33 @@ import com.example.backend.exception.ReservationException;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.security.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtils jwtUtils;
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtils = jwtUtils;
+    }
 
     public AuthResponse register(RegisterRequest request) {
         // Check if user already exists
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new ReservationException("Käyttäjä tälle sähköpostille on jo olemassa");
+            throw new ReservationException("A user with this email already exists");
         }
 
         // Create new user
         User user = new User(
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
-                request.getDisplayName()
-        );
+                request.getDisplayName());
 
         User savedUser = userRepository.save(user);
 
@@ -45,11 +46,11 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         // Find user by email
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ReservationException("Käyttäjää ei löydy"));
+                .orElseThrow(() -> new ReservationException("User not found"));
 
         // Verify password
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new ReservationException("Väärä salasana");
+            throw new ReservationException("Incorrect password");
         }
 
         // Generate JWT token

@@ -9,15 +9,17 @@ import javax.crypto.SecretKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${jwt.secret:your-secret-key-change-this-in-production-at-least-32-characters}")
     private String secret;
 
-    @Value("${jwt.expiration:86400000}")  // 24 hours in milliseconds
+    @Value("${jwt.expiration:86400000}") // 24 hours in milliseconds
     private long expiration;
 
     private JwtParser jwtParser;

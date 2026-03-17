@@ -2,19 +2,17 @@ package com.example.backend.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HealthControllerTest {
 
-    @InjectMocks
     private HealthController healthController;
 
     @BeforeEach
     void setUp() {
-        // Initialization code if needed
+        healthController = new HealthController();
     }
 
     @Test

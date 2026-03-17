@@ -7,26 +7,23 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping("/api/reservations")
+@Tag(name = "Reservations", description = "Room reservation endpoints")
 public class ReservationController {
-    
-    @Autowired
-    private ReservationService service;
-    
+
+    private final ReservationService service;
+
+    public ReservationController(ReservationService service) {
+        this.service = service;
+    }
+
     /**
-     * Haetaan kaikki varaukset tietylle huoneelle
+     * Get all reservations for a specific room
      * GET /api/reservations/{roomId}
      */
     @GetMapping("/{roomId}")
@@ -35,9 +32,9 @@ public class ReservationController {
         List<ReservationResponse> reservations = service.getReservationsByRoom(roomId);
         return ResponseEntity.ok(reservations);
     }
-    
+
     /**
-     * Luodaan uusi varaus
+     * Create a new reservation
      * POST /api/reservations
      */
     @PostMapping
@@ -47,9 +44,9 @@ public class ReservationController {
         ReservationResponse response = service.createReservation(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    
+
     /**
-     * Päivitetään olemassa olevaa varausta
+     * Update an existing reservation
      * PUT /api/reservations/{id}
      */
     @PutMapping("/{id}")
@@ -60,9 +57,9 @@ public class ReservationController {
         ReservationResponse response = service.updateReservation(id, request);
         return ResponseEntity.ok(response);
     }
-    
+
     /**
-     * Poistetaan varaus
+     * Delete a reservation
      * DELETE /api/reservations/{id}
      */
     @DeleteMapping("/{id}")
@@ -71,9 +68,9 @@ public class ReservationController {
         service.deleteReservation(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     /**
-     * Haetaan yksittäinen varaus ID:n perusteella
+     * Get a single reservation by ID
      * GET /api/reservations/detail/{id}
      */
     @GetMapping("/detail/{id}")

@@ -10,10 +10,18 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 @RequestMapping("/api/reservations")
-@Tag(name = "Reservations", description = "Room reservation endpoints")
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
+@Tag(name = "Reservations", description = "Reservation API")
 public class ReservationController {
 
     private final ReservationService service;
@@ -23,7 +31,7 @@ public class ReservationController {
     }
 
     /**
-     * Get all reservations for a specific room
+     * Haetaan kaikki varaukset tietylle huoneelle
      * GET /api/reservations/{roomId}
      */
     @GetMapping("/{roomId}")
@@ -34,7 +42,7 @@ public class ReservationController {
     }
 
     /**
-     * Create a new reservation
+     * Luodaan uusi varaus
      * POST /api/reservations
      */
     @PostMapping
@@ -46,7 +54,7 @@ public class ReservationController {
     }
 
     /**
-     * Update an existing reservation
+     * Päivitetään olemassa olevaa varausta
      * PUT /api/reservations/{id}
      */
     @PutMapping("/{id}")
@@ -59,7 +67,7 @@ public class ReservationController {
     }
 
     /**
-     * Delete a reservation
+     * Poistetaan varaus
      * DELETE /api/reservations/{id}
      */
     @DeleteMapping("/{id}")
@@ -70,7 +78,7 @@ public class ReservationController {
     }
 
     /**
-     * Get a single reservation by ID
+     * Haetaan yksittäinen varaus ID:n perusteella
      * GET /api/reservations/detail/{id}
      */
     @GetMapping("/detail/{id}")

@@ -1,6 +1,5 @@
 package com.example.backend.exception;
 
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
         /**
-         * Validation errors (@Valid)
+         * Validointivirheet (@Valid)
          */
         @ExceptionHandler(MethodArgumentNotValidException.class)
         public ResponseEntity<Map<String, Object>> handleValidationException(
@@ -23,7 +22,7 @@ public class GlobalExceptionHandler {
                 Map<String, Object> response = new HashMap<>();
                 response.put("timestamp", LocalDateTime.now());
                 response.put("status", HttpStatus.BAD_REQUEST.value());
-                response.put("error", "Validation error");
+                response.put("error", "Validointivirhe");
 
                 Map<String, String> fieldErrors = new HashMap<>();
                 ex.getBindingResult().getFieldErrors()
@@ -34,7 +33,7 @@ public class GlobalExceptionHandler {
         }
 
         /**
-         * Room is already booked
+         * Huone on jo varattu
          */
         @ExceptionHandler(RoomAlreadyBookedException.class)
         public ResponseEntity<Map<String, Object>> handleRoomAlreadyBooked(
@@ -42,12 +41,12 @@ public class GlobalExceptionHandler {
 
                 return buildErrorResponse(
                                 HttpStatus.CONFLICT,
-                                "Room already booked",
+                                "Huone varattu",
                                 ex.getMessage());
         }
 
         /**
-         * General reservation exceptions
+         * Yleiset varauspoikkeukset
          */
         @ExceptionHandler(ReservationException.class)
         public ResponseEntity<Map<String, Object>> handleReservationException(
@@ -55,7 +54,7 @@ public class GlobalExceptionHandler {
 
                 return buildErrorResponse(
                                 HttpStatus.BAD_REQUEST,
-                                "Reservation error",
+                                "Varausvirhe",
                                 ex.getMessage());
         }
 
@@ -65,7 +64,7 @@ public class GlobalExceptionHandler {
 
                 return buildErrorResponse(
                                 HttpStatus.BAD_REQUEST,
-                                "Invalid time",
+                                "Virheellinen aika",
                                 ex.getMessage());
         }
 
@@ -77,12 +76,12 @@ public class GlobalExceptionHandler {
 
                 return buildErrorResponse(
                                 HttpStatus.INTERNAL_SERVER_ERROR,
-                                "Server error",
-                                "An unexpected error occurred. Please try again.");
+                                "Palvelinvirhe",
+                                "Tapahtui odottamaton virhe. Yritä uudelleen.");
         }
 
         /**
-         * Helper method to build a standard error response
+         * Apumetodi
          */
         private ResponseEntity<Map<String, Object>> buildErrorResponse(
                         HttpStatus status, String error, String message) {

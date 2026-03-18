@@ -31,6 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Runtime logs and dumps
+logs/
+*.log
+bash.exe.stackdump
+
 # Environment files
 .env
 .env.*

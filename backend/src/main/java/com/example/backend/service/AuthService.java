@@ -7,18 +7,16 @@ import com.example.backend.exception.ReservationException;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.security.JwtUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
-@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final JwtUtils jwtUtils;
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
@@ -30,7 +28,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         // Check if user already exists
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new ReservationException("A user with this email already exists");
+            throw new ReservationException("Käyttäjä tälle sähköpostille on jo olemassa");
         }
 
         // Create new user
@@ -50,11 +48,11 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         // Find user by email
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ReservationException("User not found"));
+                .orElseThrow(() -> new ReservationException("Käyttäjää ei löydy"));
 
         // Verify password
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new ReservationException("Incorrect password");
+            throw new ReservationException("Väärä salasana");
         }
 
         // Generate JWT token

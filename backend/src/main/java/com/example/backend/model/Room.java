@@ -1,18 +1,14 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "rooms")@Data
-@NoArgsConstructor
-@AllArgsConstructor
-
+@Table(name = "rooms")
 public class Room {
 
     @Id

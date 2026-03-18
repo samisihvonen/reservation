@@ -1,0 +1,36 @@
+
+.builder/config/data.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/launch.json
+
+# Logs and dumps
+*.log
+logs/
+backend/logs/
+bash.exe.stackdump
+
+# Local environment files (keep examples)
+.env
+.env.*
+backend/.env
+backend/.env.*
+!.env.example
+!backend/.env.example
+
+# Java / Maven
+backend/target/
+backend/**/target/
+
+# Frontend / Node / Vite
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Test and coverage artifacts
+coverage/
+.nyc_output/

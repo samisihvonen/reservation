@@ -20,9 +20,8 @@ class HealthControllerTest {
         // Act
         ResponseEntity<String> response = healthController.health();
 
-        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("OK", response.getBody());
+        assertEquals("Health check: OK", response.getBody());
     }
 
     @Test
@@ -30,8 +29,7 @@ class HealthControllerTest {
         // Act
         ResponseEntity<String> response = healthController.health();
 
-        // Assert
-        assertEquals("OK", response.getBody());
+        assertEquals("Health check: OK", response.getBody());
     }
 
     @Test
@@ -39,7 +37,6 @@ class HealthControllerTest {
         // Act
         ResponseEntity<String> response = healthController.health();
 
-        // Assert
-        assertEquals("OK", response.getBody());
+        assertEquals("Health check: OK", response.getBody());
     }
 }

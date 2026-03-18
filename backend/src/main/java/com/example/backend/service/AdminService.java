@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.request.RoomCapacityChangeRequest;
 import com.example.backend.dto.request.RoomRequest;
 import com.example.backend.dto.request.UserRequest;
 import com.example.backend.dto.response.RoomResponse;
@@ -13,13 +12,9 @@ import com.example.backend.repository.UserRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
-@Slf4j
 public class AdminService {
 
     private final UserRepository userRepository;
@@ -33,7 +28,7 @@ public class AdminService {
     // ============ USER MANAGEMENT ============
 
     /**
-     * Get all users
+     * Haetaan kaikki käyttäjät
      */
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
@@ -43,20 +38,20 @@ public class AdminService {
     }
 
     /**
-     * Get user by ID
+     * Haetaan käyttäjä ID:n perusteella
      */
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ReservationException("User not found with ID: " + id));
+                .orElseThrow(() -> new ReservationException("Käyttäjää ei löydy ID:llä: " + id));
         return toUserResponse(user);
     }
 
     /**
-     * Update user details
+     * Päivitetään käyttäjän tietoja
      */
     public UserResponse updateUser(Long id, UserRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ReservationException("User not found with ID: " + id));
+                .orElseThrow(() -> new ReservationException("Käyttäjää ei löydy ID:llä: " + id));
 
         if (request.getDisplayName() != null) {
             user.setDisplayName(request.getDisplayName());
@@ -64,7 +59,7 @@ public class AdminService {
 
         if (request.getEmail() != null && !user.getEmail().equals(request.getEmail())) {
             if (userRepository.existsByEmail(request.getEmail())) {
-                throw new ReservationException("Email is already in use");
+                throw new ReservationException("Sähköposti on jo käytössä");
             }
             user.setEmail(request.getEmail());
         }
@@ -74,24 +69,24 @@ public class AdminService {
     }
 
     /**
-     * Delete user by ID
+     * Poistetaan käyttäjä
      */
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new ReservationException("User not found with ID: " + id);
+            throw new ReservationException("Käyttäjää ei löydy ID:llä: " + id);
         }
         userRepository.deleteById(id);
     }
 
     /**
-     * Change user email address
+     * Muutetaan käyttäjän sähköposti
      */
     public UserResponse changeUserEmail(Long id, String newEmail) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ReservationException("User not found with ID: " + id));
+                .orElseThrow(() -> new ReservationException("Käyttäjää ei löydy ID:llä: " + id));
 
         if (userRepository.existsByEmail(newEmail)) {
-            throw new ReservationException("Email is already in use");
+            throw new ReservationException("Sähköposti on jo käytössä");
         }
 
         user.setEmail(newEmail);
@@ -102,7 +97,7 @@ public class AdminService {
     // ============ ROOM MANAGEMENT ============
 
     /**
-     * Get all active rooms
+     * Haetaan kaikki huoneet
      */
     public List<RoomResponse> getAllRooms() {
         return roomRepository.findAll()
@@ -113,13 +108,13 @@ public class AdminService {
     }
 
     /**
-     * Create a new room
+     * Luodaan uusi huone
      */
     public RoomResponse createRoom(RoomRequest request) {
         String roomId = "room-" + UUID.randomUUID().toString().substring(0, 8);
 
         if (roomRepository.existsById(roomId)) {
-            throw new ReservationException("Room ID already exists");
+            throw new ReservationException("Huone ID on jo olemassa");
         }
 
         Room room = new Room();
@@ -135,11 +130,11 @@ public class AdminService {
     }
 
     /**
-     * Update room details
+     * Päivitetään huoneen tietoja
      */
     public RoomResponse updateRoom(String roomId, RoomRequest request) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ReservationException("Room not found with ID: " + roomId));
+                .orElseThrow(() -> new ReservationException("Huonetta ei löydy ID:llä: " + roomId));
 
         if (request.getName() != null) {
             room.setName(request.getName());
@@ -162,22 +157,22 @@ public class AdminService {
     }
 
     /**
-     * Soft-delete a room (marks as inactive)
+     * Poistetaan huone
      */
     public void deleteRoom(String roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ReservationException("Room not found with ID: " + roomId));
+                .orElseThrow(() -> new ReservationException("Huonetta ei löydy ID:llä: " + roomId));
 
         room.setIsActive(false);
         roomRepository.save(room);
     }
 
     /**
-     * Change room name
+     * Muutetaan huoneen nimeä
      */
     public RoomResponse changeRoomName(String roomId, String newName) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ReservationException("Room not found with ID: " + roomId));
+                .orElseThrow(() -> new ReservationException("Huonetta ei löydy ID:llä: " + roomId));
 
         room.setName(newName);
         Room updated = roomRepository.save(room);
@@ -185,17 +180,17 @@ public class AdminService {
     }
 
     /**
-     * Change room capacity
+     * Muutetaan huoneen kapasiteettia
      */
-    public RoomResponse changeRoomCapacity(String roomId, RoomCapacityChangeRequest request) {
-        if (request == null || request.getNewCapacity() < 1) {
-            throw new ReservationException("Capacity must be at least 1");
+    public RoomResponse changeRoomCapacity(String roomId, Integer newCapacity) {
+        if (newCapacity == null || newCapacity < 1) {
+            throw new ReservationException("Kapasiteetin täytyy olla vähintään 1");
         }
 
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ReservationException("Room not found with ID: " + roomId));
+                .orElseThrow(() -> new ReservationException("Huonetta ei löydy ID:llä: " + roomId));
 
-        room.setCapacity(request.getNewCapacity());
+        room.setCapacity(newCapacity);
         Room updated = roomRepository.save(room);
         return toRoomResponse(updated);
     }

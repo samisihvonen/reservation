@@ -3,121 +3,100 @@ package com.example.backend.controller;
 import com.example.backend.dto.request.CreateReservationRequest;
 import com.example.backend.dto.response.ReservationResponse;
 import com.example.backend.service.ReservationService;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class ReservationControllerTest {
 
-    private static class StubReservationService extends ReservationService {
-        private ReservationResponse response;
-        private String deletedId;
-        private String requestedId;
-        private String requestedRoomId;
+    @Mock
+    private ReservationService reservationService;
 
-        StubReservationService() {
-            super(null);
-        }
-
-        @Override
-        public ReservationResponse createReservation(CreateReservationRequest request) {
-            return response;
-        }
-
-        @Override
-        public ReservationResponse updateReservation(String id, CreateReservationRequest request) {
-            requestedId = id;
-            return response;
-        }
-
-        @Override
-        public void deleteReservation(String id) {
-            deletedId = id;
-        }
-
-        @Override
-        public ReservationResponse getReservationById(String id) {
-            requestedId = id;
-            return response;
-        }
-
-        @Override
-        public List<ReservationResponse> getReservationsByRoom(String roomId) {
-            requestedRoomId = roomId;
-            return List.of(response);
-        }
-    }
-
-    private StubReservationService reservationService;
+    @InjectMocks
     private ReservationController reservationController;
-    private String testId;
-    private CreateReservationRequest testRequest;
-    private ReservationResponse testResponse;
+
+    private CreateReservationRequest request;
+    private ReservationResponse response;
 
     @BeforeEach
     void setUp() {
-        reservationService = new StubReservationService();
-        reservationController = new ReservationController(reservationService);
+        LocalDateTime start = LocalDateTime.now().plusHours(1);
+        LocalDateTime end = start.plusHours(1);
 
-        testId = UUID.randomUUID().toString();
-        LocalDateTime startTime = LocalDateTime.now().plusDays(1);
-        LocalDateTime endTime = startTime.plusHours(1);
-
-        testRequest = new CreateReservationRequest("ROOM1", startTime, endTime, "Test User");
-        testResponse = new ReservationResponse(
-                testId, "ROOM1", startTime, endTime, "Test User",
-                LocalDateTime.now(), LocalDateTime.now());
-
-        reservationService.response = testResponse;
+        request = new CreateReservationRequest("ROOM1", start, end, "test-user");
+        response = new ReservationResponse(
+                "res-1",
+                "ROOM1",
+                start,
+                end,
+                "test-user",
+                LocalDateTime.now(),
+                LocalDateTime.now());
     }
 
     @Test
-    void create_shouldReturnCreatedReservation_whenValidRequest() {
-        ResponseEntity<ReservationResponse> response = reservationController.create(testRequest);
+    void create_ShouldReturnCreatedReservation() {
+        when(reservationService.createReservation(any(CreateReservationRequest.class))).thenReturn(response);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(testResponse, response.getBody());
+        ResponseEntity<ReservationResponse> result = reservationController.create(request);
+
+        assertNotNull(result);
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(response, result.getBody());
     }
 
     @Test
-    void update_shouldReturnUpdatedReservation_whenValidRequestAndId() {
-        ResponseEntity<ReservationResponse> response = reservationController.update(testId, testRequest);
+    void update_ShouldReturnUpdatedReservation() {
+        when(reservationService.updateReservation(anyString(), any(CreateReservationRequest.class)))
+                .thenReturn(response);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(testResponse, response.getBody());
-        assertEquals(testId, reservationService.requestedId);
+        ResponseEntity<ReservationResponse> result = reservationController.update("res-1", request);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(response, result.getBody());
     }
 
     @Test
-    void delete_shouldReturnNoContent_whenValidId() {
-        ResponseEntity<Void> response = reservationController.delete(testId);
+    void delete_ShouldReturnNoContent() {
+        ResponseEntity<Void> result = reservationController.delete("res-1");
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        assertEquals(testId, reservationService.deletedId);
+        assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+        verify(reservationService).deleteReservation("res-1");
     }
 
     @Test
-    void getById_shouldReturnReservation_whenValidId() {
-        ResponseEntity<ReservationResponse> response = reservationController.getById(testId);
+    void getById_ShouldReturnReservation() {
+        when(reservationService.getReservationById("res-1")).thenReturn(response);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(testResponse, response.getBody());
-        assertEquals(testId, reservationService.requestedId);
+        ResponseEntity<ReservationResponse> result = reservationController.getById("res-1");
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(response, result.getBody());
     }
 
     @Test
-    void getByRoom_shouldReturnReservations_whenValidRoomId() {
-        ResponseEntity<List<ReservationResponse>> response = reservationController.getByRoom("ROOM1");
+    void getByRoom_ShouldReturnReservationList() {
+        when(reservationService.getReservationsByRoom("ROOM1")).thenReturn(List.of(response));
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
-        assertEquals("ROOM1", reservationService.requestedRoomId);
+        ResponseEntity<List<ReservationResponse>> result = reservationController.getByRoom("ROOM1");
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(1, result.getBody().size());
     }
 }
